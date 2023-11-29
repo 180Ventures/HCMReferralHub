@@ -1,21 +1,16 @@
 import { Formik } from 'formik';
 import { FC } from 'react';
 import * as Yup from 'yup';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ErrorMessageForm } from '..';
+import { ErrorMessageForm, PasswordStrengthMeter } from '..';
 import { useSignUpFormHooks } from './hooks';
 import Image from 'next/image';
-import PasswordStrengthMeter from '../PasswordStrengthMeter';
+import Input from '../Input';
 
 interface IProps {}
 
 const SignUpForm: FC<IProps> = () => {
-  const {
-    inititalValues,
-    showPassword,
-    onSubmitForm,
-    onToggleShowPassword,
-  } = useSignUpFormHooks();
+  const { inititalValues, showPassword, onSubmitForm, onToggleShowPassword } =
+    useSignUpFormHooks();
 
   return (
     <div className='flex flex-col justify-center items-center  max-w-sm w-full pb-8'>
@@ -32,8 +27,7 @@ const SignUpForm: FC<IProps> = () => {
               return (
                 <form onSubmit={props.handleSubmit}>
                   <div className='flex mt-4 2xl:mt-8 flex-row justify-center items-center relative'>
-                    <input
-                      className={`w-full h-12 bg-white rounded-lg border border-slate-200 text-[#202020] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal`}
+                    <Input
                       name='email'
                       type='email'
                       onChange={props.handleChange}
@@ -42,11 +36,10 @@ const SignUpForm: FC<IProps> = () => {
                       placeholder='Email address'
                     />
                   </div>
-                  <ErrorMessageForm name='email' />
+
                   <div className='grid grid-cols-2 gap-6 mt-8 justify-center items-center relative'>
                     <div>
-                      <input
-                        className={`w-full h-12 bg-white rounded-lg border border-slate-200 text-[#202020] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal`}
+                      <Input
                         name='firstName'
                         type='text'
                         onChange={props.handleChange}
@@ -54,11 +47,9 @@ const SignUpForm: FC<IProps> = () => {
                         value={props.values.firstName}
                         placeholder='First name'
                       />
-                      <ErrorMessageForm name='firstName' />
                     </div>
                     <div>
-                      <input
-                        className={`w-full h-12 bg-white rounded-lg border border-slate-200 text-[#202020] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal`}
+                      <Input
                         name='lastName'
                         type='text'
                         onChange={props.handleChange}
@@ -66,31 +57,26 @@ const SignUpForm: FC<IProps> = () => {
                         value={props.values.lastName}
                         placeholder='Last name'
                       />
-                      <ErrorMessageForm name='lastName' />
                     </div>
                   </div>
                   <div className='flex mt-6 flex-row justify-center items-center relative'>
-                    <input
-                      className={`w-full h-12 bg-white rounded-lg border border-slate-200 text-[#202020] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal`}
+                    <Input
                       name='password'
                       type={showPassword ? 'text' : 'password'}
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       value={props.values.password}
                       placeholder='Password'
-                    />
-                    <FontAwesomeIcon
-                      onClick={onToggleShowPassword}
-                      icon={
-                        showPassword ? ['far', 'eye'] : ['far', 'eye-slash']
-                      }
-                      className={`text-gray20  absolute right-4 cursor-pointer`}
+                      passwordField
+                      onToggleShowPassword={onToggleShowPassword}
+                      showPassword={showPassword}
                     />
                   </div>
-                  <ErrorMessageForm name='password' />
-                  {!props.errors.password && props.values.password.length > 0 && (
-                    <PasswordStrengthMeter password={props.values.password} />
-                  )}
+
+                  {!props.errors.password &&
+                    props.values.password.length > 0 && (
+                      <PasswordStrengthMeter password={props.values.password} />
+                    )}
                   <button
                     type='submit'
                     className='mt-6 w-full bg-orangeLight rounded-lg h-12'
@@ -144,15 +130,15 @@ const SignUpForm: FC<IProps> = () => {
                     </button>
                   </div>
                   <div className='flex mt-6 flex-col'>
-                   <div>
-                    <input
+                    <div>
+                      <input
                         id='policy'
                         name='policy'
                         type='checkbox'
                         onChange={props.handleChange}
                         checked={props.values.policy}
                         className='h-4 w-4 rounded border-gray-300 text-indigo-orangeLight focus:ring-orangeLight'
-                        style={{color: '#EE8062'}}
+                        style={{ color: '#EE8062' }}
                       />
                       <label
                         htmlFor='policy'
@@ -161,7 +147,7 @@ const SignUpForm: FC<IProps> = () => {
                         By clicking Create account, I agree that I have read and
                         accepted the Terms of Use and Privacy Policy.
                       </label>
-                   </div>
+                    </div>
                     <ErrorMessageForm name='policy' />
                   </div>
                 </form>
@@ -179,9 +165,10 @@ const SignInSchema = Yup.object().shape({
   lastName: Yup.string().required('This field is required'),
   email: Yup.string().email('Invalid email').required('This field is required'),
   password: Yup.string().required('This field is required'),
-  policy: Yup
-  .bool()
-  .oneOf([true], 'You need to accept the terms and conditions'),
+  policy: Yup.bool().oneOf(
+    [true],
+    'You need to accept the terms and conditions'
+  ),
 });
 
 export default SignUpForm;

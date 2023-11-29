@@ -1,10 +1,9 @@
 import { Formik } from 'formik';
 import { FC } from 'react';
 import * as Yup from 'yup';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ErrorMessageForm } from '..';
 import { useLoginFormHooks } from './hooks';
 import Image from 'next/image';
+import Input from '../Input';
 
 interface IProps {}
 
@@ -26,9 +25,7 @@ const LoginForm: FC<IProps> = ({}) => {
     <div className='flex flex-col justify-center items-center lg:max-w-sm w-full h-full'>
       <div className='w-[90%] lg:w-auto flex flex-col justify-center items-center'>
         <div className='d-flex flex-col items-start'>
-          <p
-            className={`text-2xl text-left font-medium text-gray20`}
-          >
+          <p className={`text-2xl text-left font-medium text-gray20`}>
             {isRequestingResetPassword ? 'Recover your password' : 'Sign in'}
           </p>
         </div>
@@ -43,17 +40,14 @@ const LoginForm: FC<IProps> = ({}) => {
               <form onSubmit={props.handleSubmit} className='mt-4 2xl:mt-8'>
                 <p className='text-sm font-medium text-gray20'>Your Email</p>
                 <div className='flex mt-2 flex-row justify-center items-center relative'>
-                  <input
-                    className={`w-full rounded-[4px] border border-lightGray text-base font-normal text-gray20`}
+                  <Input
                     name='email'
                     type='email'
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
-                    value={props.values.email}
                     placeholder='user@example.com'
                   />
                 </div>
-                <ErrorMessageForm name='email' />
                 <button
                   type='submit'
                   className='mt-8 w-full h-11 bg-primary rounded-[4px]'
@@ -82,8 +76,7 @@ const LoginForm: FC<IProps> = ({}) => {
               {(props) => (
                 <form onSubmit={props.handleSubmit}>
                   <div className='flex mt-4 2xl:mt-8 flex-row justify-center items-center relative'>
-                    <input
-                      className={`w-full h-12 bg-white rounded-lg border border-slate-200 text-[#898989] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal`}
+                    <Input
                       name='email'
                       type='email'
                       onChange={props.handleChange}
@@ -91,32 +84,20 @@ const LoginForm: FC<IProps> = ({}) => {
                       value={props.values.email}
                       placeholder='Email address'
                     />
-                    {/* <FontAwesomeIcon
-                      onClick={onResetValueEmail(props)}
-                      icon={['far', 'circle-xmark']}
-                      className={`text-gray20  absolute right-4 cursor-pointer`}
-                    /> */}
                   </div>
-                  <ErrorMessageForm name='email' />
                   <div className='flex mt-6 flex-row justify-center items-center relative'>
-                    <input
-                      className={`w-full h-12 bg-white rounded-lg border border-slate-200 text-[#898989] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal`}
+                    <Input
                       name='password'
                       type={showPassword ? 'text' : 'password'}
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       value={props.values.password}
                       placeholder='Password'
-                    />
-                    <FontAwesomeIcon
-                      onClick={onToggleShowPassword}
-                      icon={
-                        showPassword ? ['far', 'eye'] : ['far', 'eye-slash']
-                      }
-                      className={`text-gray20  absolute right-4 cursor-pointer`}
+                      onToggleShowPassword={onToggleShowPassword}
+                      passwordField
+                      showPassword={showPassword}
                     />
                   </div>
-                  <ErrorMessageForm name='password' />
                   <div className='mt-6 flex flex-row items-center justify-between'>
                     <p
                       onClick={onForgotPassword}
