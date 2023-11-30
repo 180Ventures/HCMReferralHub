@@ -5,6 +5,7 @@ import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import Spinner from './Spinner';
 import PasswordStrengthMeter from './PasswordStrengthMeter'
+import ResetPasswordForm from './ResetPasswordForm';
 export {
   Container,
   Spinner,
@@ -12,5 +13,6 @@ export {
   LoadingPage,
   LoginForm,
   SignUpForm,
-  PasswordStrengthMeter
+  PasswordStrengthMeter,
+  ResetPasswordForm
 }

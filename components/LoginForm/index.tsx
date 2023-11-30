@@ -19,6 +19,7 @@ const LoginForm: FC<IProps> = ({}) => {
     onSubmitResetPasswordForm,
     onCloseResetPasswordForm,
     onLoginWithGoogle,
+    onGotoSignUp
   } = useLoginFormHooks();
 
   return (
@@ -26,8 +27,9 @@ const LoginForm: FC<IProps> = ({}) => {
       <div className='w-[90%] lg:w-auto flex flex-col justify-center items-center'>
         <div className='d-flex flex-col items-start'>
           <p className={`text-2xl text-left font-medium text-gray20`}>
-            {isRequestingResetPassword ? 'Recover your password' : 'Sign in'}
+            {isRequestingResetPassword ? 'Forgot password?' : 'Sign in'}
           </p>
+          <p className='text-sm font-normal mt-2'>No worriest! Just enter your email and we’ll send you a reset password link.</p>
         </div>
         {isRequestingResetPassword ? (
           <Formik
@@ -37,30 +39,29 @@ const LoginForm: FC<IProps> = ({}) => {
             onSubmit={onSubmitResetPasswordForm}
           >
             {(props) => (
-              <form onSubmit={props.handleSubmit} className='mt-4 2xl:mt-8'>
-                <p className='text-sm font-medium text-gray20'>Your Email</p>
+              <form onSubmit={props.handleSubmit} className='mt-4 2xl:mt-8 w-full md:w-[370px]'>
                 <div className='flex mt-2 flex-row justify-center items-center relative'>
-                  <Input
-                    name='email'
-                    type='email'
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    placeholder='user@example.com'
-                  />
+                    <Input
+                      name='email'
+                      type='email'
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      value={props.values.email}
+                      placeholder='Email address'
+                    />
                 </div>
                 <button
                   type='submit'
-                  className='mt-8 w-full h-11 bg-primary rounded-[4px]'
+                  className='mt-6 w-full bg-orangeLight rounded-lg h-12'
                 >
                   <p className='text-base font-medium text-white font-Poppins'>
-                    Send password reset email
+                  Send Recovery Email
                   </p>
                 </button>
                 <p
-                  onClick={onCloseResetPasswordForm}
-                  className='text-base font-medium text-gray20 text-center mt-4 underline cursor-pointer'
+                  className='text-sm font-normal text-gray20 text-center mt-4 cursor-pointer'
                 >
-                  Sign in
+                  Just remember? <span  onClick={onGotoSignUp} className='text-orangeLight font-semibold cursor-pointer'>Sign Up</span>
                 </p>
               </form>
             )}

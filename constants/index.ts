@@ -9,6 +9,7 @@ export const ROUTERS = {
   signup: "/signup",
   home: "/home",
   chapter: "/chapter",
+  resetPassword: "/reset-password",
 };
 
 //FORMAT

@@ -78,6 +78,10 @@ export const useLoginFormHooks = () => {
     setRequestingResetPassword(false);
   }, []);
 
+  const onGotoSignUp = useCallback(() => {
+    router.push(ROUTERS.signup);
+  }, []);
+
   const onLoginWithGoogle = useCallback(() => {
     loginWithGoogle();
   }, []);
@@ -96,6 +100,7 @@ export const useLoginFormHooks = () => {
     onForgotPassword,
     onSubmitResetPasswordForm,
     onCloseResetPasswordForm,
-    onLoginWithGoogle
+    onLoginWithGoogle,
+    onGotoSignUp
   };
 };
