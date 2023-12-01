@@ -12,7 +12,7 @@ interface IResetPasswordValues {
 }
 
 export const useResetPasswordHooks = () => {
-  const { signUpWithEmail } = useAuthState();
+  const { resetPassword } = useAuthState();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const route = useRouter();
 
@@ -22,8 +22,9 @@ export const useResetPasswordHooks = () => {
   };
   
   const onSubmitForm = async (values: IResetPasswordValues) => {
-    //TODO: handle submit form
-    console.log(values);
+    if(route.query?.oobCode) {
+      resetPassword(route.query?.oobCode as string, values.password);
+    }
   }
 
   const onToggleShowPassword = useCallback(() => {

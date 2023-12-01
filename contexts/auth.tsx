@@ -17,6 +17,7 @@ import {
   reauthenticateWithCredential,
   GoogleAuthProvider,
   signInWithPopup,
+  confirmPasswordReset
 } from "firebase/auth";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "@/firebase";
@@ -45,6 +46,7 @@ interface AuthContextProps {
   onSetProfile: (user: UserData | null) => void;
   setChapters: (chapters: Chapter[]) => void;
   loginWithGoogle: () => void;
+  resetPassword: (oobCode: string, newPassword: string) => void;
   user: User | null;
   profile: UserData | null;
   isSignedUp: boolean;
@@ -66,6 +68,7 @@ const initialState: AuthContextProps = {
   onSetProfile: (user: UserData | null) => {},
   setChapters: (chapters: Chapter[]) => {},
   loginWithGoogle: () => {},
+  resetPassword: (oobCode: string, newPassword: string) => {},
   user: null,
   profile: null,
   isSignedUp: false,
@@ -160,6 +163,26 @@ export default function AuthProvider({ children }: Props) {
     },
     []
   );
+
+  const resetPassword =
+    async (oobCode: string, newPassword: string) => {
+      setLoading(true);
+      try {
+        await confirmPasswordReset(auth, oobCode, newPassword);
+        toastSuccess("Updated password successfully!!");
+        router.push('/')
+      } catch (error) {
+        if (error instanceof FirebaseError) {
+          showErrorMessageFirebase(error);
+          return;
+        }
+        //@ts-ignore
+        toastError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+   
 
   const signUpWithEmail = useCallback(async (values: ISignUpFormValues) => {
     setLoading(true);
@@ -321,6 +344,7 @@ export default function AuthProvider({ children }: Props) {
     onSetProfile,
     setChapters,
     loginWithGoogle,
+    resetPassword
   };
 
   return (

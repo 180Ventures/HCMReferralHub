@@ -9,7 +9,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { toastConfig } from "@/utils";
 import AuthProvider from "@/contexts/auth";
-import ChapterProvider from "@/contexts/chapters";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = useState(false);
@@ -23,9 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <div>
       <AuthProvider>
-        <ChapterProvider>
-          <Component {...pageProps} />
-        </ChapterProvider>
+        <Component {...pageProps} />
       </AuthProvider>
       <ToastContainer {...toastConfig} />
     </div>
