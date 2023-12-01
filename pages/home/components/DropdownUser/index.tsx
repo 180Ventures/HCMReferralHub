@@ -7,6 +7,7 @@ const DropdownUser = () => {
   const { logout } = useAuthState();
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+  const { user, profile } = useAuthState();
 
   // close on click outside
   useEffect(() => {
@@ -42,14 +43,28 @@ const DropdownUser = () => {
         className='flex items-center gap-2 cursor-pointer'
       >
         <div className='w-8 h-8 aspect-square relative rounded-full'>
-          <Image alt='Logo' src='/images/avatar.jpg' fill priority />
+          {user?.photoURL ? (
+            <Image
+              alt='Logo'
+              src={user.photoURL}
+              fill
+              priority
+              className='rounded-full'
+            />
+          ) : (
+            <div className='uppercase w-full h-full bg-orangeLight rounded-full flex justify-center items-center'>
+              <span className='text-white uppercase'>
+                {profile?.firstName[0]}
+              </span>
+            </div>
+          )}
         </div>
         <span className='hidden text-left lg:block'>
-          <span className='block text-sm font-medium text-blackLight'>
-            Thomas Anree
+          <span className='block text-sm font-medium text-blackLight capitalize'>
+            {user?.displayName || profile?.firstName + ' ' + profile?.lastName}
           </span>
-          <span className='block text-xs font-normal text-grayLight'>
-            UX Designer
+          <span className='block text-xs font-normal text-grayLight capitalize'>
+            Admin
           </span>
         </span>
       </div>
@@ -64,7 +79,7 @@ const DropdownUser = () => {
       >
         <button
           onClick={() => logout()}
-          className='flex items-center py-4 px-6 text-sm font-normal duration-300 ease-in-out hover:text-primary'
+          className='flex items-center py-4 px-4 text-sm font-normal duration-300 ease-in-out hover:text-primary'
         >
           <svg
             className='w-5 h-5'

@@ -5,7 +5,7 @@ import React, {
   useState,
   useContext,
   useCallback,
-} from "react";
+} from 'react';
 import {
   signOut,
   User,
@@ -17,22 +17,23 @@ import {
   reauthenticateWithCredential,
   GoogleAuthProvider,
   signInWithPopup,
-  confirmPasswordReset
-} from "firebase/auth";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { auth, db } from "@/firebase";
-import { Chapter, ISignUpFormValues, UserData } from "@/queries/type";
-import { addUser, getUser } from "@/queries/users";
+  confirmPasswordReset,
+  FacebookAuthProvider,
+} from 'firebase/auth';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { auth, db } from '@/firebase';
+import { Chapter, ISignUpFormValues, UserData } from '@/queries/type';
+import { addUser, getUser } from '@/queries/users';
 import {
   getItemLocalStorage,
   removeAllLocalStorage,
   showErrorMessageFirebase,
   toastError,
   toastSuccess,
-} from "@/utils";
-import { LOCAL_STORAGE_KEYS } from "@/constants";
-import { useRouter } from "next/router";
-import { FirebaseError } from "firebase/app";
+} from '@/utils';
+import { LOCAL_STORAGE_KEYS } from '@/constants';
+import { useRouter } from 'next/router';
+import { FirebaseError } from 'firebase/app';
 
 interface AuthContextProps {
   loginWithEmail: (email: string, password: string) => void;
@@ -47,6 +48,7 @@ interface AuthContextProps {
   setChapters: (chapters: Chapter[]) => void;
   loginWithGoogle: () => void;
   resetPassword: (oobCode: string, newPassword: string) => void;
+  loginFacebook: () => void;
   user: User | null;
   profile: UserData | null;
   isSignedUp: boolean;
@@ -69,6 +71,7 @@ const initialState: AuthContextProps = {
   setChapters: (chapters: Chapter[]) => {},
   loginWithGoogle: () => {},
   resetPassword: (oobCode: string, newPassword: string) => {},
+  loginFacebook: () => {},
   user: null,
   profile: null,
   isSignedUp: false,
@@ -79,7 +82,6 @@ const initialState: AuthContextProps = {
 };
 
 const AuthContext = createContext<AuthContextProps>(initialState);
-
 interface Props {
   children: ReactNode;
 }
@@ -110,7 +112,7 @@ export default function AuthProvider({ children }: Props) {
             }
             setUser(authUser);
           } catch (error) {
-            console.log("__ ERROR in getUser function in Auth Context __");
+            console.log('__ ERROR in getUser function in Auth Context __');
           } finally {
             setLoadingInitial(false);
           }
@@ -128,8 +130,8 @@ export default function AuthProvider({ children }: Props) {
     if (profile?.uid) {
       try {
         const q = query(
-          collection(db, "users"),
-          where("uid", "==", profile.uid)
+          collection(db, 'users'),
+          where('uid', '==', profile.uid)
         );
         const usersListner = onSnapshot(q, (querySnapshot) => {
           let data = querySnapshot.docs.map((doc) => ({
@@ -140,7 +142,7 @@ export default function AuthProvider({ children }: Props) {
         });
         return () => usersListner();
       } catch (e) {
-        console.log("----------ERROR IN USER CONTEXT----------");
+        console.log('----------ERROR IN USER CONTEXT----------');
       }
     }
   }, [profile?.uid]);
@@ -164,25 +166,23 @@ export default function AuthProvider({ children }: Props) {
     []
   );
 
-  const resetPassword =
-    async (oobCode: string, newPassword: string) => {
-      setLoading(true);
-      try {
-        await confirmPasswordReset(auth, oobCode, newPassword);
-        toastSuccess("Updated password successfully!!");
-        router.push('/')
-      } catch (error) {
-        if (error instanceof FirebaseError) {
-          showErrorMessageFirebase(error);
-          return;
-        }
-        //@ts-ignore
-        toastError(error.message);
-      } finally {
-        setLoading(false);
+  const resetPassword = async (oobCode: string, newPassword: string) => {
+    setLoading(true);
+    try {
+      await confirmPasswordReset(auth, oobCode, newPassword);
+      toastSuccess('Updated password successfully!!');
+      router.push('/');
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        showErrorMessageFirebase(error);
+        return;
       }
+      //@ts-ignore
+      toastError(error.message);
+    } finally {
+      setLoading(false);
     }
-   
+  };
 
   const signUpWithEmail = useCallback(async (values: ISignUpFormValues) => {
     setLoading(true);
@@ -204,7 +204,7 @@ export default function AuthProvider({ children }: Props) {
       }
     } catch (error) {
       if (error instanceof FirebaseError) {
-        console.log("error: ", error);
+        console.log('error: ', error);
         showErrorMessageFirebase(error);
         return;
       }
@@ -228,7 +228,7 @@ export default function AuthProvider({ children }: Props) {
         }
       })
       .catch((e) => {
-        console.log("__ ERROR in fetch profile function in Auth Context __");
+        console.log('__ ERROR in fetch profile function in Auth Context __');
         console.log(e);
       })
       .finally(() => setLoadingInitial(false));
@@ -238,7 +238,7 @@ export default function AuthProvider({ children }: Props) {
     setIsLogout(true);
     setLoading(true);
     signOut(auth)
-      .catch((error) => console.log("Error", `Error: ${error.message}`))
+      .catch((error) => console.log('Error', `Error: ${error.message}`))
       .finally(() => {
         setLoading(false);
         setLoadingInitial(false);
@@ -254,11 +254,11 @@ export default function AuthProvider({ children }: Props) {
     try {
       await sendPasswordResetEmail(auth, email);
       toastSuccess(
-        "Sent a request success. Please check your email to reset password!!"
+        'Sent a request success. Please check your email to reset password!!'
       );
     } catch (error) {
       //@ts-ignore
-      console.log("Error", `Error: ${error.message}`);
+      console.log('Error', `Error: ${error.message}`);
       //@ts-ignore
       toastError(error.message);
     } finally {
@@ -283,8 +283,8 @@ export default function AuthProvider({ children }: Props) {
   }, []);
 
   const checkIfUserHasAccount = useCallback(async (userId: string) => {
-    const user = await getUser(userId)
-    if(user) return true;
+    const user = await getUser(userId);
+    if (user) return true;
     return false;
   }, []);
 
@@ -301,8 +301,8 @@ export default function AuthProvider({ children }: Props) {
               uid: user.uid,
               email: user.email!,
               firstName: user.displayName!,
-              lastName: ''
-            }
+              lastName: '',
+            };
             await addUser(userData);
             setProfile(userData);
             setIsSignedUp(true);
@@ -320,7 +320,46 @@ export default function AuthProvider({ children }: Props) {
         }
         setLoading(false);
         console.log(error);
-      }).finally(() => {
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  const loginFacebook = useCallback(() => {
+    const provider = new FacebookAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        setLoading(true);
+        const user = result.user;
+        try {
+          let doesUserHaveAccount = await checkIfUserHasAccount(user.uid);
+          if (!doesUserHaveAccount) {
+            const userData: UserData = {
+              uid: user.uid,
+              email: user.email!,
+              firstName: user.displayName!,
+              lastName: '',
+            };
+            await addUser(userData);
+            setProfile(userData);
+            setIsSignedUp(true);
+          }
+        } catch (error) {
+          setLoading(false);
+          console.log(error);
+        }
+      })
+      .catch((error) => {
+        if (error instanceof FirebaseError) {
+          console.log('error: ', error);
+          showErrorMessageFirebase(error);
+          return;
+        }
+        setLoading(false);
+        console.log(error);
+      })
+      .finally(() => {
         setLoading(false);
       });
   }, []);
@@ -344,7 +383,8 @@ export default function AuthProvider({ children }: Props) {
     onSetProfile,
     setChapters,
     loginWithGoogle,
-    resetPassword
+    resetPassword,
+    loginFacebook,
   };
 
   return (

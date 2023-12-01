@@ -19,7 +19,8 @@ const LoginForm: FC<IProps> = ({}) => {
     onSubmitResetPasswordForm,
     onCloseResetPasswordForm,
     onLoginWithGoogle,
-    onGotoSignUp
+    onGotoSignUp,
+    onLoginWithFaceBook
   } = useLoginFormHooks();
 
   return (
@@ -140,7 +141,7 @@ const LoginForm: FC<IProps> = ({}) => {
                     </button>
                     <button
                       type='button'
-                      onClick={onLoginWithGoogle}
+                      onClick={onLoginWithFaceBook}
                       className='hover:shadow-lg w-full h-12 border-2 border-slate-200 rounded-lg mb-4 bg-transparent flex flex-row justify-center items-center'
                     >
                       <div className='w-[20px] h-[20px] aspect-square relative mr-1'>

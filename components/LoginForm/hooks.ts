@@ -1,26 +1,32 @@
-import { LOCAL_STORAGE_KEYS, ROUTERS } from "@/constants";
-import { useAuthState } from "@/contexts/auth";
-import { IResetPasswordFormValues, ISignInFormValues } from "@/queries/type";
-import { setItemLocalStorage } from "@/utils";
-import { FormikProps } from "formik";
-import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { LOCAL_STORAGE_KEYS, ROUTERS } from '@/constants';
+import { useAuthState } from '@/contexts/auth';
+import { IResetPasswordFormValues, ISignInFormValues } from '@/queries/type';
+import { setItemLocalStorage } from '@/utils';
+import { FormikProps } from 'formik';
+import { useRouter } from 'next/router';
+import { useCallback, useState } from 'react';
 
 interface IProps {}
 
 export const useLoginFormHooks = () => {
   const router = useRouter();
-  const { sendForgotPassword, loginWithEmail, loading, loginWithGoogle } = useAuthState();
+  const {
+    sendForgotPassword,
+    loginWithEmail,
+    loginWithGoogle,
+    loginFacebook,
+    loading,
+  } = useAuthState();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isRequestingResetPassword, setRequestingResetPassword] =
     useState<boolean>(false);
   const initialValues: ISignInFormValues = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     rememberMe: false,
   };
   const initialResetPasswordValues: IResetPasswordFormValues = {
-    email: "",
+    email: '',
   };
 
   const onClickSignUp = useCallback(() => {
@@ -32,7 +38,7 @@ export const useLoginFormHooks = () => {
       values.rememberMe &&
         setItemLocalStorage(
           LOCAL_STORAGE_KEYS.rememberMe,
-          values.rememberMe + ""
+          values.rememberMe + ''
         );
       loginWithEmail(values.email, values.password);
     } catch (error) {
@@ -57,7 +63,7 @@ export const useLoginFormHooks = () => {
 
   const onResetValueEmail = useCallback(
     (props: FormikProps<ISignInFormValues>) => () => {
-      props.setFieldValue("email", "");
+      props.setFieldValue('email', '');
     },
     []
   );
@@ -70,7 +76,7 @@ export const useLoginFormHooks = () => {
     try {
       setRequestingResetPassword(true);
     } catch (error) {
-      console.log("error: ", error);
+      console.log('error: ', error);
     }
   }, []);
 
@@ -84,6 +90,10 @@ export const useLoginFormHooks = () => {
 
   const onLoginWithGoogle = useCallback(() => {
     loginWithGoogle();
+  }, []);
+
+  const onLoginWithFaceBook = useCallback(() => {
+    loginFacebook();
   }, []);
 
   return {
@@ -101,6 +111,7 @@ export const useLoginFormHooks = () => {
     onSubmitResetPasswordForm,
     onCloseResetPasswordForm,
     onLoginWithGoogle,
-    onGotoSignUp
+    onGotoSignUp,
+    onLoginWithFaceBook,
   };
 };
