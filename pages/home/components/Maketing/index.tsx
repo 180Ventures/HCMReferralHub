@@ -1,6 +1,5 @@
 import { DownloadIcon, ThreeDots } from '@/icons';
-import { IDashBoardMarketingData } from '../../types';
-
+import { IDashBoardMarketingData } from '@/utils/types/dashboard';
 interface IProps {
   data?: IDashBoardMarketingData[];
 }

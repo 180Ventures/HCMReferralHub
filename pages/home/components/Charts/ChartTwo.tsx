@@ -1,9 +1,10 @@
 import { ThreeDots } from '@/icons';
-import { ApexOptions } from 'apexcharts';
+// import { ApexOptions } from 'apexcharts';
 import React, { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
+import dynamic from 'next/dynamic'
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const options: ApexOptions = {
+const options: any = {
   colors: ['#EE8062'],
   chart: {
     fontFamily: 'Satoshi, sans-serif',
@@ -97,12 +98,14 @@ const ChartTwo: React.FC = () => {
 
       <div>
         <div id='chartTwo' className='-ml-5 -mb-9'>
-          <ReactApexChart
-            options={options}
-            series={state.series}
-            type='bar'
-            height={280}
-          />
+          {typeof window !== 'undefined' && (
+            <ReactApexChart
+              options={options}
+              series={state.series}
+              type='bar'
+              height={280}
+            />
+          )}
         </div>
       </div>
       <div className='flex justify-between items-center mt-6'>

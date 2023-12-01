@@ -1,13 +1,14 @@
 import { ThreeDots } from '@/icons';
-import { ApexOptions } from 'apexcharts';
+// import { ApexOptions } from 'apexcharts';
 import React, { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
+import dynamic from 'next/dynamic'
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 interface ChartThreeState {
   series: number[];
 }
 
-const options: ApexOptions = {
+const options: any = {
   chart: {
     type: 'pie',
   },
@@ -55,13 +56,13 @@ const ChartOne: React.FC = () => {
   });
 
   return (
-    <div className="col-span-12 rounded-xl border border-stroke bg-white p-8 pb-5 shadow-default xl:col-span-4">
-      <div className="mb-3 justify-between gap-4 sm:flex">
+    <div className='col-span-12 rounded-xl border border-stroke bg-white p-8 pb-5 shadow-default xl:col-span-4'>
+      <div className='mb-3 justify-between gap-4 sm:flex'>
         <div>
-          <h2 className="text-2xl font-Inter font-semibold text-blackLight">
+          <h2 className='text-2xl font-Inter font-semibold text-blackLight'>
             Closing Ratios
           </h2>
-          <h5 className="text-sm font-Inter font-normal text-blackLight">
+          <h5 className='text-sm font-Inter font-normal text-blackLight'>
             March 2020
           </h5>
         </div>
@@ -72,13 +73,15 @@ const ChartOne: React.FC = () => {
         </div>
       </div>
 
-      <div className="mb-2">
-        <div id="chartThree" className="mx-auto flex justify-center">
-          <ReactApexChart
-            options={options}
-            series={state.series}
-            type="pie"
-          />
+      <div className='mb-2'>
+        <div id='chartThree' className='mx-auto flex justify-center'>
+          {typeof window !== 'undefined' && (
+            <ReactApexChart
+              options={options}
+              series={state.series}
+              type='pie'
+            />
+          )}
         </div>
       </div>
     </div>

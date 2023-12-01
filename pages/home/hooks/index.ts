@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { IDashBoardMarketingData, IDashBoardTableData } from '../types';
 import { DASHBOARD_MARKETING_DATA_TEMPLATE, DASHBOARD_TABLE_DATE_TEMPLATE } from '@/utils/data';
+import { IDashBoardMarketingData, IDashBoardTableData } from '@/utils/types/dashboard';
 
 const copyContent = async (text: string) => {
   try {

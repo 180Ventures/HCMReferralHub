@@ -1,9 +1,10 @@
 import { ThreeDots } from '@/icons';
-import { ApexOptions } from 'apexcharts';
+// import { ApexOptions } from 'apexcharts';
 import React, { useState } from 'react';
-import ReactApexChart from 'react-apexcharts';
+import dynamic from 'next/dynamic'
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const options: ApexOptions = {
+const options: any = {
   dataLabels: {
     enabled: false,
   },
@@ -132,12 +133,14 @@ const ChartThree: React.FC = () => {
       </div>
 
       <div id='chartTwo' className='-ml-5 -mb-9'>
-        <ReactApexChart
-          options={options}
-          series={state.series}
-          type='area'
-          height={300}
-        />
+        {typeof window !== 'undefined' && (
+          <ReactApexChart
+            options={options}
+            series={state.series}
+            type='area'
+            height={300}
+          />
+        )}
       </div>
     </div>
   );

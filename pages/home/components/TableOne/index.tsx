@@ -1,6 +1,6 @@
 import { ThreeDots } from '@/icons';
+import { IDashBoardTableData } from '@/utils/types/dashboard';
 import Image from 'next/image';
-import { IDashBoardTableData } from '../../types';
 
 interface IProps {
   data?: IDashBoardTableData[];
