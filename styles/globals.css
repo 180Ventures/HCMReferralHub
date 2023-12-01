@@ -155,6 +155,6 @@ input:focus {
   border: 2px solid #EE8062 !important;
   box-shadow: none !important;
 }
-.dashboard-header input:focus {
+.no-input input:focus {
   border: none !important;
 }
