@@ -78,7 +78,7 @@ const HomePage: NextPage = () => {
             <div className='mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-[#F9F9F9]'>
               <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
                 <div className='flex flex-col'>
-                  <h1 className='text-4xl font-semibold font-Inter text-blackLight mb-2 capitalize'>
+                  <h1 className='text-2xl 2xl:text-4xl font-semibold font-Inter text-blackLight mb-2 capitalize'>
                     Hi {profile?.firstName + ' ' + profile?.lastName},
                   </h1>
                   <p className='font-Inter text-sm font-normal'>
@@ -86,11 +86,11 @@ const HomePage: NextPage = () => {
                   </p>
                 </div>
                 <div className='flex flex-col sm:flex-row no-input mt-4 md:mt-0'>
-                  <div className='sm:mr-6 flex items-center px-4 w-auto md:w-[540px] h-12 bg-white rounded-lg border border-slate-200 text-[#898989] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal'>
+                  <div className='sm:mr-6 flex items-center px-4 w-auto md:w-[430px] 2xl:w-[540px] h-10 2xl:h-12 bg-white rounded-lg border border-slate-200 text-[#898989] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal'>
                     <input
                       value={link}
                       onChange={(e) => handleChangeLink(e.target.value)}
-                      className='flex-grow pl-0 border-none'
+                      className='flex-grow pl-0 border-none pt-0 pb-0'
                     />
                     <span
                       onClick={handleCopy}
