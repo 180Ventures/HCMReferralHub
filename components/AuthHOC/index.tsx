@@ -8,7 +8,6 @@ enum RouteRole {
   auth,
   all,
 }
-
 export interface WithAuthProps {
 }
 

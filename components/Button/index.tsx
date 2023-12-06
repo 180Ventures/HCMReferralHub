@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, FC, useCallback } from 'react';
+import React, { FC } from 'react';
 
 interface IButton {
   text: string;

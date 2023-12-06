@@ -3,20 +3,19 @@ import { FC } from 'react';
 import * as Yup from 'yup';
 import { ErrorMessageForm, PasswordStrengthMeter } from '..';
 import { useSignUpFormHooks } from './hooks';
-import Image from 'next/image';
 import Input from '../Input';
 
 interface IProps {}
 
 const SignUpForm: FC<IProps> = () => {
-  const { inititalValues, showPassword, onSubmitForm, onToggleShowPassword } =
+  const { inititalValues, showPassword, onSubmitForm, onToggleShowPassword, setValidPassword } =
     useSignUpFormHooks();
 
   return (
-    <div className='flex flex-col justify-center items-center  max-w-sm w-full pb-8'>
+    <div className='flex flex-col justify-center items-center max-w-sm w-full pb-8'>
       <div>
-        <p className={`text-2xl text-left font-medium text-gray20`}>Sign Up</p>
-        <div className='mt-6 sm:mt-16 lg:mt-10 md:w-[370px]'>
+        <p className={`text-2xl text-left font-semibold text-gray20`}>Sign Up</p>
+        <div className='mt-4 2xl:mt-8 w-[320px] 2xl:w-[370px]'>
           <Formik
             validationSchema={SignInSchema}
             initialValues={inititalValues}
@@ -37,7 +36,7 @@ const SignUpForm: FC<IProps> = () => {
                     />
                   </div>
 
-                  <div className='grid grid-cols-2 gap-6 mt-8 justify-center items-center relative'>
+                  <div className='grid grid-cols-2 gap-6 mt-4 2xl:mt-8 justify-center items-center relative'>
                     <div>
                       <Input
                         name='firstName'
@@ -59,7 +58,7 @@ const SignUpForm: FC<IProps> = () => {
                       />
                     </div>
                   </div>
-                  <div className='flex mt-6 flex-row justify-center items-center relative'>
+                  <div className='flex mt-4 2xl:mt-6 flex-row justify-center items-center relative'>
                     <Input
                       name='password'
                       type={showPassword ? 'text' : 'password'}
@@ -75,15 +74,16 @@ const SignUpForm: FC<IProps> = () => {
 
                   {!props.errors.password &&
                     props.values.password.length > 0 && (
-                      <PasswordStrengthMeter password={props.values.password} />
+                      <PasswordStrengthMeter onChange={setValidPassword} password={props.values.password} />
                     )}
                   <button
                     type='submit'
-                    className='mt-6 w-full bg-orangeLight rounded-lg h-12'
+                    className='mt-6 w-full bg-orangeLight rounded-lg h-10 2xl:h-12'
                   >
-                    <p className='text-sm font-semibold text-white'>Sign Up</p>
+                    <p className='text-xs 2xl:text-sm font-semibold text-white'>Sign Up</p>
                   </button>
-                  <div className='flex justify-between items-center py-6'>
+                  
+                  {/* <div className='flex justify-between items-center py-6'>
                     <div className='h-[1px] flex-grow max-w-[166px] bg-[#DCDCDC]'></div>
                     <span className='text-sm text-[#898989] font-normal py-3'>
                       or
@@ -128,7 +128,7 @@ const SignUpForm: FC<IProps> = () => {
                         Facebok
                       </span>
                     </button>
-                  </div>
+                  </div> */}
                   <div className='flex mt-6 flex-col'>
                     <div>
                       <input

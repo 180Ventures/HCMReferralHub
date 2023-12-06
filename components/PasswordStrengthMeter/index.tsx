@@ -1,21 +1,26 @@
 import React from 'react';
 import zxcvbn from 'zxcvbn';
 
-const PasswordStrengthMeter = ({ password }: { password: string }) => {
+const PasswordStrengthMeter = ({ password, onChange }: { password: string, onChange?: any }) => {
   const testResult = zxcvbn(password);
   const num = (testResult.score * 100) / 4;
-
+  
   const createPassLabel = () => {
     switch (testResult.score) {
       case 0:
+        onChange && onChange(false);
         return 'Very weak';
       case 1:
+        onChange && onChange(false);
         return 'Weak';
       case 2:
+        onChange && onChange(true);
         return 'Fear';
       case 3:
+        onChange && onChange(true);
         return 'Good';
       case 4:
+        onChange && onChange(true);
         return 'Strong';
       default:
         return '';

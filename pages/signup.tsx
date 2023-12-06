@@ -49,18 +49,29 @@ const SignUpClientPage: NextPage = () => {
                   </div>
                 </div>
               </div>
-              <p className='text-sm font-normal max-w-[40%] md:max-w-none'>
-                Don’t have an account?
+              <div className="text-right text-neutral-800 text-sm font-normal font-Inter max-w-[40%] md:max-w-none">
+                Already have an account?{' '}
                 <span
                   onClick={() => route.push('/')}
                   className='cursor-pointer text-orangeLight text-sm font-semibold ml-1'
                 >
                   Sign In
                 </span>
-              </p>
+              </div>
             </div>
             <SignUpForm />
-            <p className='max-w-[370px] text-xs font-normal'>Protected by reCAPTCHA and subject to the Rhombus <span className='cursor-pointer text-orangeLight'>Privacy Policy </span> and <span className='text-orangeLight cursor-pointer'> Terms of Service</span>.</p>
+            <p className='max-w-[370px] text-xs font-normal'>
+              Protected by reCAPTCHA and subject to the Rhombus{' '}
+              <span className='cursor-pointer text-orangeLight'>
+                Privacy Policy{' '}
+              </span>{' '}
+              and{' '}
+              <span className='text-orangeLight cursor-pointer'>
+                {' '}
+                Terms of Service
+              </span>
+              .
+            </p>
           </div>
         </div>
       </div>

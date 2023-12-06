@@ -1,5 +1,6 @@
 import { useAuthState } from "@/contexts/auth";
 import { ISignUpFormValues } from "@/queries/type";
+import { toastError } from "@/utils";
 import { useCallback, useState } from "react";
 
 interface IProps {
@@ -8,6 +9,7 @@ interface IProps {
 export const useSignUpFormHooks = () => {
   const { signUpWithEmail } = useAuthState();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [validPassword, setValidPassword] = useState<boolean>(false);
 
   const inititalValues: ISignUpFormValues = {
     firstName: "",
@@ -19,6 +21,10 @@ export const useSignUpFormHooks = () => {
   
   const onSubmitForm = async (values: ISignUpFormValues) => {
     try {
+      if(!validPassword) {
+        toastError('Password is invalid!');
+        return;
+      }
       signUpWithEmail(values);
     } catch (error) {
       //@ts-ignore
@@ -34,6 +40,7 @@ export const useSignUpFormHooks = () => {
     inititalValues,
     showPassword,
     onSubmitForm,
+    setValidPassword,
     onToggleShowPassword,
   }
 }

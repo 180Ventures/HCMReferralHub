@@ -18,19 +18,24 @@ const LoginForm: FC<IProps> = ({}) => {
     onForgotPassword,
     onSubmitResetPasswordForm,
     onCloseResetPasswordForm,
-    onLoginWithGoogle,
     onGotoSignUp,
-    onLoginWithFaceBook
   } = useLoginFormHooks();
 
   return (
     <div className='flex flex-col justify-center items-center lg:max-w-sm w-full h-full'>
       <div className='w-[90%] lg:w-auto flex flex-col justify-center items-center'>
-        <div className='d-flex flex-col items-start'>
-          <p className={`text-2xl text-left font-medium text-gray20`}>
+        <div className='d-flex flex-col items-start w-full sm:max-w-[370px]'>
+          <p
+            className={`text-2xl text- w-full font-semibold font-Inter text-gray20`}
+          >
             {isRequestingResetPassword ? 'Forgot password?' : 'Sign in'}
           </p>
-          <p className='text-sm font-normal mt-2'>No worriest! Just enter your email and we’ll send you a reset password link.</p>
+          {isRequestingResetPassword && (
+            <p className='text-sm font-normal mt-2'>
+              No worriest! Just enter your email and we’ll send you a reset
+              password link.
+            </p>
+          )}
         </div>
         {isRequestingResetPassword ? (
           <Formik
@@ -40,29 +45,36 @@ const LoginForm: FC<IProps> = ({}) => {
             onSubmit={onSubmitResetPasswordForm}
           >
             {(props) => (
-              <form onSubmit={props.handleSubmit} className='mt-4 2xl:mt-8 w-full md:w-[370px]'>
+              <form
+                onSubmit={props.handleSubmit}
+                className='mt-4 2xl:mt-8 w-full md:w-[370px]'
+              >
                 <div className='flex mt-2 flex-row justify-center items-center relative'>
-                    <Input
-                      name='email'
-                      type='email'
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.email}
-                      placeholder='Email address'
-                    />
+                  <Input
+                    name='email'
+                    type='email'
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.email}
+                    placeholder='Email address'
+                  />
                 </div>
                 <button
                   type='submit'
-                  className='mt-6 w-full bg-orangeLight rounded-lg h-12'
+                  className='mt-6 w-full bg-orangeLight rounded-lg h-10 2xl:h-12 hover:opacity-75'
                 >
-                  <p className='text-base font-medium text-white font-Poppins'>
-                  Send Recovery Email
+                  <p className='text-xs 2xl:text-sm font-medium text-white font-Poppins'>
+                    Send Recovery Email
                   </p>
                 </button>
-                <p
-                  className='text-sm font-normal text-gray20 text-center mt-4 cursor-pointer'
-                >
-                  Just remember? <span  onClick={onGotoSignUp} className='text-orangeLight font-semibold cursor-pointer'>Sign Up</span>
+                <p className='text-xs 2xl:text-sm font-normal text-gray20 text-center mt-4 cursor-pointer'>
+                  Just remember?{' '}
+                  <span
+                    onClick={onGotoSignUp}
+                    className='text-orangeLight font-semibold cursor-pointer hover:opacity-75'
+                  >
+                    Sign Up
+                  </span>
                 </p>
               </form>
             )}
@@ -100,28 +112,26 @@ const LoginForm: FC<IProps> = ({}) => {
                       showPassword={showPassword}
                     />
                   </div>
-                  <div className='mt-6 flex flex-row items-center justify-between'>
-                    <p
-                      onClick={onForgotPassword}
-                      className={`text-orangeLight text-sm font-medium cursor-pointer`}
-                    >
-                      Forgot Password?
-                    </p>
+                  <div
+                    onClick={onForgotPassword}
+                    className='text-neutral-800 text-sm font-normal font-Inter cursor-pointer hover:text-orangeLight mt-6'
+                  >
+                    Forgot password?
                   </div>
                   <button
                     type='submit'
-                    className='mt-6 w-full bg-orangeLight rounded-lg h-12'
+                    className='mt-6 w-full bg-orangeLight rounded-lg h-10 2xl:h-12 hover:opacity-75'
                   >
                     <p className='text-sm font-semibold text-white'>Sign in</p>
                   </button>
-                  <div className='flex justify-between items-center py-6'>
+                  {/* <div className='flex justify-between items-center py-6'>
                     <div className='h-[1px] flex-grow max-w-[166px] bg-[#DCDCDC]'></div>
                     <span className='text-sm text-[#898989] font-normal py-3'>
                       or
                     </span>
                     <div className='h-[1px] flex-grow max-w-[166px]  bg-[#DCDCDC]'></div>
-                  </div>
-                  <div className='grid grid-cols-2 gap-6'>
+                  </div> */}
+                  {/* <div className='grid grid-cols-2 gap-6'>
                     <button
                       type='button'
                       onClick={onLoginWithGoogle}
@@ -159,7 +169,7 @@ const LoginForm: FC<IProps> = ({}) => {
                         Facebok
                       </span>
                     </button>
-                  </div>
+                  </div> */}
                 </form>
               )}
             </Formik>

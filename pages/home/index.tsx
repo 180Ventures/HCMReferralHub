@@ -58,6 +58,7 @@ const HomePage: NextPage = () => {
   const {
     link,
     sidebarOpen,
+    profile,
     isCopied,
     tableData,
     marketingData,
@@ -77,8 +78,8 @@ const HomePage: NextPage = () => {
             <div className='mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-[#F9F9F9]'>
               <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
                 <div className='flex flex-col'>
-                  <h1 className='text-4xl font-semibold font-Inter text-blackLight mb-2'>
-                    Hi Rachael,
+                  <h1 className='text-4xl font-semibold font-Inter text-blackLight mb-2 capitalize'>
+                    Hi {profile?.firstName + ' ' + profile?.lastName},
                   </h1>
                   <p className='font-Inter text-sm font-normal'>
                     Welcome back to The Referral Hub!
