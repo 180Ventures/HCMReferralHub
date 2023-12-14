@@ -74,7 +74,7 @@ const HomePage: NextPage = () => {
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <div className='relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden'>
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <main>
+          <main className='bg-[#F9F9F9] h-full'>
             <div className='mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-[#F9F9F9]'>
               <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
                 <div className='flex flex-col'>
@@ -106,7 +106,7 @@ const HomePage: NextPage = () => {
                   />
                 </div>
               </div>
-              <div className='grid grid-cols-1 sm:grid-cols-2 mt-8 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4 2xl:gap-7.5'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 mt-4 2xl:mt-8 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4 2xl:gap-7.5'>
                 {DASHBOARD_CARDS.map((item) => (
                   <CardItem
                     value={item.value}
@@ -118,10 +118,12 @@ const HomePage: NextPage = () => {
                   />
                 ))}
               </div>
-              <div className='mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5 pb-12'>
+               <div className='mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5'>
                 {typeof window !== 'undefined' && <ChartOne />}
                 {typeof window !== 'undefined' && <ChartTwo />}
                 {typeof window !== 'undefined' && <ChartThree />}
+              </div>
+              <div className='grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5 mt-4'>
                 <div className='col-span-12 xl:col-span-8'>
                   <TableOne data={tableData}/>
                 </div>

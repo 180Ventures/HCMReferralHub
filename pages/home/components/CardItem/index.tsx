@@ -14,7 +14,7 @@ const CardItem = ({title, value, progress, progressColor, chidrenIcon }: IProps)
   }, [progressColor])
 
   return (
-    <div className='border border-stroke bg-white p-8 rounded-xl w-full max-h-[156px] cursor-pointer hover:opacity-75'>
+    <div className='border border-stroke bg-white p-3 2xl:p-4 rounded-xl w-full max-h-[156px] cursor-pointer hover:opacity-75'>
       <div className='flex w-full items-center justify-between rounded-xl'>
         <span className='text-xl font-Inter font-bold text-blackLight'>
           {value}

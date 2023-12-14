@@ -92,7 +92,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   {pathname.includes('home') && (
                     <div className='bg-orangeLight rounded-xl opacity-20 w-full left-0 top-0 h-[52px] gap-2.5 py-2 px-4'></div>
                   )}
-                  <div className='absolute flex z-10 left-3'>
+                  <div className='absolute flex z-10 left-3 justify-center items-center'>
                     <OverviewIcon active={pathname.includes('home')} />
                     <span className='ml-3'>Overview</span>
                   </div>
@@ -106,7 +106,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   {pathname.includes('settings') && (
                     <div className='bg-orangeLight rounded-xl opacity-20 w-full left-0 top-0 h-[52px] gap-2.5 py-2 px-4'></div>
                   )}
-                  <div className='absolute flex z-10 left-3'>
+                 <div className='absolute flex z-10 left-3 justify-center items-center'>
                     <div className='w-6 h-6 bg-[#898989] relative flex justify-between items-center rounded-full'>
                       <SettingsIcon active={pathname.includes('settings')} />
                     </div>
@@ -126,7 +126,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   {pathname.includes('invite-friend') && (
                     <div className='bg-orangeLight rounded-xl opacity-20 w-full left-0 top-0 h-[52px] gap-2.5 py-2 px-4'></div>
                   )}
-                  <div className='absolute flex z-10 left-3'>
+                  <div className='absolute flex z-10 left-3 justify-center items-center'>
                     <InviteFriend active={pathname.includes('invite-friend')} />
                     <span className='ml-3'>Invite a Friend</span>
                   </div>

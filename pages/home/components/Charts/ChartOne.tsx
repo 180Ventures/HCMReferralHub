@@ -1,5 +1,5 @@
 import { ThreeDots } from '@/icons';
-// import { ApexOptions } from 'apexcharts';
+import { ApexOptions } from 'apexcharts';
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic'
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
@@ -8,7 +8,7 @@ interface ChartThreeState {
   series: number[];
 }
 
-const options: any = {
+const options: ApexOptions = {
   chart: {
     type: 'pie',
   },
@@ -32,10 +32,10 @@ const options: any = {
   },
   responsive: [
     {
-      breakpoint: 2600,
+      breakpoint: 1024,
       options: {
         chart: {
-          width: 380,
+          width: 200,
         },
       },
     },
@@ -43,7 +43,7 @@ const options: any = {
       breakpoint: 640,
       options: {
         chart: {
-          width: 200,
+          width: 240,
         },
       },
     },
@@ -56,7 +56,7 @@ const ChartOne: React.FC = () => {
   });
 
   return (
-    <div className='col-span-12 rounded-xl border border-stroke bg-white p-8 pb-5 shadow-default xl:col-span-4'>
+    <div className='col-span-12 rounded-xl border border-stroke bg-white p-4 2xl:p-8 pb-2 2xl:pb-5 shadow-default xl:col-span-4'>
       <div className='mb-3 justify-between gap-4 sm:flex'>
         <div>
           <h2 className='text-2xl font-Inter font-semibold text-blackLight'>
@@ -80,6 +80,7 @@ const ChartOne: React.FC = () => {
               options={options}
               series={state.series}
               type='pie'
+              // height={200}
             />
           )}
         </div>

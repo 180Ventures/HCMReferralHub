@@ -53,7 +53,7 @@ const options: any = {
   },
   chart: {
     fontFamily: 'Satoshi, sans-serif',
-    height: 335,
+    // height: 335,
     type: 'area',
     dropShadow: {
       enabled: true,
@@ -75,18 +75,18 @@ const options: any = {
   },
   responsive: [
     {
-      breakpoint: 1024,
+      breakpoint: 640,
       options: {
         chart: {
-          height: 300,
+          width: 200,
         },
       },
     },
     {
-      breakpoint: 1366,
+      breakpoint: 1024,
       options: {
         chart: {
-          height: 350,
+          height: 120,
         },
       },
     },
@@ -138,7 +138,7 @@ const ChartThree: React.FC = () => {
             options={options}
             series={state.series}
             type='area'
-            height={300}
+            height={200}
           />
         )}
       </div>

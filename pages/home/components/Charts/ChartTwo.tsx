@@ -9,7 +9,7 @@ const options: any = {
   chart: {
     fontFamily: 'Satoshi, sans-serif',
     type: 'bar',
-    height: 235,
+    // height: 235,
     stacked: true,
     toolbar: {
       show: false,
@@ -103,7 +103,7 @@ const ChartTwo: React.FC = () => {
               options={options}
               series={state.series}
               type='bar'
-              height={280}
+              height={180}
             />
           )}
         </div>

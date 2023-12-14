@@ -35,16 +35,4 @@ export const DASHBOARD_MARKETING_DATA_TEMPLATE = [
     id: 'd2',
     name: 'What are Fixed Indemnity Policies?',
   },
-  {
-    id: 'd3',
-    name: 'In-Office Marketing Materials',
-  },
-  {
-    id: 'd4',
-    name: 'Pros & Cons of Cost Sharing Plans',
-  },
-  {
-    id: 'd5',
-    name: 'Understanding Healthcare',
-  },
 ];
