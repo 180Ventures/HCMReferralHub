@@ -11,6 +11,9 @@
   }
 }
 
+html {
+  font-size: 14px;
+}
 
 @font-face {
   font-family: "Inter";

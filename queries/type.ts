@@ -79,3 +79,28 @@ export interface IFooterFormValues {
   email: string;
   adventure: string;
 }
+
+export type IAddContactFormValues = {
+  name: string;
+  email: string;
+  createAt?: Date;
+};
+
+export type IUpdateContactFormValues = {
+  folderId?: string;
+};
+
+export type IDepedent = {
+  name: string;
+  dob?: Date;
+};
+
+export interface IContactData extends IAddContactFormValues {
+  id: string;
+  phoneNumber: string;
+  zipCode: string;
+  isTobacco: boolean;
+  sex: string;
+  dependents?: IDepedent[];
+  fromSide?: string;
+}

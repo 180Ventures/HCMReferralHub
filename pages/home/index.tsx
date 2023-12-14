@@ -138,4 +138,3 @@ const HomePage: NextPage = () => {
 };
 
 export default withAuth(HomePage, 'all');
-// export default HomePage;

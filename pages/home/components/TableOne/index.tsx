@@ -73,7 +73,12 @@ const TableOne = ({ data }: IProps) => {
               </div>
               <div className='flex items-center gap-3 p-2.5 col-span-3 xl:p-5'>
                 <div className='w-10 h-10 relative'>
-                  <Image alt='Logo' src='/images/avatar.jpg' fill priority />
+                  {/* <Image alt='Logo' src='/images/avatar.jpg' fill priority /> */}
+                  <div className='uppercase w-full h-full bg-orangeLight rounded-full flex justify-center items-center'>
+                    <span className='text-white uppercase'>
+                      {item.clientName.length > 0 ? item.clientName[0] : 'A'}
+                    </span>
+                  </div>
                 </div>
                 <div className='flex flex-col items-start'>
                   <p className=' text-sm font-medium font-Inter text-blackLight sm:block capitalize'>
@@ -93,13 +98,13 @@ const TableOne = ({ data }: IProps) => {
 
               <div className='flex items-center justify-center p-2.5 xl:p-5 col-span-2'>
                 <p className='text-blackLight text-xs font-normal font-Inter'>
-                  {item.date as string}
+                  {(item.date as string) || '...'}
                 </p>
               </div>
 
               <div className=' items-center justify-center p-2.5 sm:flex xl:p-5 col-span-2'>
                 <p className='text-blackLight text-xs font-normal font-Inter'>
-                  {item.payout as string}
+                  {(item.payout as string) || '...'}
                 </p>
               </div>
 
