@@ -33,10 +33,10 @@ const SignInPage: NextPage = () => {
             <div className='flex justify-between w-full'>
               <div className='flex flex-col sm:flex-row relative justify-center items-center text-xl md:text-2xl text-green font-normal'>
                 <div className='flex'>
-                  <p className='font-Poppins text-orangeLight font-normal'>
+                  <p className='font-Poppins text-blueLight font-normal'>
                     Health
                   </p>
-                  <p className='font-bold text-[25px] font-Poppins text-orangeLight'>
+                  <p className='font-bold text-[25px] font-Poppins text-blueLight'>
                     care
                   </p>
                 </div>
@@ -49,10 +49,10 @@ const SignInPage: NextPage = () => {
                   </div>
                 </div>
               </div>
-              <p className='text-sm font-normal max-w-[40%] md:max-w-none'>Already have an account? <span onClick={() => route.push('/signup')} className='cursor-pointer text-orangeLight text-sm font-semibold'>Sign Up</span></p>
+              <p className='text-sm font-normal max-w-[40%] md:max-w-none'>Already have an account? <span onClick={() => route.push('/signup')} className='cursor-pointer text-blueLight text-sm font-semibold'>Sign Up</span></p>
             </div>
             <LoginForm />
-            <p className='max-w-[370px] text-xs font-normal'>Protected by reCAPTCHA and subject to the Rhombus <span className='cursor-pointer text-orangeLight'>Privacy Policy </span> and <span className='text-orangeLight cursor-pointer'> Terms of Service</span>.</p>
+            <p className='max-w-[370px] text-xs font-normal text-[#898989]'>Protected by reCAPTCHA and subject to the Rhombus <span className='cursor-pointer text-[#4B4039]'>Privacy Policy </span> and <span className='text-[#4B4039] cursor-pointer'> Terms of Service</span>.</p>
           </div>
         </div>
       </div>

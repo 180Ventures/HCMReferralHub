@@ -90,7 +90,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   className={`relative h-[52px]  rounded-xl font-Inter text-blackLight flex items-center font-medium text-base`}
                 >
                   {pathname.includes('home') && (
-                    <div className='bg-orangeLight rounded-xl opacity-20 w-full left-0 top-0 h-[52px] gap-2.5 py-2 px-4'></div>
+                    <div className='bg-[#35B0A4] rounded-xl opacity-20 w-full left-0 top-0 h-[52px] gap-2.5 py-2 px-4'></div>
                   )}
                   <div className='absolute flex z-10 left-3 justify-center items-center'>
                     <OverviewIcon active={pathname.includes('home')} />
@@ -100,14 +100,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               <li>
                 <Link
-                  href='#'
+                  href='settings'
                   className={`relative h-[52px]  rounded-xl font-Inter text-blackLight flex items-center font-medium text-base`}
                 >
                   {pathname.includes('settings') && (
-                    <div className='bg-orangeLight rounded-xl opacity-20 w-full left-0 top-0 h-[52px] gap-2.5 py-2 px-4'></div>
+                    <div className='bg-[#35B0A4] rounded-xl opacity-20 w-full left-0 top-0 h-[52px] gap-2.5 py-2 px-4'></div>
                   )}
                  <div className='absolute flex z-10 left-3 justify-center items-center'>
-                    <div className='w-6 h-6 bg-[#898989] relative flex justify-between items-center rounded-full'>
+                    <div className={`${!pathname.includes('settings') ? 'bg-[#898989]' : 'bg-blueLight'} w-6 h-6 relative flex justify-between items-center rounded-full`}>
                       <SettingsIcon active={pathname.includes('settings')} />
                     </div>
                     <span className='ml-3'>Settings</span>
@@ -117,7 +117,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   </div>
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   // href='/invite-friend'
                   href='#'
@@ -131,7 +131,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <span className='ml-3'>Invite a Friend</span>
                   </div>
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
         </nav>

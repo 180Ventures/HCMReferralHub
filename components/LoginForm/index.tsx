@@ -23,6 +23,11 @@ const LoginForm: FC<IProps> = ({}) => {
 
   return (
     <div className='flex flex-col justify-center items-center lg:max-w-sm w-full h-full'>
+      {!isRequestingResetPassword && (
+        <p className='text-[#000] font-Inter text-[25px] italic font-semibold pb-10'>
+          PROVIDER HUB
+        </p>
+      )}
       <div className='w-[90%] lg:w-auto flex flex-col justify-center items-center'>
         <div className='d-flex flex-col items-start w-full sm:max-w-[370px]'>
           <p
@@ -120,7 +125,7 @@ const LoginForm: FC<IProps> = ({}) => {
                   </div>
                   <button
                     type='submit'
-                    className='mt-6 w-full bg-orangeLight rounded-lg h-10 2xl:h-12 hover:opacity-75'
+                    className='mt-6 w-full bg-blueLight rounded-lg h-10 2xl:h-12 hover:opacity-75'
                   >
                     <p className='text-sm font-semibold text-white'>Sign in</p>
                   </button>

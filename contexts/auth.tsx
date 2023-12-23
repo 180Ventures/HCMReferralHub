@@ -19,11 +19,13 @@ import {
   signInWithPopup,
   confirmPasswordReset,
   FacebookAuthProvider,
+  getAuth,
+  updateEmail,
 } from 'firebase/auth';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
 import { Chapter, ISignUpFormValues, UserData } from '@/queries/type';
-import { addUser, getUser } from '@/queries/users';
+import { addUser, getUser, updateUser } from '@/queries/users';
 import {
   getItemLocalStorage,
   removeAllLocalStorage,
@@ -49,6 +51,7 @@ interface AuthContextProps {
   loginWithGoogle: () => void;
   resetPassword: (oobCode: string, newPassword: string) => void;
   loginFacebook: () => void;
+  handleUpdateEmail: (email: string) => void;
   user: User | null;
   profile: UserData | null;
   isSignedUp: boolean;
@@ -72,6 +75,7 @@ const initialState: AuthContextProps = {
   loginWithGoogle: () => {},
   resetPassword: (oobCode: string, newPassword: string) => {},
   loginFacebook: () => {},
+  handleUpdateEmail: (email: string) => {},
   user: null,
   profile: null,
   isSignedUp: false,
@@ -364,6 +368,16 @@ export default function AuthProvider({ children }: Props) {
       });
   }, []);
 
+  const handleUpdateEmail = useCallback((email: string) => {
+    const auth = getAuth();
+    updateEmail(auth.currentUser as any, email).then(() => {
+      console.log('update');
+      
+    }).catch((error) => {
+      console.error(error)
+    });
+  }, [])
+
   const memoedValue = {
     user,
     profile,
@@ -385,6 +399,7 @@ export default function AuthProvider({ children }: Props) {
     loginWithGoogle,
     resetPassword,
     loginFacebook,
+    handleUpdateEmail,
   };
 
   return (
