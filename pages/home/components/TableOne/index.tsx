@@ -38,19 +38,15 @@ const TableOne = ({ data }: IProps) => {
               Status
             </h5>
           </div>
-          <div className=' p-2.5 text-center col-span-2 sm:block 2xl:p-5'>
-            <h5 className='text-sm font-medium uppercase xsm:text-base'>
-              Date
-            </h5>
-          </div>
+
           <div className=' p-2.5 text-center sm:block col-span-2 2xl:p-5'>
             <h5 className='text-sm font-medium uppercase xsm:text-base'>
-              Payout
+              Payout Date
             </h5>
           </div>
-          <div className=' p-2.5 text-center sm:block 2xl:p-5 col-span-2'>
+          <div className=' p-2.5 text-center sm:block 2xl:p-5 col-span-3'>
             <h5 className='text-sm font-medium uppercase xsm:text-base'>
-              Notes
+              Phone Number
             </h5>
           </div>
         </div>
@@ -64,7 +60,7 @@ const TableOne = ({ data }: IProps) => {
             return (
               <div
                 key={item.id}
-                className={`grid overflow-auto border-b border-stroke dark:border-strokedark grid-cols-12 ${
+                className={`grid overflow-auto cursor-pointer border-b border-stroke dark:border-strokedark grid-cols-12 ${
                   index === data.length - 1 ? 'border-none' : ''
                 }`}
               >
@@ -75,7 +71,6 @@ const TableOne = ({ data }: IProps) => {
                 </div>
                 <div className='flex items-center gap-3 p-2.5 col-span-3 2xl:p-5'>
                   <div className='w-10 h-10 relative'>
-                    {/* <Image alt='Logo' src='/images/avatar.jpg' fill priority /> */}
                     <div className='uppercase w-full h-full bg-orangeLight rounded-full flex justify-center items-center'>
                       <span className='text-white uppercase'>
                         {item.clientName.length > 0 ? item.clientName[0] : 'A'}
@@ -98,21 +93,15 @@ const TableOne = ({ data }: IProps) => {
                   </p>
                 </div>
 
-                <div className='flex items-center justify-center p-2.5 2xl:p-5 col-span-2'>
-                  <p className='text-blackLight text-xs font-normal font-Inter'>
-                    {(item.date as string) || '...'}
-                  </p>
-                </div>
-
                 <div className=' items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2'>
                   <p className='text-blackLight text-xs font-normal font-Inter'>
                     {(item.payout as string) || '...'}
                   </p>
                 </div>
 
-                <div className=' items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2'>
-                  <p className='text-meta-5 underline cursor-pointer hover:opacity-60 text-blackLight text-xs font-normal font-Inter'>
-                    See Notes
+                <div className=' items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-3'>
+                  <p className='text-meta-5 cursor-pointer hover:opacity-60 text-blackLight text-xs font-normal font-Inter'>
+                  {(item.phone as string) || '...'}
                   </p>
                 </div>
               </div>

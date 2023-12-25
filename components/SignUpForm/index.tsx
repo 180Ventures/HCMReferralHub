@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { ErrorMessageForm, PasswordStrengthMeter } from '..';
 import { useSignUpFormHooks } from './hooks';
 import Input from '../Input';
+import { FIELD_REQUIRED } from '@/constants';
 
 interface IProps {}
 
@@ -161,10 +162,10 @@ const SignUpForm: FC<IProps> = () => {
 };
 
 const SignInSchema = Yup.object().shape({
-  firstName: Yup.string().required('This field is required'),
-  lastName: Yup.string().required('This field is required'),
-  email: Yup.string().email('Invalid email').required('This field is required'),
-  password: Yup.string().required('This field is required'),
+  firstName: Yup.string().required(FIELD_REQUIRED),
+  lastName: Yup.string().required(FIELD_REQUIRED),
+  email: Yup.string().email('Invalid email').required(FIELD_REQUIRED),
+  password: Yup.string().required(FIELD_REQUIRED),
   policy: Yup.bool().oneOf(
     [true],
     'You need to accept the terms and conditions'

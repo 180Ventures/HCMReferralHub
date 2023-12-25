@@ -8,6 +8,7 @@ import {
   OverviewIcon,
   SettingsIcon,
 } from '@/icons';
+import { ROUTERS } from '@/constants';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -86,7 +87,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <ul className='mb-6 flex flex-col gap-1.5'>
               <li>
                 <Link
-                  href='/home'
+                  href={ROUTERS.home}
                   className={`relative h-[52px]  rounded-xl font-Inter text-blackLight flex items-center font-medium text-base`}
                 >
                   {pathname.includes('home') && (

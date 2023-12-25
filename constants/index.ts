@@ -8,6 +8,7 @@ export const ROUTERS = {
   login: "/login",
   signup: "/signup",
   home: "/home",
+  newLead: "new-lead",
   chapter: "/chapter",
   resetPassword: "/reset-password",
 };
@@ -25,3 +26,11 @@ export const ERROR_CODE_FIREBASE = {
   "auth/invalid-login-credentials": "Email or Password is incorrect",
   "auth/email-already-in-use": "Email already in use. Please use another email",
 };
+
+export const ERROR_SOMTHING_WENT_WRONG = 'Something went wrong please try again!'
+
+export const MESSAGE = {
+  addedNewLead: 'Added new lead successfully!'
+}
+
+export const FIELD_REQUIRED = 'This field is required'

@@ -1,3 +1,4 @@
+import { FIELD_REQUIRED } from '@/constants';
 import { useAuthState } from '@/contexts/auth';
 import { toastError, toastSuccess } from '@/utils';
 import { useCallback, useState } from 'react';
@@ -16,13 +17,13 @@ export const initialValues: IPassword = {
 
 export const passwordSchema = Yup.object().shape({
   password: Yup.string()
-    .required('This field is required')
+    .required(FIELD_REQUIRED)
     .min(8, 'Password at least 8 characters'),
   currentPassword: Yup.string()
-    .required('This field is required')
+    .required(FIELD_REQUIRED)
     .min(8, 'Password at least 8 characters'),
   confirmPassword: Yup.string()
-    .required('This field is required')
+    .required(FIELD_REQUIRED)
     .oneOf([Yup.ref('password')], 'Your passwords do not match.'),
 });
 

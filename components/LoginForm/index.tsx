@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useLoginFormHooks } from './hooks';
 import Image from 'next/image';
 import Input from '../Input';
+import { FIELD_REQUIRED } from '@/constants';
 
 interface IProps {}
 
@@ -186,14 +187,14 @@ const LoginForm: FC<IProps> = ({}) => {
 };
 
 const SignInSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('This field is required'),
+  email: Yup.string().email('Invalid email').required(FIELD_REQUIRED),
   password: Yup.string()
-    .required('This field is required')
+    .required(FIELD_REQUIRED)
     .min(8, 'Password at least 8 characters'),
 });
 
 const ResetPasswordSchema = Yup.object().shape({
-  email: Yup.string().email('Invalid email').required('This field is required'),
+  email: Yup.string().email('Invalid email').required(FIELD_REQUIRED),
 });
 
 export default LoginForm;

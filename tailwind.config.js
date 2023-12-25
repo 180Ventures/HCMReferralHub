@@ -35,7 +35,8 @@ module.exports = {
         orangeLight: '#EE8062',
         blackLight: '#33475B',
         grayLight: '#898989',
-        blueLight: '#35B0A4'
+        blueLight: '#35B0A4',
+        bgF6FAFD: '#F6FAFD'
       },
       dropShadow: {
         "custom-4-4": "0 4px 4px rgba(0, 0, 0, 0.25)",

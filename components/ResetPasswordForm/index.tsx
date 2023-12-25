@@ -3,6 +3,7 @@ import { FC } from 'react';
 import * as Yup from 'yup';
 import Input from '../Input';
 import { useResetPasswordHooks } from './hooks';
+import { FIELD_REQUIRED } from '@/constants';
 
 interface IProps {}
 
@@ -89,7 +90,7 @@ const ResetPasswordForm: FC<IProps> = ({}) => {
 
 const ResetPasswordSchema = Yup.object().shape({
   password: Yup.string()
-    .required('This field is required')
+    .required(FIELD_REQUIRED)
     .min(8, 'Password at least 8 characters'),
   confirmPassword: Yup.string()
     .required('Please retype your password.')
