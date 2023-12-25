@@ -6,8 +6,8 @@ import { KeyboardEvent } from 'react';
 interface IProps {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
-  onChangeTextSearch: (arg0: string) => void;
-  onSearchLeads: () => void;
+  onChangeTextSearch?: (arg0: string) => void;
+  onSearchLeads?: () => void;
 }
 const Header = ({
   sidebarOpen,
@@ -15,9 +15,10 @@ const Header = ({
   onSearchLeads,
   setSidebarOpen,
 }: IProps) => {
+  
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      onSearchLeads();
+      onSearchLeads && onSearchLeads();
     }
   };
 
@@ -47,12 +48,17 @@ const Header = ({
             </div>
           )}
           <div className='relative w-[300px] px-4 py-5 h-8 rounded-lg bg-[#F9F9F9] flex items-center'>
-            <div onClick={() => onSearchLeads()} className='cursor-pointer'>
+            <div
+              onClick={() => onSearchLeads && onSearchLeads()}
+              className='cursor-pointer'
+            >
               <SearchIcon />
             </div>
             <input
               type='search'
-              onChange={(e) => onChangeTextSearch(e.target.value)}
+              onChange={(e) =>
+                onChangeTextSearch && onChangeTextSearch(e.target.value)
+              }
               onKeyDown={handleKeyDown}
               placeholder='Search...'
               className=' text-sm font-normal  border-none bg-transparent focus:border-none w-full'
