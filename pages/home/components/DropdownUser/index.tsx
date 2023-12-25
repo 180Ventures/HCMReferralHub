@@ -60,7 +60,7 @@ const DropdownUser = () => {
           )}
         </div>
         <span className='hidden text-left lg:block'>
-          <span className='block text-sm font-medium text-blackLight capitalize'>
+          <span className='block text-sm font-medium text-blackLight capitalize truncate w-24'>
             {user?.displayName || profile?.firstName + ' ' + profile?.lastName}
           </span>
           <span className='block text-xs font-normal text-grayLight capitalize'>
@@ -73,7 +73,7 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white ${
+        className={`absolute right-0 mt-4 flex w-62.5 shadow-xl flex-col rounded-sm border border-stroke bg-white ${
           dropdownOpen === true ? 'block' : 'hidden'
         }`}
       >

@@ -9,6 +9,7 @@ import CardItem from './components/CardItem';
 import { IcSendIcon, IcTrendingUp, InviteFriend, WedgitIcon } from '@/icons';
 import TableOne from './components/TableOne';
 import MaketingComponent from './components/Maketing';
+import { LoadingPage } from '@/components';
 const ChartOne = dynamic(() => import('./components/Charts/ChartOne'), {
   ssr: false,
 });
@@ -62,18 +63,23 @@ const HomePage: NextPage = () => {
     isCopied,
     tableData,
     marketingData,
+    loading,
     handleNewLead,
     setSidebarOpen,
+    onToggleSideBar,
     handleChangeLink,
+    handleSearchLeads,
     handleCopy,
+    onChangeTextSearch,
   } = useDashBoardHook();
 
   return (
     <div className='dark:bg-boxdark-2 dark:text-bodydark'>
+      { loading && <LoadingPage />}
       <div className='flex h-screen overflow-hidden'>
-        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        { sidebarOpen && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />}
         <div className='relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden'>
-          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <Header onSearchLeads={handleSearchLeads} onChangeTextSearch={onChangeTextSearch} sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />
           <main className='bg-[#F9F9F9] h-full'>
             <div className='mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-[#F9F9F9]'>
               <div className='flex flex-col md:flex-row md:justify-between md:items-center'>

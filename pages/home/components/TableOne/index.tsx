@@ -33,7 +33,7 @@ const TableOne = ({ data }: IProps) => {
               Client Name
             </h5>
           </div>
-          <div className='p-2.5 text-center 2xl:p-5 col-span-2'>
+          <div className='p-2.5 text-center 2xl:p-5 col-span-2 pl-0'>
             <h5 className='text-sm font-medium uppercase xsm:text-base'>
               Status
             </h5>
@@ -70,7 +70,7 @@ const TableOne = ({ data }: IProps) => {
                   </p>
                 </div>
                 <div className='flex items-center gap-3 p-2.5 col-span-3 2xl:p-5'>
-                  <div className='w-10 h-10 relative'>
+                  <div className='hidden sm:flex w-10 h-10 relative'>
                     <div className='uppercase w-full h-full bg-orangeLight rounded-full flex justify-center items-center'>
                       <span className='text-white uppercase'>
                         {item.clientName.length > 0 ? item.clientName[0] : 'A'}
@@ -78,7 +78,7 @@ const TableOne = ({ data }: IProps) => {
                     </div>
                   </div>
                   <div className='flex flex-col items-start'>
-                    <p className=' text-sm font-medium font-Inter text-blackLight sm:block capitalize'>
+                    <p className=' text-sm font-medium font-Inter text-blackLight sm:block capitalize md:max-w-[75px] 2xl:max-w-[100px] truncate'>
                       {item.clientName}
                     </p>
                     <p className=' text-sm font-medium font-Inter text-[#35B0A4] sm:block'>
@@ -88,7 +88,7 @@ const TableOne = ({ data }: IProps) => {
                 </div>
 
                 <div className='flex items-center justify-center p-2.5 2xl:p-5 col-span-2'>
-                  <p className='text-blackLight text-xs font-normal font-Inter'>
+                  <p className='text-blackLight text-xs font-normal font-Inter text-center'>
                     {item.status}
                   </p>
                 </div>

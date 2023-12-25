@@ -20,6 +20,7 @@ const copyContent = async (text: string) => {
 };
 
 const useDashBoardHook = () => {
+  const [textSearch, setTextSearch] = useState<string>('');
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const { profile } = useAuthState();
@@ -28,11 +29,37 @@ const useDashBoardHook = () => {
   );
 
   const [tableData, setTableData] = useState<IDashBoardTableData[]>([]);
-  const [marketingData, setMarketingData] = useState<IDashBoardMarketingData[]>(
-    []
-  );
-
+  const [tableDataTemplate, setTableDataTemplate] = useState<IDashBoardTableData[]>([]);
+  const [marketingData, setMarketingData] = useState<IDashBoardMarketingData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+
+  const onToggleSideBar = useCallback((value: boolean) => {
+    setSidebarOpen(value);
+  }, [sidebarOpen]);
+
+  const onChangeTextSearch = useCallback((value: string) => {
+    if (!value) {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        setTableData(tableDataTemplate);
+      }, 500);
+    }
+    setTextSearch(value);
+  }, [tableDataTemplate]);
+
+  const handleSearchLeads = useCallback(() => {
+    setLoading(true);
+    const values = tableDataTemplate.filter(
+      (item) =>
+        item.clientName.toLowerCase().trim().search(textSearch.toLowerCase().trim()) != -1
+    );
+    setTimeout(() => {
+      setLoading(false);
+      setTableData(values);
+    }, 500);
+  }, [textSearch]);
 
   const handleCopy = useCallback(async () => {
     if (isCopied) return;
@@ -54,17 +81,17 @@ const useDashBoardHook = () => {
   const getTableData = useMemo(() => {
     if (!profile?.uid) return null;
     return getContactByReferralId(profile?.uid);
-  }, []);
+  }, [profile]);
 
   const getLeadsData = useMemo(() => {
     if (!profile?.uid) return null;
     return getLeads(profile?.uid);
-  }, []);
+  }, [profile]);
 
   useEffect(() => {
     //TODO: Waiting for api links
     Promise.allSettled([getTableData, getLeadsData]).then((data) => {
-      let array: any = [];
+      let arrayData: any = [];
       const [dataTableRes, leadsRes] = data;
       if (dataTableRes.status == 'fulfilled') {
         const { value } = dataTableRes;
@@ -79,7 +106,7 @@ const useDashBoardHook = () => {
               phone: item.phoneNumber,
             };
           }) || [];
-        array = [...convertedData];
+        arrayData = [...convertedData];
       }
 
       if (leadsRes.status == 'fulfilled') {
@@ -95,9 +122,10 @@ const useDashBoardHook = () => {
               phone: item.phone,
             };
           }) || [];
-        array = [...array, ...convertedData];
+        arrayData = [...arrayData, ...convertedData];
       }
-      setTableData(array)
+      setTableData(arrayData);
+      setTableDataTemplate(arrayData);
       setMarketingData(DASHBOARD_MARKETING_DATA_TEMPLATE);
     });
   }, []);
@@ -105,10 +133,14 @@ const useDashBoardHook = () => {
   return {
     link,
     profile,
+    loading,
     isCopied,
     sidebarOpen,
     tableData,
     marketingData,
+    onToggleSideBar,
+    handleSearchLeads,
+    onChangeTextSearch,
     handleChangeLink,
     setSidebarOpen,
     handleCopy,
