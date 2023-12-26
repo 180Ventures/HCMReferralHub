@@ -128,7 +128,7 @@ const HomePage: NextPage = () => {
                 {typeof window !== 'undefined' && <ChartThree />}
               </div>
               <div className='grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5 mt-4'>
-                <div className='col-span-12 xl:col-span-8'>
+                <div className='col-span-12 xl:col-span-8 overflow-auto'>
                   <TableOne data={tableData}/>
                 </div>
                 <div className='col-span-12 xl:col-span-4'>

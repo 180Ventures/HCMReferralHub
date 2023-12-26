@@ -6,8 +6,9 @@ import { useRouter } from 'next/router';
 import { getLeads } from '@/queries/leads';
 import { ROUTERS } from '@/constants';
 import { ILead } from '@/utils/types';
+import { generateLink } from '@/utils/generateLink';
 
-const copyContent = async (text: string) => {
+export const copyContent = async (text: string) => {
   try {
     await navigator.clipboard.writeText(text);
     console.log('Content copied to clipboard');
@@ -21,9 +22,7 @@ const useDashBoardHook = () => {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const { profile } = useAuthState();
-  const [link, setLink] = useState<string>(
-    `${process.env.NEXT_PUBLIC_REFERRAL_URL + `?refid=${profile?.uid}`}`
-  );
+  const [link, setLink] = useState<string>(`${process.env.NEXT_PUBLIC_REFERRAL_URL}${generateLink(profile?.uid as string)}`);
 
   const [tableData, setTableData] = useState<ILead[]>([]);
   const [tableDataTemplate, setTableDataTemplate] = useState<ILead[]>([]);

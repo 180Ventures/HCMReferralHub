@@ -14,13 +14,12 @@ const AdminPage: NextPage = () => {
     sidebarOpen,
     profile,
     isCopied,
-    loading,
     handleNewLead,
     onToggleSideBar,
     handleCopy,
   } = useDashBoardHook();
 
-  const { leadsData } = useAdminHook();
+  const { leadsData, loading, tableData, handleSearchLeads, onChangeTextSearch } = useAdminHook();
 
   return (
     <div className='dark:bg-boxdark-2 dark:text-bodydark'>
@@ -31,8 +30,8 @@ const AdminPage: NextPage = () => {
         )}
         <div className='relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden'>
           <Header
-            // onSearchLeads={handleSearchLeads}
-            // onChangeTextSearch={onChangeTextSearch}
+            onSearchLeads={handleSearchLeads}
+            onChangeTextSearch={onChangeTextSearch}
             sidebarOpen={sidebarOpen}
             setSidebarOpen={onToggleSideBar}
           />
@@ -62,16 +61,16 @@ const AdminPage: NextPage = () => {
                     </span>
                   </div>
                   <Button
-                    text='+ Add New Lead'
+                    text='+ Add Referral Partner'
                     customStyle='max-w-[160px] mt-4 sm:mt-0'
-                    onClick={handleNewLead}
+                    //onClick={handleNewLead}
                   />
                 </div>
               </div>
 
               <div className='grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5 mt-12'>
-                <div className='col-span-12'>
-                  <TableOne data={leadsData} />
+                <div className='col-span-12 overflow-auto'>
+                  <TableOne data={tableData} />
                 </div>
               </div>
             </div>

@@ -1,7 +1,14 @@
-import { ERROR_SOMTHING_WENT_WRONG, FIELD_REQUIRED, MESSAGE, ROUTERS } from '@/constants';
+import {
+  ERROR_SOMTHING_WENT_WRONG,
+  FIELD_REQUIRED,
+  MESSAGE,
+  ROUTERS,
+} from '@/constants';
 import { useAuthState } from '@/contexts/auth';
 import { addLead } from '@/queries/leads';
 import { toastError, toastSuccess } from '@/utils';
+import { LeadStatus, PriceByStatusLead } from '@/utils/enums';
+import { generateLink } from '@/utils/generateLink';
 import { ILead } from '@/utils/types';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';
@@ -11,9 +18,11 @@ export const inititalValues: ILead = {
   name: '',
   phone: '',
   payout: '',
-  status: 'Pending',
-  price: '',
-  userName: '',
+  status: LeadStatus.loss,
+  price: PriceByStatusLead.loss,
+  referralName: '',
+  referralId: '',
+  subReferralLink: '',
 };
 
 export const leadSchema = Yup.object().shape({
@@ -30,14 +39,23 @@ const useNewLeadHook = () => {
   const router = useRouter();
   const { profile } = useAuthState();
 
-  const fullName = useMemo(() => profile?.firstName + ' ' + profile?.lastName, [profile]);
+  const fullName = useMemo(
+    () => profile?.firstName + ' ' + profile?.lastName,
+    [profile]
+  );
+  
   const onSubmitForm = useCallback(async (values: ILead) => {
     if (loading && !profile) return;
     try {
       setLoading(true);
-      await addLead({...values, userName: fullName, userId: profile?.uid});
+      await addLead({
+        ...values,
+        referralName: fullName,
+        referralId: profile?.uid,
+        subReferralLink: generateLink(profile?.uid as string, true),
+      });
       toastSuccess(MESSAGE.addedNewLead);
-      if(profile?.role === 'admin') router.push(ROUTERS.admin);
+      if (profile?.role === 'admin') router.push(ROUTERS.admin);
       else router.push(ROUTERS.home);
     } catch (error) {
       console.error(error);

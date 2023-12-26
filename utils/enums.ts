@@ -7,3 +7,14 @@ export enum Tables {
   replies = "replies",
   chapters = "chapters",
 }
+
+export enum LeadStatus {
+  pending = 'Pending',
+  sold = 'Sold',
+  loss = 'Loss'
+}
+
+export enum PriceByStatusLead {
+  sold = '250',
+  loss = '0'
+}

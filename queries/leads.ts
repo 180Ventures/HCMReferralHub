@@ -8,6 +8,8 @@ import {
   orderBy,
   getDocs,
   limit,
+  doc,
+  updateDoc,
 } from 'firebase/firestore';
 
 import { Tables } from '@/utils/enums';
@@ -17,8 +19,9 @@ export const addLead = async (leadData: ILead) => {
   const leadDocument = await addDoc(collection(db, Tables.leads), {
     name: leadData.name,
     phone: leadData.phone,
-    userId: leadData.userId,
-    userName: leadData.userName,
+    referralId: leadData.referralId,
+    referralName: leadData.referralName,
+    subReferralLink: leadData.subReferralLink,
     status: leadData.status,
     price: leadData.price,
     payout: leadData.payout,
@@ -28,12 +31,12 @@ export const addLead = async (leadData: ILead) => {
 };
 
 export const getLeads = async (
-  userId: string,
+   referralId: string,
   _limit?: number
 ): Promise<ILead[]> => {
   const q = query(
     collection(db, Tables.leads),
-    where('userId', '==', userId),
+    where('referralId', '==', referralId),
     orderBy('createdAt', 'desc'),
     limit(_limit || 999)
   );
@@ -59,4 +62,9 @@ export const getAllLeads = async (
     ...it.data(),
     createdAt: it.data().createdAt.toString()
   })) as ILead[];
+};
+
+export const updateLead = async (leadId: string, leadData: any) => {
+  const leadRef = doc(db, Tables.leads, leadId);
+  return await updateDoc(leadRef, leadData);
 };

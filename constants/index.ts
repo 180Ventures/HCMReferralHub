@@ -31,7 +31,14 @@ export const ERROR_CODE_FIREBASE = {
 export const ERROR_SOMTHING_WENT_WRONG = 'Something went wrong please try again!'
 
 export const MESSAGE = {
-  addedNewLead: 'Added new lead successfully!'
+  addedNewLead: 'Added new lead successfully!',
+  updatedLead: 'Updated lead successfully!',
+  copied: 'Referral Link copied to clipboard!'
 }
 
 export const FIELD_REQUIRED = 'This field is required'
+
+export const USDollar = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
