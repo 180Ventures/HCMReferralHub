@@ -5,6 +5,7 @@ import React, {
   useState,
   useContext,
   useCallback,
+  useMemo,
 } from 'react';
 import {
   signOut,
@@ -59,6 +60,7 @@ interface AuthContextProps {
   loading: boolean;
   isLogout: boolean;
   chapters: Chapter[];
+  isAdmin: boolean
 }
 
 const initialState: AuthContextProps = {
@@ -83,6 +85,7 @@ const initialState: AuthContextProps = {
   loading: false,
   isLogout: false,
   chapters: [],
+  isAdmin: false
 };
 
 const AuthContext = createContext<AuthContextProps>(initialState);
@@ -203,6 +206,7 @@ export default function AuthProvider({ children }: Props) {
           email: values.email,
           firstName: values.firstName,
           lastName: values.lastName,
+          role: 'user'
         };
         await addUser(userData);
       }
@@ -378,6 +382,8 @@ export default function AuthProvider({ children }: Props) {
     });
   }, [])
 
+  const isAdmin = useMemo(() => profile?.role === 'admin', [profile])
+
   const memoedValue = {
     user,
     profile,
@@ -386,6 +392,7 @@ export default function AuthProvider({ children }: Props) {
     isSignedUp,
     isLogout,
     chapters,
+    isAdmin,
     logout,
     setIsSignedUp,
     fetchProfile,

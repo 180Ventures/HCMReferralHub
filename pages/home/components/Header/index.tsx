@@ -42,7 +42,7 @@ const Header = ({
           {!sidebarOpen && (
             <div
               onClick={() => setSidebarOpen(true)}
-              className='cursor-pointer'
+              className='cursor-pointer hidden lg:flex'
             >
               <BarIcon />
             </div>

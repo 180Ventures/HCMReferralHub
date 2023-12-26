@@ -1,10 +1,12 @@
 import { Timestamp } from "firebase/firestore";
 
+type Role = 'admin' | 'user'
 export type UserData = {
   uid: string;
   firstName: string;
   lastName?: string;
   email: string;
+  role?: Role
 };
 
 export type ISignUpFormValues = {

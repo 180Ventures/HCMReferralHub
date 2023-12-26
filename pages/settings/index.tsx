@@ -6,6 +6,7 @@ import useSettings from './hook';
 import Header from '../home/components/Header';
 import ModelChangePassword from './components/PopupChangePassword';
 import ModelConfim from '@/components/ModelConfirm';
+import useDashBoardHook from '../home/hooks';
 
 const Settings: NextPage = () => {
   const {
@@ -24,14 +25,21 @@ const Settings: NextPage = () => {
     handleUpdateInfo,
   } = useSettings();
 
+  const {
+    sidebarOpen,
+    onToggleSideBar,
+    handleSearchLeads,
+    onChangeTextSearch
+  } = useDashBoardHook();
+  
   return (
     <Container headTitle='Settings Page'>
       {loading && <LoadingPage />}
       <div className='dark:bg-boxdark-2 dark:text-bodydark no-input'>
         <div className='flex h-screen overflow-hidden'>
-          <Sidebar sidebarOpen={true} setSidebarOpen={() => {}} />
+          { sidebarOpen && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />}
           <div className='relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden'>
-            <Header sidebarOpen={true} setSidebarOpen={() => {}} />
+          <Header onSearchLeads={handleSearchLeads} onChangeTextSearch={onChangeTextSearch} sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />
             <main className='bg-[#F9F9F9] h-full p-8 2xl:p-16'>
               <div className='text-gray-800 text-xl 2xl:text-3xl font-bold font-Inter'>
                 Your Account
@@ -47,7 +55,6 @@ const Settings: NextPage = () => {
                     </div>
                   </div>
                   <div className='text-gray-800 pb-6 2xl:pb-8 text-md 2xl:text-xl font-normal font-Inter border-b border-stone-300 border-opacity-80 w-full'>
-                    {/* {profile?.firstName + ' ' + profile?.lastName} */}
                     <input
                       type='text'
                       id='fullName'

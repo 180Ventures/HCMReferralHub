@@ -4,12 +4,16 @@ import { addLead } from '@/queries/leads';
 import { toastError, toastSuccess } from '@/utils';
 import { ILead } from '@/utils/types';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import * as Yup from 'yup';
 
 export const inititalValues: ILead = {
   name: '',
   phone: '',
+  payout: '',
+  status: 'Pending',
+  price: '',
+  userName: '',
 };
 
 export const leadSchema = Yup.object().shape({
@@ -26,13 +30,15 @@ const useNewLeadHook = () => {
   const router = useRouter();
   const { profile } = useAuthState();
 
+  const fullName = useMemo(() => profile?.firstName + ' ' + profile?.lastName, [profile]);
   const onSubmitForm = useCallback(async (values: ILead) => {
     if (loading && !profile) return;
     try {
       setLoading(true);
-      await addLead({...values, userId: profile?.uid});
+      await addLead({...values, userName: fullName, userId: profile?.uid});
       toastSuccess(MESSAGE.addedNewLead);
-      router.push(ROUTERS.home);
+      if(profile?.role === 'admin') router.push(ROUTERS.admin);
+      else router.push(ROUTERS.home);
     } catch (error) {
       console.error(error);
       toastError(ERROR_SOMTHING_WENT_WRONG);

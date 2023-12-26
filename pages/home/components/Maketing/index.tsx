@@ -1,7 +1,7 @@
 import { DownloadIcon, ThreeDots } from '@/icons';
-import { IDashBoardMarketingData } from '@/utils/types/dashboard';
+import { IMarketingData } from '@/utils/types/dashboard';
 interface IProps {
-  data?: IDashBoardMarketingData[];
+  data?: IMarketingData[];
 }
 
 const MaketingComponent = ({ data }: IProps) => {

@@ -9,6 +9,7 @@ import {
   SettingsIcon,
 } from '@/icons';
 import { ROUTERS } from '@/constants';
+import { useAuthState } from '@/contexts/auth';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -17,6 +18,7 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const { pathname } = location;
+  const { isAdmin } = useAuthState();
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -87,14 +89,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <ul className='mb-6 flex flex-col gap-1.5'>
               <li>
                 <Link
-                  href={ROUTERS.home}
+                  href={ isAdmin ? ROUTERS.admin : ROUTERS.home}
                   className={`relative h-[52px]  rounded-xl font-Inter text-blackLight flex items-center font-medium text-base`}
                 >
-                  {pathname.includes('home') && (
+                  {pathname.includes(ROUTERS.home) || pathname.includes(ROUTERS.admin) && (
                     <div className='bg-[#35B0A4] rounded-xl opacity-20 w-full left-0 top-0 h-[52px] gap-2.5 py-2 px-4'></div>
                   )}
                   <div className='absolute flex z-10 left-3 justify-center items-center'>
-                    <OverviewIcon active={pathname.includes('home')} />
+                    <OverviewIcon active={pathname.includes(ROUTERS.home) || pathname.includes(ROUTERS.admin)} />
                     <span className='ml-3'>Overview</span>
                   </div>
                 </Link>
@@ -118,21 +120,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   </div>
                 </Link>
               </li>
-              {/* <li>
-                <Link
-                  // href='/invite-friend'
-                  href='#'
-                  className={`relative h-[52px]  rounded-xl font-Inter text-blackLight flex items-center font-medium text-base`}
-                >
-                  {pathname.includes('invite-friend') && (
-                    <div className='bg-orangeLight rounded-xl opacity-20 w-full left-0 top-0 h-[52px] gap-2.5 py-2 px-4'></div>
-                  )}
-                  <div className='absolute flex z-10 left-3 justify-center items-center'>
-                    <InviteFriend active={pathname.includes('invite-friend')} />
-                    <span className='ml-3'>Invite a Friend</span>
-                  </div>
-                </Link>
-              </li> */}
             </ul>
           </div>
         </nav>

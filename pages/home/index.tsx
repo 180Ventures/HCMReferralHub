@@ -65,9 +65,7 @@ const HomePage: NextPage = () => {
     marketingData,
     loading,
     handleNewLead,
-    setSidebarOpen,
     onToggleSideBar,
-    handleChangeLink,
     handleSearchLeads,
     handleCopy,
     onChangeTextSearch,
@@ -85,7 +83,7 @@ const HomePage: NextPage = () => {
               <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
                 <div className='flex flex-col'>
                   <h1 className='text-2xl 2xl:text-4xl font-semibold font-Inter text-blackLight mb-2 capitalize'>
-                    Hi {profile?.firstName + ' ' + profile?.lastName},
+                    Hi {profile?.firstName?.trim() + ' ' + profile?.lastName?.trim()}
                   </h1>
                   <p className='font-Inter text-sm font-normal'>
                     Welcome back to The Referral Hub!
@@ -95,7 +93,7 @@ const HomePage: NextPage = () => {
                   <div className='sm:mr-6 flex items-center px-4 w-auto md:w-[430px] 2xl:w-[540px] h-10 2xl:h-12 bg-white rounded-lg border border-slate-200 text-[#898989] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal'>
                     <input
                       value={link}
-                      onChange={(e) => handleChangeLink(e.target.value)}
+                      // onChange={(e) => handleChangeLink(e.target.value)}
                       className='flex-grow pl-0 border-none pt-0 pb-0'
                     />
                     <span

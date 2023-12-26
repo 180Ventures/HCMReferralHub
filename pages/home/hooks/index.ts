@@ -1,14 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DASHBOARD_MARKETING_DATA_TEMPLATE } from '@/utils/data';
-import {
-  IDashBoardMarketingData,
-  IDashBoardTableData,
-} from '@/utils/types/dashboard';
+import { IMarketingData } from '@/utils/types/dashboard';
 import { useAuthState } from '@/contexts/auth';
-import { getContactByReferralId } from '@/queries/contacts';
 import { useRouter } from 'next/router';
 import { getLeads } from '@/queries/leads';
 import { ROUTERS } from '@/constants';
+import { ILead } from '@/utils/types';
 
 const copyContent = async (text: string) => {
   try {
@@ -21,39 +18,42 @@ const copyContent = async (text: string) => {
 
 const useDashBoardHook = () => {
   const [textSearch, setTextSearch] = useState<string>('');
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const { profile } = useAuthState();
   const [link, setLink] = useState<string>(
     `${process.env.NEXT_PUBLIC_REFERRAL_URL + `?refid=${profile?.uid}`}`
   );
 
-  const [tableData, setTableData] = useState<IDashBoardTableData[]>([]);
-  const [tableDataTemplate, setTableDataTemplate] = useState<IDashBoardTableData[]>([]);
-  const [marketingData, setMarketingData] = useState<IDashBoardMarketingData[]>([]);
+  const [tableData, setTableData] = useState<ILead[]>([]);
+  const [tableDataTemplate, setTableDataTemplate] = useState<ILead[]>([]);
+  const [marketingData, setMarketingData] = useState<IMarketingData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const { isAdmin } = useAuthState();
 
   const onToggleSideBar = useCallback((value: boolean) => {
     setSidebarOpen(value);
-  }, [sidebarOpen]);
+  },[sidebarOpen]);
 
-  const onChangeTextSearch = useCallback((value: string) => {
-    if (!value) {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setTableData(tableDataTemplate);
-      }, 500);
-    }
-    setTextSearch(value);
-  }, [tableDataTemplate]);
+  const onChangeTextSearch = useCallback(
+    (value: string) => {
+      if (!value) {
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+          setTableData(tableDataTemplate);
+        }, 500);
+      }
+      setTextSearch(value);
+    },
+    [tableDataTemplate]
+  );
 
   const handleSearchLeads = useCallback(() => {
     setLoading(true);
     const values = tableDataTemplate.filter(
-      (item) =>
-        item.clientName.toLowerCase().trim().search(textSearch.toLowerCase().trim()) != -1
+      (item) => item.name.toLowerCase().trim().search(textSearch.toLowerCase().trim()) != -1
     );
     setTimeout(() => {
       setLoading(false);
@@ -78,54 +78,25 @@ const useDashBoardHook = () => {
     router.push(ROUTERS.newLead);
   }, []);
 
-  const getTableData = useMemo(() => {
-    if (!profile?.uid) return null;
-    return getContactByReferralId(profile?.uid);
-  }, [profile]);
-
   const getLeadsData = useMemo(() => {
     if (!profile?.uid) return null;
     return getLeads(profile?.uid);
   }, [profile]);
+  
+  useEffect(() => {
+    if (isAdmin && window.location.pathname.includes(ROUTERS.home)) router.replace(ROUTERS.admin);
+  }, [isAdmin]);
 
   useEffect(() => {
-    //TODO: Waiting for api links
-    Promise.allSettled([getTableData, getLeadsData]).then((data) => {
-      let arrayData: any = [];
-      const [dataTableRes, leadsRes] = data;
+    Promise.allSettled([getLeadsData]).then((data) => {
+      const [dataTableRes] = data;
       if (dataTableRes.status == 'fulfilled') {
         const { value } = dataTableRes;
-        const convertedData =
-          value?.map((item) => {
-            return {
-              id: item.id,
-              clientName: item.name,
-              price: '',
-              status: 'Pending',
-              payout: '',
-              phone: item.phoneNumber,
-            };
-          }) || [];
-        arrayData = [...convertedData];
+        if(dataTableRes.value) {
+          setTableData(value as ILead[]);
+          setTableDataTemplate(value as ILead[]);
+        }
       }
-
-      if (leadsRes.status == 'fulfilled') {
-        const { value } = leadsRes;
-        const convertedData =
-          value?.map((item) => {
-            return {
-              id: item.id || Math.random().toString(),
-              clientName: item.name,
-              price: '',
-              status: 'Pending',
-              payout: '',
-              phone: item.phone,
-            };
-          }) || [];
-        arrayData = [...arrayData, ...convertedData];
-      }
-      setTableData(arrayData);
-      setTableDataTemplate(arrayData);
       setMarketingData(DASHBOARD_MARKETING_DATA_TEMPLATE);
     });
   }, []);

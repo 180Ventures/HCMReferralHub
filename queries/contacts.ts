@@ -30,3 +30,19 @@ export const getContactByReferralId = async (
     };
   }) as IContactData[];
 };
+
+export const getAllContactWithRefId = async (
+): Promise<IContactData[]> => {
+  let q = query(
+    collection(db, Tables.contacts),
+    where('referralId', '!=', ''),
+    // orderBy('createAt', 'desc')
+  );
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((it) => {
+    return {
+      id: it.id,
+      ...it.data(),
+    };
+  }) as IContactData[];
+};

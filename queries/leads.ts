@@ -18,6 +18,10 @@ export const addLead = async (leadData: ILead) => {
     name: leadData.name,
     phone: leadData.phone,
     userId: leadData.userId,
+    userName: leadData.userName,
+    status: leadData.status,
+    price: leadData.price,
+    payout: leadData.payout,
     createdAt: Timestamp.now(),
   });
   return leadDocument;
@@ -37,5 +41,22 @@ export const getLeads = async (
   return querySnapshot.docs.map((it) => ({
     id: it.id,
     ...it.data(),
+    createdAt: it.data().createdAt.toString()
+  })) as ILead[];
+};
+
+export const getAllLeads = async (
+  _limit?: number
+): Promise<ILead[]> => {
+  const q = query(
+    collection(db, Tables.leads),
+    orderBy('createdAt', 'desc'),
+    limit(_limit || 999)
+  );
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((it) => ({
+    id: it.id,
+    ...it.data(),
+    createdAt: it.data().createdAt.toString()
   })) as ILead[];
 };

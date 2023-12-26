@@ -7,6 +7,7 @@ import { ROUTERS } from '@/constants';
 enum RouteRole {
   auth,
   all,
+  admin
 }
 export interface WithAuthProps {
 }
@@ -22,9 +23,13 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(
 
     const checkRouterRole = useCallback(async () => {
       if (!loading && !loadingInitial) {
-        if (isAuthenticated && routeRole === 'auth') {
+        if (isAuthenticated && routeRole === 'auth' && profile?.role === 'admin') {
+          router.replace(ROUTERS.admin);
+        } 
+        else if (isAuthenticated && routeRole === 'auth') {
           router.replace(ROUTERS.home);
         }
+
         if (!isAuthenticated && routeRole !== 'auth') {
           let routerName = '/';
           router.replace(
