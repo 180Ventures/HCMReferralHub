@@ -2,9 +2,9 @@ import { Formik } from 'formik';
 import { FC } from 'react';
 import * as Yup from 'yup';
 import { useLoginFormHooks } from './hooks';
-import Image from 'next/image';
 import Input from '../Input';
 import { FIELD_REQUIRED } from '@/constants';
+import LoadingPage from '../LoadingPage';
 
 interface IProps {}
 
@@ -20,10 +20,12 @@ const LoginForm: FC<IProps> = ({}) => {
     onSubmitResetPasswordForm,
     onCloseResetPasswordForm,
     onGotoSignUp,
+    loadingStatus
   } = useLoginFormHooks();
 
   return (
     <div className='flex flex-col justify-center items-center lg:max-w-sm w-full h-full'>
+      {loadingStatus &&  <LoadingPage />}
       {!isRequestingResetPassword && (
         <p className='text-[#000] font-Inter text-[25px] italic font-semibold pb-10'>
           PROVIDER HUB

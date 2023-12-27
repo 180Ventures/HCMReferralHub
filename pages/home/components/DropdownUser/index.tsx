@@ -61,7 +61,7 @@ const DropdownUser = () => {
         </div>
         <span className='hidden text-left lg:block'>
           <span className='block text-sm font-medium text-blackLight capitalize truncate w-24'>
-            {user?.displayName || profile?.firstName + ' ' + profile?.lastName}
+            {user?.displayName || profile?.firstName?.trim()?.toLowerCase() + ' ' + profile?.lastName?.trim()?.toLowerCase()}
           </span>
           <span className='block text-xs font-normal text-grayLight capitalize'>
             { profile?.role == 'admin' ? 'Super Admin' : ''}

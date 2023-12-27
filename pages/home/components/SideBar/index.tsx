@@ -3,8 +3,6 @@ import Link from 'next/link';
 import {
   ArrowLeftIcon,
   BarIcon,
-  InviteFriend,
-  LogoIcon,
   OverviewIcon,
   SettingsIcon,
 } from '@/icons';
@@ -72,11 +70,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     >
       <div className='flex h-[72px] items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5'>
         <div className='flex items-center'>
-          <div onClick={() => setSidebarOpen(false)} className='cursor-pointer'>
+          <div onClick={() => setSidebarOpen(false)} className='cursor-pointer mr-2 lg:hidden'>
             <BarIcon />
-          </div>
-          <div className='cursor-pointer mx-2.5'>
-            <LogoIcon />
           </div>
           <span className='font-Inter font-bold text-[21px] text-blackLight'>
             The Hub

@@ -6,7 +6,8 @@ export type UserData = {
   firstName: string;
   lastName?: string;
   email: string;
-  role?: Role
+  role?: Role,
+  port?: string
 };
 
 export type ISignUpFormValues = {
@@ -16,7 +17,8 @@ export type ISignUpFormValues = {
   password: string;
   confirmPassword?: string;
   rememberMe?: boolean;
-  policy?: boolean
+  policy?: boolean;
+  port?: string
 };
 
 export type ISignInFormValues = {

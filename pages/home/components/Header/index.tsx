@@ -1,6 +1,6 @@
 import DropdownUser from '../DropdownUser';
 import DropdownNotification from '../DropdownNotification';
-import { BarIcon, HelpIcon, SearchIcon } from '@/icons';
+import { BarIcon, SearchIcon } from '@/icons';
 import { KeyboardEvent } from 'react';
 
 interface IProps {
@@ -39,14 +39,6 @@ const Header = ({
         </div>
 
         <div className='hidden sm:flex gap-2 items-center'>
-          {!sidebarOpen && (
-            <div
-              onClick={() => setSidebarOpen(true)}
-              className='cursor-pointer hidden lg:flex'
-            >
-              <BarIcon />
-            </div>
-          )}
           <div className='relative w-[300px] px-4 py-5 h-8 rounded-lg bg-[#F9F9F9] flex items-center'>
             <div
               onClick={() => onSearchLeads && onSearchLeads()}

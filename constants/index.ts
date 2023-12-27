@@ -33,7 +33,8 @@ export const ERROR_SOMTHING_WENT_WRONG = 'Something went wrong please try again!
 export const MESSAGE = {
   addedNewLead: 'Added new lead successfully!',
   updatedLead: 'Updated lead successfully!',
-  copied: 'Referral Link copied to clipboard!'
+  copied: 'Referral Link copied to clipboard!',
+  loginFailed: 'Email or password is incorrect!'
 }
 
 export const FIELD_REQUIRED = 'This field is required'
@@ -42,3 +43,5 @@ export const USDollar = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
 });
+
+export const PORT = 'REFERRAL_HUB'

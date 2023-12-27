@@ -83,7 +83,7 @@ const HomePage: NextPage = () => {
               <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
                 <div className='flex flex-col'>
                   <h1 className='text-2xl 2xl:text-4xl font-semibold font-Inter text-blackLight mb-2 capitalize'>
-                    Hi {profile?.firstName?.trim() + ' ' + profile?.lastName?.trim()}
+                    Hi {profile?.firstName?.trim().toLowerCase() + ' ' + profile?.lastName?.trim().toLowerCase()},
                   </h1>
                   <p className='font-Inter text-sm font-normal'>
                     Welcome back to The Referral Hub!

@@ -18,3 +18,8 @@ export enum PriceByStatusLead {
   sold = '250',
   loss = '0'
 }
+
+export enum Roles {
+  admin = 'admin',
+  user = 'user'
+}

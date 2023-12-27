@@ -34,9 +34,10 @@ import {
   toastError,
   toastSuccess,
 } from '@/utils';
-import { LOCAL_STORAGE_KEYS } from '@/constants';
+import { LOCAL_STORAGE_KEYS, PORT } from '@/constants';
 import { useRouter } from 'next/router';
 import { FirebaseError } from 'firebase/app';
+import { Roles } from '@/utils/enums';
 
 interface AuthContextProps {
   loginWithEmail: (email: string, password: string) => void;
@@ -206,7 +207,8 @@ export default function AuthProvider({ children }: Props) {
           email: values.email,
           firstName: values.firstName,
           lastName: values.lastName,
-          role: 'user'
+          role: Roles.user,
+          port: PORT
         };
         await addUser(userData);
       }

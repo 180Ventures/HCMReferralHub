@@ -1,7 +1,8 @@
-import { LOCAL_STORAGE_KEYS, ROUTERS } from '@/constants';
+import { LOCAL_STORAGE_KEYS, MESSAGE, PORT, ROUTERS } from '@/constants';
 import { useAuthState } from '@/contexts/auth';
 import { IResetPasswordFormValues, ISignInFormValues } from '@/queries/type';
-import { setItemLocalStorage } from '@/utils';
+import { getUserByEmail } from '@/queries/users';
+import { setItemLocalStorage, toastError } from '@/utils';
 import { FormikProps } from 'formik';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
@@ -17,6 +18,7 @@ export const useLoginFormHooks = () => {
     loginFacebook,
     loading,
   } = useAuthState();
+  const [loadingStatus, setLoadingStatus] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isRequestingResetPassword, setRequestingResetPassword] =
     useState<boolean>(false);
@@ -34,16 +36,19 @@ export const useLoginFormHooks = () => {
   }, [router]);
 
   const onSubmitForm = useCallback(async (values: ISignInFormValues) => {
+    setLoadingStatus(true);
     try {
-      values.rememberMe &&
-        setItemLocalStorage(
-          LOCAL_STORAGE_KEYS.rememberMe,
-          values.rememberMe + ''
-        );
+      const userRes = await getUserByEmail(values.email);
+      if(userRes?.port !== PORT) {
+        toastError(MESSAGE.loginFailed);
+        setLoadingStatus(false);
+        return;
+      }
       loginWithEmail(values.email, values.password);
     } catch (error) {
       //@ts-ignore
       toastError(error.message);
+      setLoadingStatus(false);
     }
   }, []);
 
@@ -103,6 +108,7 @@ export const useLoginFormHooks = () => {
     loading,
     showPassword,
     isRequestingResetPassword,
+    loadingStatus,
     onClickSignUp,
     onSubmitForm,
     onResetValueEmail,
