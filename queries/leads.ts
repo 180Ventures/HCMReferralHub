@@ -21,17 +21,17 @@ export const addLead = async (leadData: ILead) => {
     phone: leadData.phone,
     referralId: leadData.referralId,
     referralName: leadData.referralName,
-    subReferralLink: leadData.subReferralLink,
     status: leadData.status,
     price: leadData.price,
     payout: leadData.payout,
+    note: leadData.note,
     createdAt: Timestamp.now(),
   });
   return leadDocument;
 };
 
 export const getLeads = async (
-   referralId: string,
+  referralId: string,
   _limit?: number
 ): Promise<ILead[]> => {
   const q = query(
@@ -44,13 +44,38 @@ export const getLeads = async (
   return querySnapshot.docs.map((it) => ({
     id: it.id,
     ...it.data(),
-    createdAt: it.data().createdAt.toString()
+    createdAt: it.data().createdAt.toString(),
   })) as ILead[];
 };
 
-export const getAllLeads = async (
-  _limit?: number
-): Promise<ILead[]> => {
+export const countLeads = async (
+  referralId: string,
+  startDate: string,
+  endDate: string,
+  status?: string
+): Promise<number> => {
+  let q;
+  if (status) {
+    q = query(
+      collection(db, Tables.leads),
+      where('referralId', '==', referralId),
+      where('status', '==', status),
+      where('createdAt', '>=', Timestamp.fromDate(new Date(startDate))),
+      where('createdAt', '<=', Timestamp.fromDate(new Date(endDate)))
+    );
+  } else {
+    q = query(
+      collection(db, Tables.leads),
+      where('referralId', '==', referralId),
+      where('createdAt', '>=', Timestamp.fromDate(new Date(startDate))),
+      where('createdAt', '<=', Timestamp.fromDate(new Date(endDate)))
+    );
+  }
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.length;
+};
+
+export const getAllLeads = async (_limit?: number): Promise<ILead[]> => {
   const q = query(
     collection(db, Tables.leads),
     orderBy('createdAt', 'desc'),
@@ -60,7 +85,7 @@ export const getAllLeads = async (
   return querySnapshot.docs.map((it) => ({
     id: it.id,
     ...it.data(),
-    createdAt: it.data().createdAt.toString()
+    createdAt: it.data().createdAt.toString(),
   })) as ILead[];
 };
 

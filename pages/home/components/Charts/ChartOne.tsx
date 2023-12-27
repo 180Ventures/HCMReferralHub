@@ -1,8 +1,15 @@
 import { ThreeDots } from '@/icons';
 import { ApexOptions } from 'apexcharts';
-import React, { useState } from 'react';
-import dynamic from 'next/dynamic'
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import moment from 'moment';
+import { useAuthState } from '@/contexts/auth';
+import { countLeads } from '@/queries/leads';
+import { FORMAT_DATE } from '@/constants';
+import { LeadStatus } from '@/utils/enums';
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {
+  ssr: false,
+});
 
 interface ChartThreeState {
   series: number[];
@@ -12,8 +19,8 @@ const options: ApexOptions = {
   chart: {
     type: 'pie',
   },
-  colors: ['#EE8062', '#01ADC7', '#7785DE'],
-  labels: ['Deals Won', 'Deals Lost'],
+  colors: ['#7785DE', '#00C3AB', '#EE8062'],
+  labels: ['Deals Pending', 'Deals Won', 'Deals Lost'],
   legend: {
     show: true,
     position: 'bottom',
@@ -35,7 +42,7 @@ const options: ApexOptions = {
       breakpoint: 1024,
       options: {
         chart: {
-          width: 200,
+          width: 220,
         },
       },
     },
@@ -50,10 +57,13 @@ const options: ApexOptions = {
   ],
 };
 
-const ChartOne: React.FC = () => {
-  const [state, setState] = useState<ChartThreeState>({
-    series: [45, 35, 20],
-  });
+interface IProps {
+  //series: [1,1,1]
+  series: number[]
+}
+
+const ChartOne = ({series}: IProps) => {
+  const { profile } = useAuthState();
 
   return (
     <div className='col-span-12 rounded-xl border border-stroke bg-white p-4 2xl:p-8 pb-2 2xl:pb-5 shadow-default xl:col-span-4'>
@@ -63,7 +73,7 @@ const ChartOne: React.FC = () => {
             Closing Ratios
           </h2>
           <h5 className='text-sm font-Inter font-normal text-blackLight'>
-            March 2020
+            {moment().format('MMMM YYYY')}
           </h5>
         </div>
         <div>
@@ -78,9 +88,8 @@ const ChartOne: React.FC = () => {
           {typeof window !== 'undefined' && (
             <ReactApexChart
               options={options}
-              series={state.series}
+              series={series}
               type='pie'
-              // height={200}
             />
           )}
         </div>

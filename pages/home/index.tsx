@@ -6,7 +6,6 @@ import withAuth from '@/components/AuthHOC';
 import Button from '@/components/Button';
 import useDashBoardHook from './hooks';
 import CardItem from './components/CardItem';
-import { IcSendIcon, IcTrendingUp, InviteFriend, WedgitIcon } from '@/icons';
 import TableOne from './components/TableOne';
 import MaketingComponent from './components/Maketing';
 import { LoadingPage } from '@/components';
@@ -20,40 +19,6 @@ const ChartThree = dynamic(() => import('./components/Charts/ChartThree'), {
   ssr: false,
 });
 
-const DASHBOARD_CARDS = [
-  {
-    id: 'card_01',
-    value: '9',
-    title: 'Tier 4 Commission Level',
-    progress: 90,
-    progressColor: '#EE8062',
-    icon: <InviteFriend active />,
-  },
-  {
-    id: 'card_02',
-    value: '$250.00/ea',
-    title: 'Tier 4 Commission Level',
-    progress: 45,
-    progressColor: '#7785DE',
-    icon: <WedgitIcon />,
-  },
-  {
-    id: 'card_03',
-    value: '98.98%',
-    title: 'Tier 4 Commission Level',
-    progress: 98,
-    progressColor: '#01ADC7',
-    icon: <IcTrendingUp />,
-  },
-  {
-    id: 'card_04',
-    value: '4',
-    title: 'Tier 4 Commission Level',
-    progress: 45,
-    progressColor: '#FAC76F',
-    icon: <IcSendIcon />,
-  },
-];
 
 const HomePage: NextPage = () => {
   const {
@@ -61,7 +26,9 @@ const HomePage: NextPage = () => {
     sidebarOpen,
     profile,
     isCopied,
+    initialCards,
     tableData,
+    pieChart,
     marketingData,
     loading,
     handleNewLead,
@@ -110,29 +77,29 @@ const HomePage: NextPage = () => {
                   />
                 </div>
               </div>
-              <div className='grid grid-cols-1 sm:grid-cols-2 mt-4 2xl:mt-8 gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4 2xl:gap-7.5'>
-                {DASHBOARD_CARDS.map((item) => (
+              <div className='grid grid-cols-1 sm:grid-cols-2 mt-4 2xl:mt-8 gap-4 md:grid-cols-3 md:gap-6 2xl:gap-7.5'>
+                {initialCards.map((item) => (
                   <CardItem
                     value={item.value}
                     title={item.title}
                     progress={item.progress}
                     key={item.id}
                     progressColor={item.progressColor}
-                    chidrenIcon={item.icon}
+                    price={item.price}
                   />
                 ))}
               </div>
                <div className='mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5'>
-                {typeof window !== 'undefined' && <ChartOne />}
-                {typeof window !== 'undefined' && <ChartTwo />}
+                {typeof window !== 'undefined' && <ChartOne series={pieChart}/>}
+                {/* {typeof window !== 'undefined' && <ChartTwo />} */}
                 {typeof window !== 'undefined' && <ChartThree />}
+                <div className='col-span-12 rounded-xl shadow-default xl:col-span-4'>
+                  <MaketingComponent data={marketingData}/>
+                </div>
               </div>
               <div className='grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5 mt-4'>
-                <div className='col-span-12 xl:col-span-8 overflow-auto'>
+                <div className='col-span-12 overflow-auto'>
                   <TableOne data={tableData}/>
-                </div>
-                <div className='col-span-12 xl:col-span-4'>
-                  <MaketingComponent data={marketingData}/>
                 </div>
               </div>
             </div>

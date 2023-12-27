@@ -7,6 +7,6 @@ export interface ILead {
   payout?: string | Date;
   referralId?: string;
   referralName?: string;
-  subReferralLink: string;
   createdAt?: string;
+  note?: string;
 }

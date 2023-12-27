@@ -6,7 +6,8 @@ import SignUpForm from './SignUpForm';
 import Spinner from './Spinner';
 import PasswordStrengthMeter from './PasswordStrengthMeter'
 import ResetPasswordForm from './ResetPasswordForm';
-import PopoverBase from './PopoverBase'
+import PopoverBase from './PopoverBase';
+import ModalBase from './Modelbase'
 
 export {
   Container,
@@ -17,5 +18,6 @@ export {
   SignUpForm,
   PasswordStrengthMeter,
   ResetPasswordForm,
-  PopoverBase
+  PopoverBase,
+  ModalBase
 }

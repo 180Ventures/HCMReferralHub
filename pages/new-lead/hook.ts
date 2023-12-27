@@ -18,11 +18,11 @@ export const inititalValues: ILead = {
   name: '',
   phone: '',
   payout: '',
-  status: LeadStatus.loss,
-  price: PriceByStatusLead.loss,
+  status: LeadStatus.pending,
+  price: PriceByStatusLead.lost,
   referralName: '',
   referralId: '',
-  subReferralLink: '',
+  note: ''
 };
 
 export const leadSchema = Yup.object().shape({
@@ -52,7 +52,6 @@ const useNewLeadHook = () => {
         ...values,
         referralName: fullName,
         referralId: profile?.uid,
-        subReferralLink: generateLink(profile?.uid as string, true),
       });
       toastSuccess(MESSAGE.addedNewLead);
       if (profile?.role === 'admin') router.push(ROUTERS.admin);
