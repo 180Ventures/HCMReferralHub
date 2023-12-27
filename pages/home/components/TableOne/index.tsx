@@ -4,7 +4,7 @@ import { LoadingPage, ModalBase, PopoverBase } from '@/components';
 import useTableHook from './hook';
 import { USDollar } from '@/constants';
 import { LeadStatus } from '@/utils/enums';
-import { CreateNote } from '../CreateNote';
+import CreateNote from '../CreateNote';
 import clsx from 'clsx';
 interface IProps {
   data: ILead[];

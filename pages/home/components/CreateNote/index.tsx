@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import clsx from 'clsx';
 
-interface Props {
+interface IProps {
   name: string;
   hideSave?: boolean;
   disableArea?: boolean;
@@ -9,13 +9,13 @@ interface Props {
   onSaveNote?: () => void;
 }
 
-export const CreateNote = ({
+const CreateNote = ({
   name,
   hideSave,
   disableArea,
   setName,
   onSaveNote,
-}: Props) => {
+}: IProps) => {
   const changeName = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setName && setName(e.target.value);
@@ -58,3 +58,5 @@ export const CreateNote = ({
     </div>
   );
 };
+
+export default CreateNote;
