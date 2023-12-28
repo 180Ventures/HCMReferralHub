@@ -5,7 +5,7 @@ export const LOCAL_STORAGE_KEYS = {
 
 //ROUTER
 export const ROUTERS = {
-  admin: '/admin',
+  admin: '/superadmin',
   login: '/login',
   signup: '/signup',
   home: '/home',
