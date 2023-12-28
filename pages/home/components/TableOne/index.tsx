@@ -6,6 +6,9 @@ import { USDollar } from '@/constants';
 import { LeadStatus, PriceByStatusLead } from '@/utils/enums';
 import CreateNote from '../CreateNote';
 import clsx from 'clsx';
+import { formatPhoneNumber } from '@/utils';
+import { formatPhoneNumberIntl } from 'react-phone-number-input';
+
 interface IProps {
   data: ILead[];
 }
@@ -61,7 +64,7 @@ const TableOne = ({ data }: IProps) => {
         </div>
       </div>
       <div className="flex flex-col overflow-auto">
-        <div className="grid rounded-sm bg-gray-2 grid-cols-12 overflow-auto">
+        <div className="grid rounded-sm bg-gray-2 grid-cols-12 overflow-x-auto">
           <div className="p-2.5 2xl:p-5 col-span-1">
             <h5 className="text-sm font-medium text-[#898989] capitalize">No</h5>
           </div>
@@ -93,17 +96,17 @@ const TableOne = ({ data }: IProps) => {
             <h5 className="text-sm font-medium capitalize text-[#898989]">Notes</h5>
           </div>
         </div>
-        {/* {data?.length == 0 && (
-          <p className='text-sm text-blackLight font-normal text-center py-2 capitalize'>
-            No data found!
+        {data?.length == 0 && (
+          <p className='text-sm text-blackLight font-normal text-center pt-10 pb-4 capitalize'>
+            no records found.
           </p>
-        )} */}
-        <div className={`${isAdmin ? 'h-[50vh]' : 'max-h-40'} overflow-auto`}>
+        )}
+        <div className={`${isAdmin ? 'h-[50vh]' : 'max-h-40'}`}>
           {data?.map((item, index) => {
             return (
               <div
                 key={item.id}
-                className={`grid overflow-auto cursor-pointer border-b border-stroke dark:border-strokedark grid-cols-12 ${
+                className={`grid cursor-pointer border-b border-stroke dark:border-strokedark grid-cols-12 ${
                   index === data.length - 1 ? 'border-none' : ''
                 }`}
               >
@@ -158,16 +161,16 @@ const TableOne = ({ data }: IProps) => {
                   )}
                 </div>
 
-                <div className=" items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
+                <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
                   <p className="text-blackLight text-xs font-normal font-Inter">{(item.payout as string) || '...'}</p>
                 </div>
                 {isAdmin ? (
-                  <div className=" items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
-                    <p className="text-blackLight text-xs font-normal font-Inter">{item.phone || '...'}</p>
+                  <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
+                    <p className="text-blackLight text-xs font-normal font-Inter">{formatPhoneNumberIntl(item.phone) || '...'}</p>
                   </div>
                 ) : (
-                  <div className=" items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-3">
-                    <p className="text-blackLight text-xs font-normal font-Inter truncate">{item.phone || '...'}</p>
+                  <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-3">
+                    <p className="text-blackLight text-xs font-normal font-Inter truncate">{formatPhoneNumberIntl(item.phone) || '...'}</p>
                   </div>
                 )}
                 {isAdmin && (
@@ -180,7 +183,7 @@ const TableOne = ({ data }: IProps) => {
 
                 <div
                   onClick={() => item.id && handleClickNotes(item.id, item.note || '')}
-                  className=" items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-1"
+                  className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-1"
                 >
                   <p className="text-meta-5 capitalize cursor-pointer hover:opacity-60 text-blackLight text-xs font-normal font-Inter underline truncate">
                     See Notes

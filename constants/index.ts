@@ -19,6 +19,7 @@ export const FORMAT_DATE = {
   formatDate: 'DD/MM/YYYY',
   monthDayYear: 'MM-DD-YYYY',
   formatFullDate: 'MMM DD, YYYY h:mm A',
+  monthDayYearSlash: 'MM/DD/YYYY',
 };
 
 //ERROR_MESSAGES

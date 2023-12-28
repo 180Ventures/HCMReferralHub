@@ -3,7 +3,6 @@ import { useAuthState } from '@/contexts/auth';
 import { addLead } from '@/queries/leads';
 import { toastError, toastSuccess } from '@/utils';
 import { LeadStatus, PriceByStatusLead } from '@/utils/enums';
-import { generateLink } from '@/utils/generateLink';
 import { ILead } from '@/utils/types';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo, useState } from 'react';

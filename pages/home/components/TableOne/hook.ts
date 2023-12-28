@@ -26,7 +26,7 @@ const useTableHook = () => {
         setLoading(true);
         const dataParams = {
           status: stsId,
-          payout: stsId === LeadStatus.won ? moment().format(FORMAT_DATE.formatDate) : '',
+          payout: stsId === LeadStatus.won ? moment().format(FORMAT_DATE.monthDayYearSlash) : '',
           price: stsId === LeadStatus.won ? PriceByStatusLead.won : PriceByStatusLead.lost,
         };
         await updateLead(leadId, dataParams);

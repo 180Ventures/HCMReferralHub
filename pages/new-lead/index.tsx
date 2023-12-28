@@ -1,10 +1,12 @@
-import { Container, LoadingPage } from '@/components';
+import { Container, ErrorMessageForm, LoadingPage } from '@/components';
 import withAuth from '@/components/AuthHOC';
 import Input from '@/components/Input';
 import { AddNewLeadIcon, ArrowRight } from '@/icons';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import useNewLeadHook, { inititalValues, leadSchema } from './hook';
+import 'react-phone-number-input/style.css';
+import PhoneInput from 'react-phone-number-input';
 
 const NewLead: NextPage = () => {
   const { loading, onSubmitForm } = useNewLeadHook();
@@ -47,14 +49,24 @@ const NewLead: NextPage = () => {
                   </div>
 
                   <div className="flex mt-4 2xl:mt-8 flex-row justify-center items-center relative">
-                    <Input
+                    {/* <Input
                       name="phone"
                       type="text"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       value={props.values.phone}
                       placeholder="What is a good phone number to reach you?"
-                    />
+                    /> */}
+                    <div className='flex flex-col w-full'>
+                      <PhoneInput
+                        placeholder="What is a good phone number to reach you?"
+                        value={props.values.phone}
+                        className="w-full h-11 2xl:h-12 bg-white rounded-lg border border-slate-200 text-[#898989] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal"
+                        defaultCountry="US"
+                        onChange={(value) => props.setFieldValue('phone', value)}
+                      />
+                      <ErrorMessageForm name="phone" />
+                    </div>
                   </div>
 
                   <button type="submit" className="mt-6 hover:opacity-75 w-full bg-[#396589] rounded-lg h-10 2xl:h-12">
