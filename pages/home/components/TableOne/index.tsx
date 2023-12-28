@@ -42,7 +42,7 @@ const TableOne = ({ data }: IProps) => {
   } = useTableHook();
 
   return (
-    <div className="rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white px-5 py-3 2xl:pt-6 pb-2.5 xl:pb-1">
+    <div className="rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white p-8">
       {loading && <LoadingPage />}
       <ModalBase
         setOpen={setShowModelCreateNotes}
@@ -60,10 +60,10 @@ const TableOne = ({ data }: IProps) => {
       <div className="mb-3 justify-between gap-4 flex">
         <div>
           <h2 className="text-2xl font-Inter font-semibold text-blackLight">All Leads Referred</h2>
-          {!isAdmin && <h5 className="text-sm font-Inter font-normal text-blackLight mt-2">This month</h5>}
+          {/* {!isAdmin && <h5 className="text-sm font-Inter font-normal text-blackLight mt-2">This month</h5>} */}
         </div>
       </div>
-      <div className="flex flex-col overflow-auto">
+      <div className="flex flex-col overflow-auto mt-5">
         <div className="grid rounded-sm bg-gray-2 grid-cols-12 overflow-x-auto">
           <div className="p-2.5 2xl:p-5 col-span-1">
             <h5 className="text-sm font-medium text-[#898989] capitalize">No</h5>
