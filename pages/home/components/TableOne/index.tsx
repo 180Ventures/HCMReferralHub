@@ -3,7 +3,7 @@ import { DropdownIcon } from '@/icons';
 import { LoadingPage, ModalBase, PopoverBase } from '@/components';
 import useTableHook from './hook';
 import { USDollar } from '@/constants';
-import { LeadStatus } from '@/utils/enums';
+import { LeadStatus, PriceByStatusLead } from '@/utils/enums';
 import CreateNote from '../CreateNote';
 import clsx from 'clsx';
 interface IProps {
@@ -131,9 +131,13 @@ const TableOne = ({ data }: IProps) => {
                     </p>
                     {item.status === LeadStatus.pending ? (
                       <p className=" text-sm font-normal font-Inter text-grayLight sm:block">{LeadStatus.pending}</p>
+                    ) : item.price === PriceByStatusLead.lost ? (
+                      <p className=" text-sm font-medium font-Inter text-grayLight sm:block">
+                        $0
+                      </p>
                     ) : (
                       <p className=" text-sm font-medium font-Inter text-[#35B0A4] sm:block">
-                        {item.price ? USDollar.format(+item.price) : 0}
+                        {item.price && USDollar.format(item.price)}
                       </p>
                     )}
                   </div>

@@ -23,8 +23,8 @@ export const inititalValues: ILead = {
 export const leadSchema = Yup.object().shape({
   name: Yup.string().required(FIELD_REQUIRED),
   phone: Yup.string()
-    .matches(/^[0-9]+$/, 'Phone number can only contain digits')
-    .min(10, 'Phone number must have at least 10 digits')
+    //.matches(/^[0-9]+$/, 'Phone number can only contain digits')
+    // .min(10, 'Phone number must have at least 10 digits')
     .max(15, 'Phone number cannot have more than 15 digits')
     .required('Phone number is required'),
 });

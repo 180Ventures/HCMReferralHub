@@ -15,8 +15,8 @@ export enum LeadStatus {
 }
 
 export enum PriceByStatusLead {
-  won = '250',
-  lost = '0',
+  won = 250,
+  lost = 0,
 }
 
 export enum Roles {

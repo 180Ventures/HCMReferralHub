@@ -3,7 +3,7 @@ export interface ILead {
   name: string;
   phone: string;
   status?: string;
-  price?: string;
+  price?: number;
   payout?: string | Date;
   referralId?: string;
   referralName?: string;

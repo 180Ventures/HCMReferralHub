@@ -10,6 +10,7 @@ import { generateLink } from '@/utils/generateLink';
 import moment from 'moment';
 import { LeadStatus, PriceByStatusLead, PromiseStatus } from '@/utils/enums';
 import { ChartThreeState } from '../components/Charts/ChartThree';
+import { getStartAndEndDate12Month } from '@/utils/date';
 
 export const copyContent = async (text: string) => {
   try {
@@ -18,6 +19,8 @@ export const copyContent = async (text: string) => {
     console.error('Failed to copy: ', err);
   }
 };
+
+const DATA_12MONTHS = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const useDashBoardHook = () => {
   const [textSearch, setTextSearch] = useState<string>('');
@@ -44,7 +47,7 @@ const useDashBoardHook = () => {
     series: [
       {
         name: 'Earned',
-        data: [2.5, 3.5, 2, 4, 5, 6.7],
+        data: DATA_12MONTHS,
       },
     ],
   });
@@ -55,7 +58,7 @@ const useDashBoardHook = () => {
       value: `${totalClients} Clients`,
       title: 'helped this month',
       progress: 90,
-      price: USDollar.format(totalClients * +PriceByStatusLead.won),
+      price: USDollar.format(totalClients * PriceByStatusLead.won),
       progressColor: '#EE8062',
     },
     {
@@ -161,6 +164,36 @@ const useDashBoardHook = () => {
     ];
   }, [profile]);
 
+  const getAreaChartData = useCallback(async () => {
+    if (!profile) return [];
+    const months = getStartAndEndDate12Month();
+    const monthsPromise = months.map((month) => {
+      return countLeads(profile.uid, month.start, month.end, LeadStatus.won);
+    });
+    try {
+      const responsive = await Promise.allSettled(monthsPromise);
+      const leadsByMonths = DATA_12MONTHS.map((value, index) => {
+        if (responsive[index].status === PromiseStatus.fulfilled) {
+          return (responsive[index] as any)?.value * PriceByStatusLead.won;
+        } else {
+          return value;
+        }
+      });
+      const sumLeadsByMonths = leadsByMonths.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+      setAreaChart({
+        total: sumLeadsByMonths,
+        series: [
+          {
+            name: 'Earned',
+            data: leadsByMonths,
+          },
+        ],
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [profile]);
+
   useEffect(() => {
     if (isAdmin && window.location.pathname.includes(ROUTERS.home)) router.replace(ROUTERS.admin);
   }, [isAdmin]);
@@ -195,6 +228,7 @@ const useDashBoardHook = () => {
       }
       setMarketingData(DASHBOARD_MARKETING_DATA_TEMPLATE);
     });
+    getAreaChartData();
   }, []);
 
   return {

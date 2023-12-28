@@ -9,7 +9,7 @@ import {
   getDocs,
   limit,
   doc,
-  updateDoc,
+  updateDoc
 } from 'firebase/firestore';
 
 import { Tables } from '@/utils/enums';
