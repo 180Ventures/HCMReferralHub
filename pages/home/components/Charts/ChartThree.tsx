@@ -1,8 +1,11 @@
 import { ThreeDots } from '@/icons';
 // import { ApexOptions } from 'apexcharts';
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic'
-const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import dynamic from 'next/dynamic';
+import { USDollar } from '@/constants';
+const ReactApexChart = dynamic(() => import('react-apexcharts'), {
+  ssr: false,
+});
 
 const options: any = {
   dataLabels: {
@@ -93,54 +96,43 @@ const options: any = {
   ],
 };
 
-interface ChartThreeState {
-  series: {
-    name: string;
-    data: number[];
-  }[];
+interface ISerie {
+  name: string;
+  data: number[];
+}
+export interface ChartThreeState {
+  series: ISerie[];
+  total: number;
 }
 
-const ChartThree: React.FC = () => {
-  const [state, setState] = useState<ChartThreeState>({
-    series: [
-      {
-        name: 'Series 1',
-        data: [45, 46, 42, 47, 48, 49, 50, 49, 47, 45, 47, 49, 54, 54, 45, 46],
-      },
-    ],
-  });
+const ChartThree = ({ series, total }: ChartThreeState) => {
+  // const [state, setState] = useState<ChartThreeState>({
+  //   series: [
+  //     {
+  //       name: 'Earned',
+  //       data: [2.5,3.5,2,4,5,6.7],
+  //     },
+  //   ],
+  // });
 
   return (
-    <div className='col-span-12 rounded-xl border border-stroke bg-white p-8 pb-0 xl:col-span-4'>
-      <div className='justify-between sm:flex'>
+    <div className="col-span-12 rounded-xl border border-stroke bg-white p-4 2xl:p-8 pb-0 xl:col-span-4">
+      <div className="justify-between sm:flex">
         <div>
-          <h2 className='text-2xl font-Inter font-semibold text-blackLight'>
-            Commission Earned
-          </h2>
-          <div className='pt-2'>
-            <p className='text-2xl font-Inter font-semibold text-blackLight'>
-              $2,250.00
-            </p>
-            <p className='text-sm font-Inter font-normal text-blackLight'>
-              March 2020
-            </p>
+          <h2 className="text-2xl font-Inter font-semibold text-blackLight">Commission Earned</h2>
+          <div className="pt-2">
+            <p className="text-2xl font-Inter font-semibold text-blackLight">{USDollar.format(total)}</p>
+            <p className="text-sm font-Inter font-normal text-blackLight">This year</p>
           </div>
         </div>
 
-        <span className='cursor-pointer'>
+        <span className="cursor-pointer">
           <ThreeDots />
         </span>
       </div>
 
-      <div id='chartTwo' className='-ml-5 -mb-9'>
-        {typeof window !== 'undefined' && (
-          <ReactApexChart
-            options={options}
-            series={state.series}
-            type='area'
-            height={200}
-          />
-        )}
+      <div id="chartTwo" className="-ml-5 -mb-9">
+        {typeof window !== 'undefined' && <ReactApexChart options={options} series={series} type="area" height={200} />}
       </div>
     </div>
   );

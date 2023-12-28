@@ -3,16 +3,7 @@ import { combineReducers } from 'redux';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 import storage from 'redux-persist/lib/storage';
 import leadsAdminReducer from './slides/leadsAdminSlice';
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 
 const rootReducer = combineReducers({
   leadsAdminReducer,
@@ -43,9 +34,4 @@ export { store, persistedStore };
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<
-  ReturnType,
-  RootState,
-  unknown,
-  Action<string>
->;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;

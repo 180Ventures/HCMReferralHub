@@ -14,14 +14,8 @@ import { IContactData } from './type';
 import { db } from '@/firebase';
 import { Tables } from '@/utils/enums';
 
-export const getContactByReferralId = async (
-  referralId: string
-): Promise<IContactData[]> => {
-  let q = query(
-    collection(db, Tables.contacts),
-    where('referralId', '==', referralId),
-    orderBy('createAt', 'desc')
-  );
+export const getContactByReferralId = async (referralId: string): Promise<IContactData[]> => {
+  let q = query(collection(db, Tables.contacts), where('referralId', '==', referralId), orderBy('createAt', 'desc'));
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((it) => {
     return {
@@ -31,11 +25,10 @@ export const getContactByReferralId = async (
   }) as IContactData[];
 };
 
-export const getAllContactWithRefId = async (
-): Promise<IContactData[]> => {
+export const getAllContactWithRefId = async (): Promise<IContactData[]> => {
   let q = query(
     collection(db, Tables.contacts),
-    where('referralId', '!=', ''),
+    where('referralId', '!=', '')
     // orderBy('createAt', 'desc')
   );
   const querySnapshot = await getDocs(q);

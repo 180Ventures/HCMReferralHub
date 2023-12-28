@@ -30,10 +30,7 @@ export const addLead = async (leadData: ILead) => {
   return leadDocument;
 };
 
-export const getLeads = async (
-  referralId: string,
-  _limit?: number
-): Promise<ILead[]> => {
+export const getLeads = async (referralId: string, _limit?: number): Promise<ILead[]> => {
   const q = query(
     collection(db, Tables.leads),
     where('referralId', '==', referralId),
@@ -76,11 +73,7 @@ export const countLeads = async (
 };
 
 export const getAllLeads = async (_limit?: number): Promise<ILead[]> => {
-  const q = query(
-    collection(db, Tables.leads),
-    orderBy('createdAt', 'desc'),
-    limit(_limit || 999)
-  );
+  const q = query(collection(db, Tables.leads), orderBy('createdAt', 'desc'), limit(_limit || 999));
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((it) => ({
     id: it.id,

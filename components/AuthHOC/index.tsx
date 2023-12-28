@@ -7,14 +7,13 @@ import { ROUTERS } from '@/constants';
 enum RouteRole {
   auth,
   all,
-  admin
+  admin,
 }
-export interface WithAuthProps {
-}
+export interface WithAuthProps {}
 
 export default function withAuth<T extends WithAuthProps = WithAuthProps>(
   Component: React.ComponentType<T>,
-  routeRole: keyof typeof RouteRole,
+  routeRole: keyof typeof RouteRole
 ) {
   const ComponentWithAuth = (props: Omit<T, keyof WithAuthProps>) => {
     const router = useRouter();
@@ -25,17 +24,13 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(
       if (!loading && !loadingInitial) {
         if (isAuthenticated && routeRole === 'auth' && profile?.role === 'admin') {
           router.replace(ROUTERS.admin);
-        } 
-        else if (isAuthenticated && routeRole === 'auth') {
+        } else if (isAuthenticated && routeRole === 'auth') {
           router.replace(ROUTERS.home);
         }
 
         if (!isAuthenticated && routeRole !== 'auth') {
           let routerName = '/';
-          router.replace(
-            `${routerName}?redirect=${router.asPath}`,
-            `${routerName}`
-          );
+          router.replace(`${routerName}?redirect=${router.asPath}`, `${routerName}`);
         }
       }
     }, [loading, loadingInitial, router, routeRole, isAuthenticated]);
@@ -45,21 +40,19 @@ export default function withAuth<T extends WithAuthProps = WithAuthProps>(
     }, [checkRouterRole]);
 
     if ((loading || loadingInitial || isAuthenticated) && isAuthenticated && routeRole === 'auth') {
-      return (
-        <LoadingPage />
-      );
+      return <LoadingPage />;
     }
 
     if ((loadingInitial || !isAuthenticated) && routeRole !== 'auth') {
-      return (
-        <LoadingPage />
-      );
+      return <LoadingPage />;
     }
 
-    return <div>
-      {(loading || loadingInitial) && <LoadingPage />}
-      <Component {...(props as T)} />
-    </div>
+    return (
+      <div>
+        {(loading || loadingInitial) && <LoadingPage />}
+        <Component {...(props as T)} />
+      </div>
+    );
   };
 
   return ComponentWithAuth;

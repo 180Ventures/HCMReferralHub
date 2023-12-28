@@ -29,16 +29,14 @@ const PopoverBase = ({ children, onClickItem, data }: IProps) => {
       isOpen={showDropdown}
       positions={['bottom']}
       content={
-        <div className='flex flex-col pt-2 pb-2 min-w-[160px] mt-2 max-h-60 overflow-auto max-w-[260px] rounded-lg border border-gray-200 bg-white font-Inter shadow'>
+        <div className="flex flex-col pt-2 pb-2 min-w-[160px] mt-2 max-h-60 overflow-auto max-w-[260px] rounded-lg border border-gray-200 bg-white font-Inter shadow">
           {data.map((value) => (
             <button
               onClick={() => handleClickItem(value.id)}
               key={value.id}
-              className='flex flex-row items-center hover:opacity-75 py-2 px-4 hover:bg-slate-200'
+              className="flex flex-row items-center hover:opacity-75 py-2 px-4 hover:bg-slate-200"
             >
-              <span className='text-sm font-medium hover:text-redOrange'>
-                {value.name}
-              </span>
+              <span className="text-sm font-medium hover:text-redOrange">{value.name}</span>
             </button>
           ))}
         </div>

@@ -14,21 +14,22 @@ const useAdminHook = () => {
   const [tableData, setTableData] = useState<ILead[]>([]);
   const [textSearch, setTextSearch] = useState<string>('');
   const router = useRouter();
-  const leadsData = useSelector(
-    (state: RootState) => state.leadsAdminReducer.data
-  );
+  const leadsData = useSelector((state: RootState) => state.leadsAdminReducer.data);
   const { profile, isAdmin } = useAuthState();
 
-  const onChangeTextSearch = useCallback((value: string) => {
-    if (!value) {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setTableData(leadsData);
-      }, 500);
-    }
-    setTextSearch(value);
-  }, [leadsData]);
+  const onChangeTextSearch = useCallback(
+    (value: string) => {
+      if (!value) {
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false);
+          setTableData(leadsData);
+        }, 500);
+      }
+      setTextSearch(value);
+    },
+    [leadsData]
+  );
 
   const handleSearchLeads = useCallback(() => {
     setLoading(true);
@@ -40,7 +41,6 @@ const useAdminHook = () => {
       setTableData(values);
     }, 500);
   }, [textSearch]);
-
 
   const fetchLeads = useCallback(async () => {
     try {
@@ -65,7 +65,7 @@ const useAdminHook = () => {
       (item) => item.name.toLowerCase().trim().search(textSearch.toLowerCase().trim()) != -1
     );
     setTableData(values);
-  }, [leadsData])
+  }, [leadsData]);
 
   return { tableData, loading, leadsData, handleSearchLeads, onChangeTextSearch };
 };

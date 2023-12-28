@@ -1,14 +1,13 @@
-import { ROUTERS } from "@/constants";
-import { useAuthState } from "@/contexts/auth";
-import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import { ROUTERS } from '@/constants';
+import { useAuthState } from '@/contexts/auth';
+import { useRouter } from 'next/router';
+import { useCallback, useState } from 'react';
 
-interface IProps {
-}
+interface IProps {}
 
 interface IResetPasswordValues {
-    password: string;
-    confirmPassword: string;
+  password: string;
+  confirmPassword: string;
 }
 
 export const useResetPasswordHooks = () => {
@@ -17,15 +16,15 @@ export const useResetPasswordHooks = () => {
   const route = useRouter();
 
   const inititalValues: IResetPasswordValues = {
-    password: "",
-    confirmPassword: "",
+    password: '',
+    confirmPassword: '',
   };
-  
+
   const onSubmitForm = async (values: IResetPasswordValues) => {
-    if(route.query?.oobCode) {
+    if (route.query?.oobCode) {
       resetPassword(route.query?.oobCode as string, values.password);
     }
-  }
+  };
 
   const onToggleShowPassword = useCallback(() => {
     setShowPassword(!showPassword);
@@ -40,6 +39,6 @@ export const useResetPasswordHooks = () => {
     showPassword,
     onSubmitForm,
     onToggleShowPassword,
-    onGotoSignUp
-  }
-}
+    onGotoSignUp,
+  };
+};

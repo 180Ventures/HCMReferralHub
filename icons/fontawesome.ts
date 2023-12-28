@@ -1,4 +1,4 @@
-import { library } from "@fortawesome/fontawesome-svg-core";
+import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faCircleXmark,
   faSquare,
@@ -12,14 +12,13 @@ import {
   faClock,
   faBell,
   faUser,
-} from "@fortawesome/free-regular-svg-icons";
+} from '@fortawesome/free-regular-svg-icons';
 import {
   faCircleXmark as fasCircleXmark,
   faCirclePlus as fasCirclePlus,
   faUserGroup as fasUserGroup,
   faArrowRightFromBracket as fasArrowRightFromBracket,
   faPen as fasPen,
-
   faBars as fasBars,
   faXmark as fasXmark,
   faLink as fasLink,
@@ -44,7 +43,7 @@ import {
   faVideo as fasVideo,
   faServer as fasServer,
   faEnvelope as fasEnvelope,
-} from "@fortawesome/free-solid-svg-icons";
+} from '@fortawesome/free-solid-svg-icons';
 
 library.add(
   //Regular Icons
@@ -89,5 +88,5 @@ library.add(
   fasUser,
   fasVideo,
   fasServer,
-  fasEnvelope,
+  fasEnvelope
 );

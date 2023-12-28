@@ -12,13 +12,10 @@ import moment from 'moment';
 const useTableHook = () => {
   const { isAdmin } = useAuthState();
   const [loading, setLoading] = useState<boolean>(false);
-  const leadsData = useSelector(
-    (state: RootState) => state.leadsAdminReducer.data
-  );
+  const leadsData = useSelector((state: RootState) => state.leadsAdminReducer.data);
   const dispatch = useDispatch();
 
-  const [showModelCreateNotes, setShowModelCreateNotes] =
-    useState<boolean>(false);
+  const [showModelCreateNotes, setShowModelCreateNotes] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>('');
   const [currentLeadId, setCurrentLeadId] = useState<string>('');
 
@@ -58,7 +55,7 @@ const useTableHook = () => {
   const handleSaveNotes = useCallback(async () => {
     try {
       setLoading(true);
-      const dataParams = {note: notes};
+      const dataParams = { note: notes };
       await updateLead(currentLeadId, dataParams);
       const leadsUpdated = leadsData.map((item) => {
         if (item.id === currentLeadId) return { ...item, ...dataParams };

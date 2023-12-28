@@ -8,9 +8,7 @@ const useSettings = () => {
   const [showModelComfirm, setShowModelConfirm] = useState<boolean>(false);
   const [showModelEmail, setShowModelEmail] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [fullName, setFullName] = useState<string>(
-    profile?.firstName + ' ' + profile?.lastName
-  );
+  const [fullName, setFullName] = useState<string>(profile?.firstName + ' ' + profile?.lastName);
   const [email, setEmail] = useState<string>('');
 
   const onShowModelConfirm = useCallback(() => {
@@ -60,15 +58,13 @@ const useSettings = () => {
   }, [fullName]);
 
   const onUpdateEmail = useCallback(() => {
-    var validRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!email.match(validRegex)) {
       toastError('Valid email address!');
       return;
     }
 
-    handleUpdateEmail(email)
-
+    handleUpdateEmail(email);
   }, [email]);
 
   useEffect(() => {

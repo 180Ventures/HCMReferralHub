@@ -16,12 +16,8 @@ export const initialValues: IPassword = {
 };
 
 export const passwordSchema = Yup.object().shape({
-  password: Yup.string()
-    .required(FIELD_REQUIRED)
-    .min(8, 'Password at least 8 characters'),
-  currentPassword: Yup.string()
-    .required(FIELD_REQUIRED)
-    .min(8, 'Password at least 8 characters'),
+  password: Yup.string().required(FIELD_REQUIRED).min(8, 'Password at least 8 characters'),
+  currentPassword: Yup.string().required(FIELD_REQUIRED).min(8, 'Password at least 8 characters'),
   confirmPassword: Yup.string()
     .required(FIELD_REQUIRED)
     .oneOf([Yup.ref('password')], 'Your passwords do not match.'),

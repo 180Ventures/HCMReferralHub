@@ -9,6 +9,7 @@ import { ILead } from '@/utils/types';
 import { generateLink } from '@/utils/generateLink';
 import moment from 'moment';
 import { LeadStatus, PriceByStatusLead, PromiseStatus } from '@/utils/enums';
+import { ChartThreeState } from '../components/Charts/ChartThree';
 
 export const copyContent = async (text: string) => {
   try {
@@ -24,9 +25,7 @@ const useDashBoardHook = () => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const { profile } = useAuthState();
   const [link, setLink] = useState<string>(
-    `${process.env.NEXT_PUBLIC_REFERRAL_URL}${generateLink(
-      profile?.uid as string
-    )}`
+    `${process.env.NEXT_PUBLIC_REFERRAL_URL}${generateLink(profile?.uid as string)}`
   );
 
   const [tableData, setTableData] = useState<ILead[]>([]);
@@ -37,7 +36,18 @@ const useDashBoardHook = () => {
   const { isAdmin } = useAuthState();
   const [totalLeads, setTotalLeads] = useState<number>(0);
   const [totalClients, setTotalClients] = useState<number>(0);
-  const [pieChart, setPieCart] = useState<number[]>([0,0,0]);
+
+  //CHART
+  const [pieChart, setPieCart] = useState<number[]>([0, 0, 0]);
+  const [areaChart, setAreaChart] = useState<ChartThreeState>({
+    total: 0,
+    series: [
+      {
+        name: 'Earned',
+        data: [2.5, 3.5, 2, 4, 5, 6.7],
+      },
+    ],
+  });
 
   const initialCards = [
     {
@@ -88,11 +98,7 @@ const useDashBoardHook = () => {
   const handleSearchLeads = useCallback(() => {
     setLoading(true);
     const values = tableDataTemplate.filter(
-      (item) =>
-        item.name
-          .toLowerCase()
-          .trim()
-          .search(textSearch.toLowerCase().trim()) != -1
+      (item) => item.name.toLowerCase().trim().search(textSearch.toLowerCase().trim()) != -1
     );
     setTimeout(() => {
       setLoading(false);
@@ -137,45 +143,48 @@ const useDashBoardHook = () => {
     if (!profile) return null;
     try {
       const startOfThisMonth = moment().startOf('month').format(FORMAT_DATE.monthDayYear);
-      const endOfThisMonth = moment().endOf('month').format(FORMAT_DATE.monthDayYear);      
+      const endOfThisMonth = moment().endOf('month').format(FORMAT_DATE.monthDayYear);
       return countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadStatus.won);
     } catch (error) {
       console.log(error);
     }
   }, [profile]);
 
-  const getChartData = useMemo(() => {
+  const getPieChartData = useMemo(() => {
     if (!profile) return [];
     const startOfThisMonth = moment().startOf('month').format(FORMAT_DATE.monthDayYear);
-    const endOfThisMonth = moment().endOf('month').format(FORMAT_DATE.monthDayYear);      
+    const endOfThisMonth = moment().endOf('month').format(FORMAT_DATE.monthDayYear);
     return [
       countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadStatus.pending),
       countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadStatus.won),
-      countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadStatus.lost)
-    ]
+      countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadStatus.lost),
+    ];
   }, [profile]);
 
   useEffect(() => {
-    if (isAdmin && window.location.pathname.includes(ROUTERS.home))
-      router.replace(ROUTERS.admin);
+    if (isAdmin && window.location.pathname.includes(ROUTERS.home)) router.replace(ROUTERS.admin);
   }, [isAdmin]);
 
   useEffect(() => {
-    Promise.allSettled([getLeadsData, countLeadsOfWeek, countClientThisMonth, ...getChartData]).then((data) => {
+    Promise.allSettled([getLeadsData, countLeadsOfWeek, countClientThisMonth, ...getPieChartData]).then((data) => {
       const [dataTableRes, leadsOfWeek, clientThisMonth, pedingData, wonData, lostData] = data;
 
-      if(pedingData.status === PromiseStatus.fulfilled && wonData.status == PromiseStatus.fulfilled && lostData.status === PromiseStatus.fulfilled) {
+      if (
+        pedingData.status === PromiseStatus.fulfilled &&
+        wonData.status == PromiseStatus.fulfilled &&
+        lostData.status === PromiseStatus.fulfilled
+      ) {
         setPieCart([pedingData.value, wonData.value, lostData.value]);
       }
 
-      if(clientThisMonth.status === PromiseStatus.fulfilled) {
+      if (clientThisMonth.status === PromiseStatus.fulfilled) {
         const { value } = clientThisMonth;
-        if(value) setTotalClients(value);
+        if (value) setTotalClients(value);
       }
 
-      if(leadsOfWeek.status === PromiseStatus.fulfilled) {
+      if (leadsOfWeek.status === PromiseStatus.fulfilled) {
         const { value } = leadsOfWeek;
-        if(value) setTotalLeads(value);
+        if (value) setTotalLeads(value);
       }
       if (dataTableRes.status == PromiseStatus.fulfilled) {
         const { value } = dataTableRes;
@@ -197,6 +206,7 @@ const useDashBoardHook = () => {
     tableData,
     initialCards,
     pieChart,
+    areaChart,
     marketingData,
     onToggleSideBar,
     handleSearchLeads,

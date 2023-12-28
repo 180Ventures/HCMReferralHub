@@ -59,39 +59,29 @@ const options: ApexOptions = {
 
 interface IProps {
   //series: [1,1,1]
-  series: number[]
+  series: number[];
 }
 
-const ChartOne = ({series}: IProps) => {
+const ChartOne = ({ series }: IProps) => {
   const { profile } = useAuthState();
 
   return (
-    <div className='col-span-12 rounded-xl border border-stroke bg-white p-4 2xl:p-8 pb-2 2xl:pb-5 shadow-default xl:col-span-4'>
-      <div className='mb-3 justify-between gap-4 sm:flex'>
+    <div className="col-span-12 rounded-xl border border-stroke bg-white p-4 2xl:p-8 pb-2 2xl:pb-5 shadow-default xl:col-span-4">
+      <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
-          <h2 className='text-2xl font-Inter font-semibold text-blackLight'>
-            Closing Ratios
-          </h2>
-          <h5 className='text-sm font-Inter font-normal text-blackLight'>
-            {moment().format('MMMM YYYY')}
-          </h5>
+          <h2 className="text-2xl font-Inter font-semibold text-blackLight">Closing Ratios</h2>
+          <h5 className="text-sm font-Inter font-normal text-blackLight">{moment().format('MMMM YYYY')}</h5>
         </div>
         <div>
-          <span className='cursor-pointer'>
+          <span className="cursor-pointer">
             <ThreeDots />
           </span>
         </div>
       </div>
 
-      <div className='mb-2'>
-        <div id='chartThree' className='mx-auto flex justify-center'>
-          {typeof window !== 'undefined' && (
-            <ReactApexChart
-              options={options}
-              series={series}
-              type='pie'
-            />
-          )}
+      <div className="mb-2">
+        <div id="chartThree" className="mx-auto flex justify-center">
+          {typeof window !== 'undefined' && <ReactApexChart options={options} series={series} type="pie" />}
         </div>
       </div>
     </div>

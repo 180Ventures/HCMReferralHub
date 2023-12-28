@@ -1,13 +1,13 @@
-import { Timestamp } from "firebase/firestore";
+import { Timestamp } from 'firebase/firestore';
 
-type Role = 'admin' | 'user'
+type Role = 'admin' | 'user';
 export type UserData = {
   uid: string;
   firstName: string;
   lastName?: string;
   email: string;
-  role?: Role,
-  port?: string
+  role?: Role;
+  port?: string;
 };
 
 export type ISignUpFormValues = {
@@ -18,7 +18,7 @@ export type ISignUpFormValues = {
   confirmPassword?: string;
   rememberMe?: boolean;
   policy?: boolean;
-  port?: string
+  port?: string;
 };
 
 export type ISignInFormValues = {
@@ -72,11 +72,11 @@ export type IAddChapter = {
   description: string;
   thumbnail: string;
   video: string;
-}
+};
 
 export interface Chapter extends IAddChapter {
   id: string;
-};
+}
 
 export interface IFooterFormValues {
   fullName: string;

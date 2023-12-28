@@ -1,9 +1,4 @@
-import {
-  ERROR_SOMTHING_WENT_WRONG,
-  FIELD_REQUIRED,
-  MESSAGE,
-  ROUTERS,
-} from '@/constants';
+import { ERROR_SOMTHING_WENT_WRONG, FIELD_REQUIRED, MESSAGE, ROUTERS } from '@/constants';
 import { useAuthState } from '@/contexts/auth';
 import { addLead } from '@/queries/leads';
 import { toastError, toastSuccess } from '@/utils';
@@ -22,7 +17,7 @@ export const inititalValues: ILead = {
   price: PriceByStatusLead.lost,
   referralName: '',
   referralId: '',
-  note: ''
+  note: '',
 };
 
 export const leadSchema = Yup.object().shape({
@@ -39,11 +34,8 @@ const useNewLeadHook = () => {
   const router = useRouter();
   const { profile } = useAuthState();
 
-  const fullName = useMemo(
-    () => profile?.firstName + ' ' + profile?.lastName,
-    [profile]
-  );
-  
+  const fullName = useMemo(() => profile?.firstName + ' ' + profile?.lastName, [profile]);
+
   const onSubmitForm = useCallback(async (values: ILead) => {
     if (loading && !profile) return;
     try {

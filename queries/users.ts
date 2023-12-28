@@ -1,15 +1,5 @@
 import { db } from '@/firebase';
-import {
-  DocumentData,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from 'firebase/firestore';
+import { DocumentData, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { UserData } from './type';
 import { Tables } from '@/utils/enums';
 
@@ -39,9 +29,7 @@ export const updateUser = async (userId: string, userData: any) => {
   return await updateDoc(userRef, userData);
 };
 
-export const getUserByEmail = async (
-  email: string
-): Promise<DocumentData | null> => {
+export const getUserByEmail = async (email: string): Promise<DocumentData | null> => {
   const q = query(collection(db, Tables.users), where('email', '==', email));
   const querySnapshot = await getDocs(q);
   const data = querySnapshot.docs.map((it) => ({
@@ -49,6 +37,6 @@ export const getUserByEmail = async (
     ...it.data(),
   })) as DocumentData[];
 
-  if(data.length === 0) return null;
+  if (data.length === 0) return null;
   return data[0];
 };

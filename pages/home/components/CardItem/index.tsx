@@ -6,33 +6,24 @@ interface IProps {
   progress?: number;
   progressColor?: string;
   chidrenIcon?: any;
-  price?: string
+  price?: string;
 }
 
-const CardItem = ({
-  title,
-  value,
-  progress,
-  progressColor,
-  price,
-  chidrenIcon,
-}: IProps) => {
+const CardItem = ({ title, value, progress, progressColor, price, chidrenIcon }: IProps) => {
   const backgroundColor = useMemo(() => {
     return `bg-[${progressColor}]`;
   }, [progressColor]);
 
   return (
-    <div className='border flex flex-col gap-4 justify-between border-stroke bg-white p-6 2xl:p-9 rounded-xl cursor-pointer hover:opacity-75'>
-      <div className='flex w-full items-center justify-between rounded-xl'>
-        <div className='flex flex-col'>
-          <span className='text-3xl font-Inter font-bold text-blackLight'>
-            {value}
-          </span>
-          <span className='text-sm font-medium text-[#35B0A4] mt-1'>{price}</span>
+    <div className="border flex flex-col gap-4 justify-between border-stroke bg-white p-6 2xl:p-9 rounded-xl cursor-pointer hover:opacity-75">
+      <div className="flex w-full items-center justify-between rounded-xl">
+        <div className="flex flex-col">
+          <span className="text-3xl font-Inter font-bold text-blackLight">{value}</span>
+          <span className="text-sm font-medium text-[#35B0A4] mt-1">{price}</span>
         </div>
         {chidrenIcon}
       </div>
-      <p className='text-sm font-normal text-grayLight capitalize'>{title}</p>
+      <p className="text-sm font-normal text-grayLight capitalize">{title}</p>
       {/* <div className='flex items-center justify-between gap-4 mt-2'>
         <div className='w-full bg-gray-200 rounded-sm h-1'>
           <div className={`h-1 bg-orangeLight rounded-l-sm w-[${progress}%] ${progressColor ? backgroundColor : ''}`}></div>

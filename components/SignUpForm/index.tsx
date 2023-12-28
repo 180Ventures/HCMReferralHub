@@ -9,14 +9,13 @@ import { FIELD_REQUIRED } from '@/constants';
 interface IProps {}
 
 const SignUpForm: FC<IProps> = () => {
-  const { inititalValues, showPassword, onSubmitForm, onToggleShowPassword, setValidPassword } =
-    useSignUpFormHooks();
+  const { inititalValues, showPassword, onSubmitForm, onToggleShowPassword, setValidPassword } = useSignUpFormHooks();
 
   return (
-    <div className='flex flex-col justify-center items-center max-w-sm w-full pb-8'>
+    <div className="flex flex-col justify-center items-center max-w-sm w-full pb-8">
       <div>
         <p className={`text-2xl text-left font-semibold text-gray20`}>Sign Up</p>
-        <div className='mt-4 2xl:mt-8 w-[320px] 2xl:w-[370px]'>
+        <div className="mt-4 2xl:mt-8 w-[320px] 2xl:w-[370px]">
           <Formik
             validationSchema={SignInSchema}
             initialValues={inititalValues}
@@ -26,64 +25,60 @@ const SignUpForm: FC<IProps> = () => {
             {(props) => {
               return (
                 <form onSubmit={props.handleSubmit}>
-                  <div className='flex mt-4 2xl:mt-8 flex-row justify-center items-center relative'>
+                  <div className="flex mt-4 2xl:mt-8 flex-row justify-center items-center relative">
                     <Input
-                      name='email'
-                      type='email'
+                      name="email"
+                      type="email"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       value={props.values.email}
-                      placeholder='Email address'
+                      placeholder="Email address"
                     />
                   </div>
 
-                  <div className='grid grid-cols-2 gap-6 mt-4 2xl:mt-8 justify-center items-center relative'>
+                  <div className="grid grid-cols-2 gap-6 mt-4 2xl:mt-8 justify-center items-center relative">
                     <div>
                       <Input
-                        name='firstName'
-                        type='text'
+                        name="firstName"
+                        type="text"
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         value={props.values.firstName}
-                        placeholder='First name'
+                        placeholder="First name"
                       />
                     </div>
                     <div>
                       <Input
-                        name='lastName'
-                        type='text'
+                        name="lastName"
+                        type="text"
                         onChange={props.handleChange}
                         onBlur={props.handleBlur}
                         value={props.values.lastName}
-                        placeholder='Last name'
+                        placeholder="Last name"
                       />
                     </div>
                   </div>
-                  <div className='flex mt-4 2xl:mt-6 flex-row justify-center items-center relative'>
+                  <div className="flex mt-4 2xl:mt-6 flex-row justify-center items-center relative">
                     <Input
-                      name='password'
+                      name="password"
                       type={showPassword ? 'text' : 'password'}
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       value={props.values.password}
-                      placeholder='Password'
+                      placeholder="Password"
                       passwordField
                       onToggleShowPassword={onToggleShowPassword}
                       showPassword={showPassword}
                     />
                   </div>
 
-                  {!props.errors.password &&
-                    props.values.password.length > 0 && (
-                      <PasswordStrengthMeter onChange={setValidPassword} password={props.values.password} />
-                    )}
-                  <button
-                    type='submit'
-                    className='mt-6 w-full bg-orangeLight rounded-lg h-10 2xl:h-12'
-                  >
-                    <p className='text-xs 2xl:text-sm font-semibold text-white'>Sign Up</p>
+                  {!props.errors.password && props.values.password.length > 0 && (
+                    <PasswordStrengthMeter onChange={setValidPassword} password={props.values.password} />
+                  )}
+                  <button type="submit" className="mt-6 w-full bg-orangeLight rounded-lg h-10 2xl:h-12">
+                    <p className="text-xs 2xl:text-sm font-semibold text-white">Sign Up</p>
                   </button>
-                  
+
                   {/* <div className='flex justify-between items-center py-6'>
                     <div className='h-[1px] flex-grow max-w-[166px] bg-[#DCDCDC]'></div>
                     <span className='text-sm text-[#898989] font-normal py-3'>
@@ -130,26 +125,23 @@ const SignUpForm: FC<IProps> = () => {
                       </span>
                     </button>
                   </div> */}
-                  <div className='flex mt-6 flex-col'>
+                  <div className="flex mt-6 flex-col">
                     <div>
                       <input
-                        id='policy'
-                        name='policy'
-                        type='checkbox'
+                        id="policy"
+                        name="policy"
+                        type="checkbox"
                         onChange={props.handleChange}
                         checked={props.values.policy}
-                        className='h-4 w-4 rounded border-gray-300 text-indigo-orangeLight focus:ring-orangeLight'
+                        className="h-4 w-4 rounded border-gray-300 text-indigo-orangeLight focus:ring-orangeLight"
                         style={{ color: '#EE8062' }}
                       />
-                      <label
-                        htmlFor='policy'
-                        className='font-normal text-xs text-[#898989] ml-2'
-                      >
-                        By clicking Create account, I agree that I have read and
-                        accepted the Terms of Use and Privacy Policy.
+                      <label htmlFor="policy" className="font-normal text-xs text-[#898989] ml-2">
+                        By clicking Create account, I agree that I have read and accepted the Terms of Use and Privacy
+                        Policy.
                       </label>
                     </div>
-                    <ErrorMessageForm name='policy' />
+                    <ErrorMessageForm name="policy" />
                   </div>
                 </form>
               );
@@ -166,10 +158,7 @@ const SignInSchema = Yup.object().shape({
   lastName: Yup.string().required(FIELD_REQUIRED),
   email: Yup.string().email('Invalid email').required(FIELD_REQUIRED),
   password: Yup.string().required(FIELD_REQUIRED),
-  policy: Yup.bool().oneOf(
-    [true],
-    'You need to accept the terms and conditions'
-  ),
+  policy: Yup.bool().oneOf([true], 'You need to accept the terms and conditions'),
 });
 
 export default SignUpForm;
