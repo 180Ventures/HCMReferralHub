@@ -11,7 +11,7 @@ function CalendarComponent() {
 
   return (
     <div>
-      <Calendar onChange={onChange} value={value} locale="en-GB"/>
+      <Calendar onChange={onChange} value={value} locale="en-GB" />
     </div>
   );
 }

@@ -1,12 +1,12 @@
-import { ERROR_CODE_FIREBASE } from "@/constants";
-import { FirebaseError } from "firebase/app";
-import { toast, ToastOptions } from "react-toastify";
+import { ERROR_CODE_FIREBASE } from '@/constants';
+import { FirebaseError } from 'firebase/app';
+import { toast, ToastOptions } from 'react-toastify';
 
 //Toast Notification
 export const toastConfig: ToastOptions = {
-  position: "bottom-left",
+  position: 'bottom-left',
   autoClose: 3000,
-  theme: "light",
+  theme: 'light',
   hideProgressBar: true,
 };
 
@@ -49,17 +49,15 @@ export const removeAllLocalStorage = () => {
 };
 
 export const formatNumberWithCommas = (value: number) => {
-  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
 export const showErrorMessageFirebase = (error: FirebaseError) => {
   const code = error.code as keyof typeof ERROR_CODE_FIREBASE;
   const errorMessage = ERROR_CODE_FIREBASE[code];
-  toastError(errorMessage || "Something went wrong please try again later!");
+  toastError(errorMessage || 'Something went wrong please try again later!');
 };
 
 export const formatPhoneNumber = (phoneNumber: string) => {
-  return phoneNumber
-    .replace(/\D+/g, "")
-    .replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, "+$1 ($2) $3-$4");
+  return phoneNumber.replace(/\D+/g, '').replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '+$1 ($2) $3-$4');
 };

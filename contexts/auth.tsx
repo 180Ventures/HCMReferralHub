@@ -1,11 +1,4 @@
-import React, {
-  createContext,
-  ReactNode,
-  useEffect,
-  useState,
-  useContext,
-  useCallback,
-} from 'react';
+import React, { createContext, ReactNode, useEffect, useState, useContext, useCallback, useMemo } from 'react';
 import {
   signOut,
   User,
@@ -33,9 +26,10 @@ import {
   toastError,
   toastSuccess,
 } from '@/utils';
-import { LOCAL_STORAGE_KEYS } from '@/constants';
+import { LOCAL_STORAGE_KEYS, PORT } from '@/constants';
 import { useRouter } from 'next/router';
 import { FirebaseError } from 'firebase/app';
+import { Roles } from '@/utils/enums';
 
 interface AuthContextProps {
   loginWithEmail: (email: string, password: string) => void;
@@ -59,6 +53,7 @@ interface AuthContextProps {
   loading: boolean;
   isLogout: boolean;
   chapters: Chapter[];
+  isAdmin: boolean;
 }
 
 const initialState: AuthContextProps = {
@@ -83,6 +78,7 @@ const initialState: AuthContextProps = {
   loading: false,
   isLogout: false,
   chapters: [],
+  isAdmin: false,
 };
 
 const AuthContext = createContext<AuthContextProps>(initialState);
@@ -133,10 +129,7 @@ export default function AuthProvider({ children }: Props) {
   useEffect(() => {
     if (profile?.uid) {
       try {
-        const q = query(
-          collection(db, 'users'),
-          where('uid', '==', profile.uid)
-        );
+        const q = query(collection(db, 'users'), where('uid', '==', profile.uid));
         const usersListner = onSnapshot(q, (querySnapshot) => {
           let data = querySnapshot.docs.map((doc) => ({
             ...doc.data(),
@@ -151,24 +144,21 @@ export default function AuthProvider({ children }: Props) {
     }
   }, [profile?.uid]);
 
-  const loginWithEmail = useCallback(
-    async (email: string, password: string) => {
-      setLoading(true);
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-      } catch (error) {
-        if (error instanceof FirebaseError) {
-          showErrorMessageFirebase(error);
-          return;
-        }
-        //@ts-ignore
-        toastError(error.message);
-      } finally {
-        setLoading(false);
+  const loginWithEmail = useCallback(async (email: string, password: string) => {
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        showErrorMessageFirebase(error);
+        return;
       }
-    },
-    []
-  );
+      //@ts-ignore
+      toastError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   const resetPassword = async (oobCode: string, newPassword: string) => {
     setLoading(true);
@@ -191,11 +181,7 @@ export default function AuthProvider({ children }: Props) {
   const signUpWithEmail = useCallback(async (values: ISignUpFormValues) => {
     setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        values.email,
-        values.password
-      );
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
       const user = userCredential.user;
       if (user) {
         const userData: UserData = {
@@ -203,6 +189,8 @@ export default function AuthProvider({ children }: Props) {
           email: values.email,
           firstName: values.firstName,
           lastName: values.lastName,
+          role: Roles.user,
+          port: PORT,
         };
         await addUser(userData);
       }
@@ -257,9 +245,7 @@ export default function AuthProvider({ children }: Props) {
     setLoading(true);
     try {
       await sendPasswordResetEmail(auth, email);
-      toastSuccess(
-        'Sent a request success. Please check your email to reset password!!'
-      );
+      toastSuccess('Sent a request success. Please check your email to reset password!!');
     } catch (error) {
       //@ts-ignore
       console.log('Error', `Error: ${error.message}`);
@@ -272,10 +258,7 @@ export default function AuthProvider({ children }: Props) {
 
   const onUpdatePassword = useCallback(
     async (currentPassword: string, newPassword: string) => {
-      const emailCredential = await EmailAuthProvider.credential(
-        profile?.email!,
-        currentPassword
-      );
+      const emailCredential = await EmailAuthProvider.credential(profile?.email!, currentPassword);
       await reauthenticateWithCredential(user!, emailCredential);
       await updatePassword(auth.currentUser!, newPassword);
     },
@@ -370,13 +353,16 @@ export default function AuthProvider({ children }: Props) {
 
   const handleUpdateEmail = useCallback((email: string) => {
     const auth = getAuth();
-    updateEmail(auth.currentUser as any, email).then(() => {
-      console.log('update');
-      
-    }).catch((error) => {
-      console.error(error)
-    });
-  }, [])
+    updateEmail(auth.currentUser as any, email)
+      .then(() => {
+        console.log('update');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const isAdmin = useMemo(() => profile?.role === 'admin', [profile]);
 
   const memoedValue = {
     user,
@@ -386,6 +372,7 @@ export default function AuthProvider({ children }: Props) {
     isSignedUp,
     isLogout,
     chapters,
+    isAdmin,
     logout,
     setIsSignedUp,
     fetchProfile,
@@ -402,9 +389,7 @@ export default function AuthProvider({ children }: Props) {
     handleUpdateEmail,
   };
 
-  return (
-    <AuthContext.Provider value={memoedValue}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={memoedValue}>{children}</AuthContext.Provider>;
 }
 
 export function useAuthState() {

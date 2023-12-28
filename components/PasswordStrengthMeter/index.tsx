@@ -1,13 +1,7 @@
 import React from 'react';
 import zxcvbn from 'zxcvbn';
 
-const PasswordStrengthMeter = ({
-  password,
-  onChange,
-}: {
-  password: string;
-  onChange?: (state: boolean) => void;
-}) => {
+const PasswordStrengthMeter = ({ password, onChange }: { password: string; onChange?: (state: boolean) => void }) => {
   const testResult = zxcvbn(password);
   const num = (testResult.score * 100) / 4;
 
@@ -58,20 +52,15 @@ const PasswordStrengthMeter = ({
 
   return (
     <React.Fragment>
-      <div className='w-full bg-gray-200 rounded-md h-1 mt-2'>
-        <div style={changePasswordColor()} className='rounded-md'></div>
+      <div className="w-full bg-gray-200 rounded-md h-1 mt-2">
+        <div style={changePasswordColor()} className="rounded-md"></div>
       </div>
-      <div className='flex justify-between items-center mt-1'>
+      <div className="flex justify-between items-center mt-1">
         {(testResult.score == 4 || testResult.score == 3) && (
-          <p className='text-xs text-[#898989] font-normal'>
-            Your password is great. Nice work!
-          </p>
+          <p className="text-xs text-[#898989] font-normal">Your password is great. Nice work!</p>
         )}
-        <div className='flex justify-end flex-grow'>
-          <p
-            className='text-sm font-medium text-right'
-            style={{ color: funcProgressColor() }}
-          >
+        <div className="flex justify-end flex-grow">
+          <p className="text-sm font-medium text-right" style={{ color: funcProgressColor() }}>
             {createPassLabel()}
           </p>
         </div>

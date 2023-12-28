@@ -8,7 +8,7 @@ export interface IDashBoardTableData {
   phone: string;
 }
 
-export interface IDashBoardMarketingData {
+export interface IMarketingData {
   id: string;
   name: string;
 }

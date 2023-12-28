@@ -26,7 +26,7 @@ const Input: FC<IProps> = ({
   passwordField,
 }) => {
   return (
-    <div className='flex flex-col w-full items-start relative'>
+    <div className="flex flex-col w-full items-start relative">
       <input
         className={`w-full h-11 2xl:h-12 bg-white rounded-lg border border-slate-200 text-[#898989] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal`}
         name={name}

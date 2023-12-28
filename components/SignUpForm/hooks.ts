@@ -1,10 +1,9 @@
-import { useAuthState } from "@/contexts/auth";
-import { ISignUpFormValues } from "@/queries/type";
-import { toastError } from "@/utils";
-import { useCallback, useState } from "react";
+import { useAuthState } from '@/contexts/auth';
+import { ISignUpFormValues } from '@/queries/type';
+import { toastError } from '@/utils';
+import { useCallback, useState } from 'react';
 
-interface IProps {
-}
+interface IProps {}
 
 export const useSignUpFormHooks = () => {
   const { signUpWithEmail } = useAuthState();
@@ -12,16 +11,16 @@ export const useSignUpFormHooks = () => {
   const [validPassword, setValidPassword] = useState<boolean>(false);
 
   const inititalValues: ISignUpFormValues = {
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
     policy: false,
   };
-  
+
   const onSubmitForm = async (values: ISignUpFormValues) => {
     try {
-      if(!validPassword) {
+      if (!validPassword) {
         toastError('Password is invalid!');
         return;
       }
@@ -30,7 +29,7 @@ export const useSignUpFormHooks = () => {
       //@ts-ignore
       toastError(error.message);
     }
-  }
+  };
 
   const onToggleShowPassword = useCallback(() => {
     setShowPassword(!showPassword);
@@ -42,5 +41,5 @@ export const useSignUpFormHooks = () => {
     onSubmitForm,
     setValidPassword,
     onToggleShowPassword,
-  }
-}
+  };
+};

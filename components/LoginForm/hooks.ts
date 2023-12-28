@@ -1,7 +1,8 @@
-import { LOCAL_STORAGE_KEYS, ROUTERS } from '@/constants';
+import { LOCAL_STORAGE_KEYS, MESSAGE, PORT, ROUTERS } from '@/constants';
 import { useAuthState } from '@/contexts/auth';
 import { IResetPasswordFormValues, ISignInFormValues } from '@/queries/type';
-import { setItemLocalStorage } from '@/utils';
+import { getUserByEmail } from '@/queries/users';
+import { setItemLocalStorage, toastError } from '@/utils';
 import { FormikProps } from 'formik';
 import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
@@ -10,16 +11,10 @@ interface IProps {}
 
 export const useLoginFormHooks = () => {
   const router = useRouter();
-  const {
-    sendForgotPassword,
-    loginWithEmail,
-    loginWithGoogle,
-    loginFacebook,
-    loading,
-  } = useAuthState();
+  const { sendForgotPassword, loginWithEmail, loginWithGoogle, loginFacebook, loading } = useAuthState();
+  const [loadingStatus, setLoadingStatus] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [isRequestingResetPassword, setRequestingResetPassword] =
-    useState<boolean>(false);
+  const [isRequestingResetPassword, setRequestingResetPassword] = useState<boolean>(false);
   const initialValues: ISignInFormValues = {
     email: '',
     password: '',
@@ -34,32 +29,32 @@ export const useLoginFormHooks = () => {
   }, [router]);
 
   const onSubmitForm = useCallback(async (values: ISignInFormValues) => {
+    setLoadingStatus(true);
     try {
-      values.rememberMe &&
-        setItemLocalStorage(
-          LOCAL_STORAGE_KEYS.rememberMe,
-          values.rememberMe + ''
-        );
+      const userRes = await getUserByEmail(values.email);
+      if (userRes?.port !== PORT) {
+        toastError(MESSAGE.loginFailed);
+        setLoadingStatus(false);
+        return;
+      }
       loginWithEmail(values.email, values.password);
     } catch (error) {
       //@ts-ignore
       toastError(error.message);
+      setLoadingStatus(false);
     }
   }, []);
 
-  const onSubmitResetPasswordForm = useCallback(
-    async (values: IResetPasswordFormValues) => {
-      try {
-        await sendForgotPassword(values.email);
-      } catch (error) {
-        //@ts-ignore
-        toastError(error.message);
-      } finally {
-        onCloseResetPasswordForm();
-      }
-    },
-    []
-  );
+  const onSubmitResetPasswordForm = useCallback(async (values: IResetPasswordFormValues) => {
+    try {
+      await sendForgotPassword(values.email);
+    } catch (error) {
+      //@ts-ignore
+      toastError(error.message);
+    } finally {
+      onCloseResetPasswordForm();
+    }
+  }, []);
 
   const onResetValueEmail = useCallback(
     (props: FormikProps<ISignInFormValues>) => () => {
@@ -103,6 +98,7 @@ export const useLoginFormHooks = () => {
     loading,
     showPassword,
     isRequestingResetPassword,
+    loadingStatus,
     onClickSignUp,
     onSubmitForm,
     onResetValueEmail,

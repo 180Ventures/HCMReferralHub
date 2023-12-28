@@ -2,9 +2,9 @@ import { Formik } from 'formik';
 import { FC } from 'react';
 import * as Yup from 'yup';
 import { useLoginFormHooks } from './hooks';
-import Image from 'next/image';
 import Input from '../Input';
 import { FIELD_REQUIRED } from '@/constants';
+import LoadingPage from '../LoadingPage';
 
 interface IProps {}
 
@@ -20,26 +20,23 @@ const LoginForm: FC<IProps> = ({}) => {
     onSubmitResetPasswordForm,
     onCloseResetPasswordForm,
     onGotoSignUp,
+    loadingStatus,
   } = useLoginFormHooks();
 
   return (
-    <div className='flex flex-col justify-center items-center lg:max-w-sm w-full h-full'>
+    <div className="flex flex-col justify-center items-center lg:max-w-sm w-full h-full">
+      {loadingStatus && <LoadingPage />}
       {!isRequestingResetPassword && (
-        <p className='text-[#000] font-Inter text-[25px] italic font-semibold pb-10'>
-          PROVIDER HUB
-        </p>
+        <p className="text-[#000] font-Inter text-[25px] italic font-semibold pb-10">PROVIDER HUB</p>
       )}
-      <div className='w-[90%] lg:w-auto flex flex-col justify-center items-center'>
-        <div className='d-flex flex-col items-start w-full sm:max-w-[370px]'>
-          <p
-            className={`text-2xl text- w-full font-semibold font-Inter text-gray20`}
-          >
+      <div className="w-[90%] lg:w-auto flex flex-col justify-center items-center">
+        <div className="d-flex flex-col items-start w-full sm:max-w-[370px]">
+          <p className={`text-2xl text- w-full font-semibold font-Inter text-gray20`}>
             {isRequestingResetPassword ? 'Forgot password?' : 'Sign in'}
           </p>
           {isRequestingResetPassword && (
-            <p className='text-sm font-normal mt-2'>
-              No worriest! Just enter your email and we’ll send you a reset
-              password link.
+            <p className="text-sm font-normal mt-2">
+              No worriest! Just enter your email and we’ll send you a reset password link.
             </p>
           )}
         </div>
@@ -51,33 +48,25 @@ const LoginForm: FC<IProps> = ({}) => {
             onSubmit={onSubmitResetPasswordForm}
           >
             {(props) => (
-              <form
-                onSubmit={props.handleSubmit}
-                className='mt-4 2xl:mt-8 w-full md:w-[370px]'
-              >
-                <div className='flex mt-2 flex-row justify-center items-center relative'>
+              <form onSubmit={props.handleSubmit} className="mt-4 2xl:mt-8 w-full md:w-[370px]">
+                <div className="flex mt-2 flex-row justify-center items-center relative">
                   <Input
-                    name='email'
-                    type='email'
+                    name="email"
+                    type="email"
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.email}
-                    placeholder='Email address'
+                    placeholder="Email address"
                   />
                 </div>
-                <button
-                  type='submit'
-                  className='mt-6 w-full bg-orangeLight rounded-lg h-10 2xl:h-12 hover:opacity-75'
-                >
-                  <p className='text-xs 2xl:text-sm font-medium text-white font-Poppins'>
-                    Send Recovery Email
-                  </p>
+                <button type="submit" className="mt-6 w-full bg-orangeLight rounded-lg h-10 2xl:h-12 hover:opacity-75">
+                  <p className="text-xs 2xl:text-sm font-medium text-white font-Poppins">Send Recovery Email</p>
                 </button>
-                <p className='text-xs 2xl:text-sm font-normal text-gray20 text-center mt-4 cursor-pointer'>
+                <p className="text-xs 2xl:text-sm font-normal text-gray20 text-center mt-4 cursor-pointer">
                   Just remember?{' '}
                   <span
                     onClick={onGotoSignUp}
-                    className='text-orangeLight font-semibold cursor-pointer hover:opacity-75'
+                    className="text-orangeLight font-semibold cursor-pointer hover:opacity-75"
                   >
                     Sign Up
                   </span>
@@ -86,7 +75,7 @@ const LoginForm: FC<IProps> = ({}) => {
             )}
           </Formik>
         ) : (
-          <div className='mt-4 2xl:mt-8 w-full md:w-[370px]'>
+          <div className="mt-4 2xl:mt-8 w-full md:w-[370px]">
             <Formik
               validationSchema={SignInSchema}
               initialValues={initialValues}
@@ -95,24 +84,24 @@ const LoginForm: FC<IProps> = ({}) => {
             >
               {(props) => (
                 <form onSubmit={props.handleSubmit}>
-                  <div className='flex mt-4 2xl:mt-8 flex-row justify-center items-center relative'>
+                  <div className="flex mt-4 2xl:mt-8 flex-row justify-center items-center relative">
                     <Input
-                      name='email'
-                      type='email'
+                      name="email"
+                      type="email"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       value={props.values.email}
-                      placeholder='Email address'
+                      placeholder="Email address"
                     />
                   </div>
-                  <div className='flex mt-6 flex-row justify-center items-center relative'>
+                  <div className="flex mt-6 flex-row justify-center items-center relative">
                     <Input
-                      name='password'
+                      name="password"
                       type={showPassword ? 'text' : 'password'}
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
                       value={props.values.password}
-                      placeholder='Password'
+                      placeholder="Password"
                       onToggleShowPassword={onToggleShowPassword}
                       passwordField
                       showPassword={showPassword}
@@ -120,15 +109,12 @@ const LoginForm: FC<IProps> = ({}) => {
                   </div>
                   <div
                     onClick={onForgotPassword}
-                    className='text-neutral-800 text-sm font-normal font-Inter cursor-pointer hover:text-orangeLight mt-6'
+                    className="text-neutral-800 text-sm font-normal font-Inter cursor-pointer hover:text-orangeLight mt-6"
                   >
                     Forgot password?
                   </div>
-                  <button
-                    type='submit'
-                    className='mt-6 w-full bg-blueLight rounded-lg h-10 2xl:h-12 hover:opacity-75'
-                  >
-                    <p className='text-sm font-semibold text-white'>Sign in</p>
+                  <button type="submit" className="mt-6 w-full bg-blueLight rounded-lg h-10 2xl:h-12 hover:opacity-75">
+                    <p className="text-sm font-semibold text-white">Sign in</p>
                   </button>
                   {/* <div className='flex justify-between items-center py-6'>
                     <div className='h-[1px] flex-grow max-w-[166px] bg-[#DCDCDC]'></div>
@@ -188,9 +174,7 @@ const LoginForm: FC<IProps> = ({}) => {
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string().email('Invalid email').required(FIELD_REQUIRED),
-  password: Yup.string()
-    .required(FIELD_REQUIRED)
-    .min(8, 'Password at least 8 characters'),
+  password: Yup.string().required(FIELD_REQUIRED).min(8, 'Password at least 8 characters'),
 });
 
 const ResetPasswordSchema = Yup.object().shape({

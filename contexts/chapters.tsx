@@ -1,17 +1,10 @@
 // Will delete this file in the future
-import React, {
-  createContext,
-  ReactNode,
-  useEffect,
-  useState,
-  useContext,
-  useCallback,
-} from "react";
-import { Chapter } from "@/queries/type";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import { db } from "@/firebase";
-import { Tables } from "@/utils/enums";
-import { useAuthState } from "@/contexts/auth";
+import React, { createContext, ReactNode, useEffect, useState, useContext, useCallback } from 'react';
+import { Chapter } from '@/queries/type';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { db } from '@/firebase';
+import { Tables } from '@/utils/enums';
+import { useAuthState } from '@/contexts/auth';
 
 interface ChapterContextProps {
   chapters: Chapter[];
@@ -32,10 +25,7 @@ export default function ChapterProvider({ children }: Props) {
 
   const getChapters = useCallback(() => {
     try {
-      const q = query(
-        collection(db, Tables.chapters),
-        orderBy("indexChapter", "asc")
-      );
+      const q = query(collection(db, Tables.chapters), orderBy('indexChapter', 'asc'));
       const clientsListner = onSnapshot(q, (querySnapshot) => {
         let data = querySnapshot.docs.map((doc) => ({
           id: doc.id,
@@ -45,7 +35,7 @@ export default function ChapterProvider({ children }: Props) {
       });
       return () => clientsListner();
     } catch (e) {
-      console.log("----------ERROR IN CHAPTERS CONTEXT----------");
+      console.log('----------ERROR IN CHAPTERS CONTEXT----------');
     }
   }, []);
 
@@ -57,11 +47,7 @@ export default function ChapterProvider({ children }: Props) {
     chapters,
   };
 
-  return (
-    <ChapterContext.Provider value={memoedValue}>
-      {children}
-    </ChapterContext.Provider>
-  );
+  return <ChapterContext.Provider value={memoedValue}>{children}</ChapterContext.Provider>;
 }
 
 export function useChapterState() {

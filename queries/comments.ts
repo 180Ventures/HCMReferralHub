@@ -1,22 +1,8 @@
 //Will delete this file in the future
-import { db } from "@/firebase";
-import {
-  Timestamp,
-  addDoc,
-  collection,
-  query,
-  where,
-  orderBy,
-  getDocs,
-  limit,
-} from "firebase/firestore";
-import {
-  IAddCommentData,
-  IAddReplyData,
-  ICommentData,
-  IReplyData,
-} from "./type";
-import { Tables } from "@/utils/enums";
+import { db } from '@/firebase';
+import { Timestamp, addDoc, collection, query, where, orderBy, getDocs, limit } from 'firebase/firestore';
+import { IAddCommentData, IAddReplyData, ICommentData, IReplyData } from './type';
+import { Tables } from '@/utils/enums';
 
 export const addComment = async (commentData: IAddCommentData) => {
   const commentDocument = await addDoc(collection(db, Tables.comments), {
@@ -42,14 +28,11 @@ export const addReply = async (commentData: IAddReplyData) => {
   });
 };
 
-export const getReplies = async (
-  commentId: string,
-  _limit?: number
-): Promise<IReplyData[]> => {
+export const getReplies = async (commentId: string, _limit?: number): Promise<IReplyData[]> => {
   const q = query(
     collection(db, Tables.replies),
-    where("commentId", "==", commentId),
-    orderBy("createdAt", "desc"),
+    where('commentId', '==', commentId),
+    orderBy('createdAt', 'desc'),
     limit(_limit || 999)
   );
   const querySnapshot = await getDocs(q);
@@ -59,14 +42,11 @@ export const getReplies = async (
   })) as IReplyData[];
 };
 
-export const getComments = async (
-  chapterId: string,
-  _limit?: number
-): Promise<ICommentData[]> => {
+export const getComments = async (chapterId: string, _limit?: number): Promise<ICommentData[]> => {
   const q = query(
-    collection(db, "comments"),
-    where("chapterId", "==", chapterId),
-    orderBy("createdAt", "desc"),
+    collection(db, 'comments'),
+    where('chapterId', '==', chapterId),
+    orderBy('createdAt', 'desc'),
     limit(_limit || 999)
   );
   const querySnapshot = await getDocs(q);

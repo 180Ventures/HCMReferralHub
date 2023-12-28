@@ -4,8 +4,11 @@ import LoadingPage from './LoadingPage';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import Spinner from './Spinner';
-import PasswordStrengthMeter from './PasswordStrengthMeter'
+import PasswordStrengthMeter from './PasswordStrengthMeter';
 import ResetPasswordForm from './ResetPasswordForm';
+import PopoverBase from './PopoverBase';
+import ModalBase from './Modelbase';
+
 export {
   Container,
   Spinner,
@@ -14,5 +17,7 @@ export {
   LoginForm,
   SignUpForm,
   PasswordStrengthMeter,
-  ResetPasswordForm
-}
+  ResetPasswordForm,
+  PopoverBase,
+  ModalBase,
+};

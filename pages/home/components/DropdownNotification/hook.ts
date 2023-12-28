@@ -10,12 +10,7 @@ const useNotificationHook = () => {
   useEffect(() => {
     const clickHandler = ({ target }: MouseEvent) => {
       if (!dropdown.current) return;
-      if (
-        !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
-      )
-        return;
+      if (!dropdownOpen || dropdown.current.contains(target) || trigger.current.contains(target)) return;
       setDropdownOpen(false);
     };
     document.addEventListener('click', clickHandler);
@@ -34,7 +29,7 @@ const useNotificationHook = () => {
 
   useEffect(() => {
     //TODO: get notifications
-  })
+  });
   return { dropdown, trigger, dropdownOpen, notifications, setDropdownOpen };
 };
 
