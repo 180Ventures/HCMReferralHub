@@ -116,9 +116,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <p className="text-base mb-2 font-medium text-blackLight font-Inter">Need Support?</p>
         <p className="text-sm font-normal text-[#898989]">
           Contact The HUB Team <br />{' '}
-          <Link href="#" className="font-normal text-sm underline cursor-pointer font-Inter text-orangeLight">
+          <a href="mailto:Reece@thehcm.org" className="font-normal text-sm underline cursor-pointer font-Inter text-orangeLight">
             Contact us
-          </Link>
+          </a>
         </p>
       </div>
     </aside>

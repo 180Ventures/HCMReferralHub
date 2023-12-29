@@ -25,7 +25,7 @@ const MaketingComponent = ({ data }: IProps) => {
         {data?.map((item) => {
           return (
             <div className="flex items-center mb-4 cursor-pointer hover:opacity-70" key={item.id}>
-              <DownloadIcon />
+              <a href={item.url} download target='_blank'><DownloadIcon /></a>
               <p className="text-xs font-normal text-blackLight ml-1">{item.name}</p>
             </div>
           );
