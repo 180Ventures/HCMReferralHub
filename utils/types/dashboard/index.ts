@@ -11,4 +11,5 @@ export interface IDashBoardTableData {
 export interface IMarketingData {
   id: string;
   name: string;
+  url: string;
 }
