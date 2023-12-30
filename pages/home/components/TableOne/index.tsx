@@ -1,13 +1,22 @@
 import { ILead } from '@/utils/types';
 import { DropdownIcon } from '@/icons';
-import { LoadingPage, ModalBase, PopoverBase } from '@/components';
+import {
+  LoadingPage,
+  ModalBase,
+  PaginatedItems,
+  PopoverBase,
+} from '@/components';
 import useTableHook from './hook';
-import { USDollar } from '@/constants';
+import { FIRST_INDEX, ITEMS_PER_PAGE, USDollar } from '@/constants';
 import { LeadStatus } from '@/utils/enums';
 import CreateNote from '../CreateNote';
 import clsx from 'clsx';
 interface IProps {
   data: ILead[];
+  itemsPerPage?: number;
+  countPage?: number;
+  currentPage?: number;
+  onPageClick?: (e: any) => void;
 }
 
 const STATUS_DATA = [
@@ -25,7 +34,7 @@ const STATUS_DATA = [
   },
 ];
 
-const TableOne = ({ data }: IProps) => {
+const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: IProps) => {
   const {
     isAdmin,
     loading,
@@ -39,7 +48,7 @@ const TableOne = ({ data }: IProps) => {
   } = useTableHook();
 
   return (
-    <div className='rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white px-5 py-3 2xl:pt-6 pb-2.5 xl:pb-1'>
+    <div className='rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white px-12 py-8 2xl:pt-6 pb-2.5 xl:pb-1'>
       {loading && <LoadingPage />}
       <ModalBase
         setOpen={setShowModelCreateNotes}
@@ -59,14 +68,9 @@ const TableOne = ({ data }: IProps) => {
           <h2 className='text-2xl font-Inter font-semibold text-blackLight'>
             All Leads Referred
           </h2>
-          {!isAdmin && (
-            <h5 className='text-sm font-Inter font-normal text-blackLight mt-2'>
-              This month
-            </h5>
-          )}
         </div>
       </div>
-      <div className='flex flex-col overflow-auto'>
+      <div className='flex flex-col overflow-auto mt-8'>
         <div className='grid rounded-sm bg-gray-2 grid-cols-12 overflow-auto'>
           <div className='p-2.5 2xl:p-5 col-span-1'>
             <h5 className='text-sm font-medium text-[#898989] capitalize'>
@@ -115,12 +119,7 @@ const TableOne = ({ data }: IProps) => {
             </h5>
           </div>
         </div>
-        {/* {data?.length == 0 && (
-          <p className='text-sm text-blackLight font-normal text-center py-2 capitalize'>
-            No data found!
-          </p>
-        )} */}
-        <div className={`${isAdmin ? 'h-[50vh]' : 'max-h-40'} overflow-auto`}>
+        <div className={`h-auto overflow-auto`}>
           {data?.map((item, index) => {
             return (
               <div
@@ -239,6 +238,17 @@ const TableOne = ({ data }: IProps) => {
           })}
         </div>
       </div>
+      {
+        (countPage && countPage > 1) ? 
+        <div className='my-4 w-full flex justify-center'>
+          <PaginatedItems
+            handlePageClick={onPageClick}
+            itemsPerPage={itemsPerPage || FIRST_INDEX}
+            pageCount={countPage || FIRST_INDEX}
+            currentPage={currentPage || FIRST_INDEX}
+          />
+        </div> : null
+      }
     </div>
   );
 };

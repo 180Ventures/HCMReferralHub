@@ -9,16 +9,13 @@ import CardItem from './components/CardItem';
 import TableOne from './components/TableOne';
 import MaketingComponent from './components/Maketing';
 import { LoadingPage } from '@/components';
+import { ITEMS_PER_PAGE } from '@/constants';
 const ChartOne = dynamic(() => import('./components/Charts/ChartOne'), {
-  ssr: false,
-});
-const ChartTwo = dynamic(() => import('./components/Charts/ChartTwo'), {
   ssr: false,
 });
 const ChartThree = dynamic(() => import('./components/Charts/ChartThree'), {
   ssr: false,
 });
-
 
 const HomePage: NextPage = () => {
   const {
@@ -31,6 +28,9 @@ const HomePage: NextPage = () => {
     pieChart,
     marketingData,
     loading,
+    currentPage,
+    pageCount,
+    handlePageClick,
     handleNewLead,
     onToggleSideBar,
     handleSearchLeads,
@@ -40,17 +40,28 @@ const HomePage: NextPage = () => {
 
   return (
     <div className='dark:bg-boxdark-2 dark:text-bodydark'>
-      { loading && <LoadingPage />}
+      {loading && <LoadingPage />}
       <div className='flex h-screen overflow-hidden'>
-        { sidebarOpen && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />}
+        {sidebarOpen && (
+          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />
+        )}
         <div className='relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden'>
-          <Header onSearchLeads={handleSearchLeads} onChangeTextSearch={onChangeTextSearch} sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />
+          <Header
+            onSearchLeads={handleSearchLeads}
+            onChangeTextSearch={onChangeTextSearch}
+            sidebarOpen={sidebarOpen}
+            setSidebarOpen={onToggleSideBar}
+          />
           <main className='bg-[#F9F9F9] h-full'>
             <div className='mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-[#F9F9F9]'>
               <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
                 <div className='flex flex-col'>
                   <h1 className='text-2xl 2xl:text-4xl font-semibold font-Inter text-blackLight mb-2 capitalize'>
-                    Hi {profile?.firstName?.trim().toLowerCase() + ' ' + profile?.lastName?.trim().toLowerCase()},
+                    Hi{' '}
+                    {profile?.firstName?.trim().toLowerCase() +
+                      ' ' +
+                      profile?.lastName?.trim().toLowerCase()}
+                    ,
                   </h1>
                   <p className='font-Inter text-sm font-normal'>
                     Welcome back to The Referral Hub!
@@ -89,17 +100,25 @@ const HomePage: NextPage = () => {
                   />
                 ))}
               </div>
-               <div className='mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5'>
-                {typeof window !== 'undefined' && <ChartOne series={pieChart}/>}
+              <div className='mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5'>
+                {typeof window !== 'undefined' && (
+                  <ChartOne series={pieChart} />
+                )}
                 {/* {typeof window !== 'undefined' && <ChartTwo />} */}
                 {typeof window !== 'undefined' && <ChartThree />}
                 <div className='col-span-12 rounded-xl shadow-default xl:col-span-4'>
-                  <MaketingComponent data={marketingData}/>
+                  <MaketingComponent data={marketingData} />
                 </div>
               </div>
               <div className='grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5 mt-4'>
                 <div className='col-span-12 overflow-auto'>
-                  <TableOne data={tableData}/>
+                  <TableOne
+                    data={tableData}
+                    countPage={pageCount}
+                    itemsPerPage={ITEMS_PER_PAGE}
+                    onPageClick={(e) => handlePageClick(e)}
+                    currentPage={currentPage}
+                  />
                 </div>
               </div>
             </div>

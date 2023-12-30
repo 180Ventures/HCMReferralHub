@@ -3,20 +3,13 @@ import { DASHBOARD_MARKETING_DATA_TEMPLATE } from '@/utils/data';
 import { IMarketingData } from '@/utils/types/dashboard';
 import { useAuthState } from '@/contexts/auth';
 import { useRouter } from 'next/router';
-import { countLeads, getLeads } from '@/queries/leads';
-import { FORMAT_DATE, ROUTERS, USDollar } from '@/constants';
+import { countLeads, getLeadsByReferralId } from '@/queries/leads';
+import { FIRST_INDEX, FORMAT_DATE, ITEMS_PER_PAGE, ROUTERS, USDollar } from '@/constants';
 import { ILead } from '@/utils/types';
 import { generateLink } from '@/utils/generateLink';
 import moment from 'moment';
 import { LeadStatus, PriceByStatusLead, PromiseStatus } from '@/utils/enums';
-
-export const copyContent = async (text: string) => {
-  try {
-    await navigator.clipboard.writeText(text);
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-  }
-};
+import { copyContent } from '@/utils';
 
 const useDashBoardHook = () => {
   const [textSearch, setTextSearch] = useState<string>('');
@@ -28,17 +21,28 @@ const useDashBoardHook = () => {
       profile?.uid as string
     )}`
   );
-
+  
+  //Table
   const [tableData, setTableData] = useState<ILead[]>([]);
   const [tableDataTemplate, setTableDataTemplate] = useState<ILead[]>([]);
   const [marketingData, setMarketingData] = useState<IMarketingData[]>([]);
+
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
   const { isAdmin } = useAuthState();
+
+  //Pagination
+  const [itemOffset, setItemOffset] = useState<number>(FIRST_INDEX);
+  const [currentPage, setCurrentPage] = useState<number>(FIRST_INDEX);
+  const [totalItems, setTotalItems] = useState<number>(FIRST_INDEX);
+  const pageCount = useMemo(() => {
+    return Math.ceil(totalItems / ITEMS_PER_PAGE);
+  }, [totalItems]);
+  
+  //Dashboard & Charts
   const [totalLeads, setTotalLeads] = useState<number>(0);
   const [totalClients, setTotalClients] = useState<number>(0);
   const [pieChart, setPieCart] = useState<number[]>([0,0,0]);
-
   const initialCards = [
     {
       id: 'card_01',
@@ -71,34 +75,37 @@ const useDashBoardHook = () => {
     [sidebarOpen]
   );
 
-  const onChangeTextSearch = useCallback(
-    (value: string) => {
-      if (!value) {
-        setLoading(true);
-        setTimeout(() => {
-          setLoading(false);
-          setTableData(tableDataTemplate);
-        }, 500);
-      }
-      setTextSearch(value);
-    },
-    [tableDataTemplate]
-  );
+  const onChangeTextSearch = useCallback((value: string) => {
+    if(!value) {
+      setLoading(true);
+      setTimeout(() => {
+        const dataSlice = [...tableDataTemplate].slice(FIRST_INDEX, FIRST_INDEX + ITEMS_PER_PAGE);
+        setTableData(dataSlice);
+        setTotalItems(tableDataTemplate.length);
+        setItemOffset(FIRST_INDEX);
+        setCurrentPage(FIRST_INDEX)
+        setLoading(false);
+      }, 500);
+    }
+    setTextSearch(value);
+  }, [tableDataTemplate]);
 
   const handleSearchLeads = useCallback(() => {
     setLoading(true);
-    const values = tableDataTemplate.filter(
-      (item) =>
-        item.name
-          .toLowerCase()
-          .trim()
-          .search(textSearch.toLowerCase().trim()) != -1
+    const lowerCasedSearch = textSearch.toLowerCase().trim();
+    const searchedValues = tableDataTemplate.filter(item =>
+      item.name.trim().toLowerCase().includes(lowerCasedSearch)
     );
+    setTotalItems(searchedValues.length);
+    setItemOffset(FIRST_INDEX);
+    setCurrentPage(FIRST_INDEX)
+
     setTimeout(() => {
       setLoading(false);
-      setTableData(values);
+      const dataSlice = [...searchedValues].slice(FIRST_INDEX, FIRST_INDEX + ITEMS_PER_PAGE);
+      setTableData(dataSlice);
     }, 500);
-  }, [textSearch]);
+  }, [textSearch, tableDataTemplate]);
 
   const handleCopy = useCallback(async () => {
     if (isCopied) return;
@@ -118,8 +125,8 @@ const useDashBoardHook = () => {
   }, []);
 
   const getLeadsData = useMemo(() => {
-    if (!profile?.uid) return null;
-    return getLeads(profile?.uid);
+    if(!profile?.uid) return null;
+    return getLeadsByReferralId(profile?.uid);
   }, [profile]);
 
   const countLeadsOfWeek = useMemo(() => {
@@ -162,10 +169,10 @@ const useDashBoardHook = () => {
 
   useEffect(() => {
     Promise.allSettled([getLeadsData, countLeadsOfWeek, countClientThisMonth, ...getChartData]).then((data) => {
-      const [dataTableRes, leadsOfWeek, clientThisMonth, pedingData, wonData, lostData] = data;
+      const [leadsData ,leadsOfWeek, clientThisMonth, pendingData, wonData, lostData] = data;
 
-      if(pedingData.status === PromiseStatus.fulfilled && wonData.status == PromiseStatus.fulfilled && lostData.status === PromiseStatus.fulfilled) {
-        setPieCart([pedingData.value, wonData.value, lostData.value]);
+      if(pendingData.status === PromiseStatus.fulfilled && wonData.status == PromiseStatus.fulfilled && lostData.status === PromiseStatus.fulfilled) {
+        setPieCart([pendingData.value, wonData.value, lostData.value]);
       }
 
       if(clientThisMonth.status === PromiseStatus.fulfilled) {
@@ -177,16 +184,26 @@ const useDashBoardHook = () => {
         const { value } = leadsOfWeek;
         if(value) setTotalLeads(value);
       }
-      if (dataTableRes.status == PromiseStatus.fulfilled) {
-        const { value } = dataTableRes;
-        if (dataTableRes.value) {
-          setTableData(value as ILead[]);
+      if (leadsData.status == PromiseStatus.fulfilled) {
+        const { value } = leadsData;
+        if (value) {
+          setTotalItems(value?.length)
+          const dataSlice = [...value].slice(itemOffset, itemOffset + ITEMS_PER_PAGE);
+          setTableData(dataSlice as ILead[]);
           setTableDataTemplate(value as ILead[]);
         }
       }
       setMarketingData(DASHBOARD_MARKETING_DATA_TEMPLATE);
     });
   }, []);
+
+  const handlePageClick = (event: any) => {
+    setCurrentPage(event.selected);
+    const newOffset = (event.selected * ITEMS_PER_PAGE) % totalItems;
+    const data = [...tableDataTemplate].slice(newOffset, newOffset + ITEMS_PER_PAGE);
+    setTableData(data);
+    setItemOffset(newOffset);
+  };
 
   return {
     link,
@@ -198,11 +215,15 @@ const useDashBoardHook = () => {
     initialCards,
     pieChart,
     marketingData,
+    pageCount,
+    itemOffset,
+    currentPage,
     onToggleSideBar,
     handleSearchLeads,
     onChangeTextSearch,
     handleChangeLink,
     setSidebarOpen,
+    handlePageClick,
     handleCopy,
     handleNewLead,
   };

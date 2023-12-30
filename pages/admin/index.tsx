@@ -7,6 +7,8 @@ import withAuth from '@/components/AuthHOC';
 import Sidebar from '../home/components/SideBar';
 import TableOne from '../home/components/TableOne';
 import useAdminHook from './hook';
+import { ITEMS_PER_PAGE } from '@/constants';
+import React from 'react';
 
 const AdminPage: NextPage = () => {
   const {
@@ -14,15 +16,23 @@ const AdminPage: NextPage = () => {
     sidebarOpen,
     profile,
     isCopied,
-    handleNewLead,
     onToggleSideBar,
     handleCopy,
   } = useDashBoardHook();
 
-  const { leadsData, loading, tableData, handleSearchLeads, onChangeTextSearch } = useAdminHook();
+  const {
+    pageCount,
+    loading,
+    tableData,
+    itemOffset,
+    currentPage,
+    handlePageClick,
+    handleSearchLeads,
+    onChangeTextSearch,
+  } = useAdminHook();
 
   return (
-    <div className='dark:bg-boxdark-2 dark:text-bodydark'>
+    <React.Fragment>
       {loading && <LoadingPage />}
       <div className='flex h-screen overflow-hidden'>
         {sidebarOpen && (
@@ -40,7 +50,10 @@ const AdminPage: NextPage = () => {
               <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
                 <div className='flex flex-col'>
                   <h1 className='text-2xl 2xl:text-4xl font-semibold font-Inter text-blackLight mb-2 capitalize'>
-                    Hi {profile?.firstName?.trim()?.toLowerCase() + ' ' + profile?.lastName?.trim()?.toLowerCase()}
+                    Hi{' '}
+                    {profile?.firstName?.trim()?.toLowerCase() +
+                      ' ' +
+                      profile?.lastName?.trim()?.toLowerCase()}
                   </h1>
                   <p className='font-Inter text-sm font-normal'>
                     Welcome back to The Referral Hub!
@@ -70,14 +83,20 @@ const AdminPage: NextPage = () => {
 
               <div className='grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5 mt-12'>
                 <div className='col-span-12 overflow-auto'>
-                  <TableOne data={tableData} />
+                  <TableOne
+                    data={tableData}
+                    countPage={pageCount}
+                    itemsPerPage={ITEMS_PER_PAGE}
+                    onPageClick={(e) => handlePageClick(e)}
+                    currentPage={currentPage}
+                  />
                 </div>
               </div>
             </div>
           </main>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

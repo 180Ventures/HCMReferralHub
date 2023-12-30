@@ -39,7 +39,7 @@ export const useLoginFormHooks = () => {
     setLoadingStatus(true);
     try {
       const userRes = await getUserByEmail(values.email);
-      if(userRes?.port !== PORT) {
+      if (userRes?.port !== PORT) {
         toastError(MESSAGE.loginFailed);
         setLoadingStatus(false);
         return;
@@ -48,6 +48,7 @@ export const useLoginFormHooks = () => {
     } catch (error) {
       //@ts-ignore
       toastError(error.message);
+    } finally {
       setLoadingStatus(false);
     }
   }, []);

@@ -63,3 +63,11 @@ export const formatPhoneNumber = (phoneNumber: string) => {
     .replace(/\D+/g, "")
     .replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, "+$1 ($2) $3-$4");
 };
+
+export const copyContent = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (err) {
+    console.error('Failed to copy: ', err);
+  }
+};
