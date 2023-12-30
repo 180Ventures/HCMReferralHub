@@ -1,19 +1,12 @@
 import { ThreeDots } from '@/icons';
 import { ApexOptions } from 'apexcharts';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
 import moment from 'moment';
-import { useAuthState } from '@/contexts/auth';
-import { countLeads } from '@/queries/leads';
-import { FORMAT_DATE } from '@/constants';
-import { LeadStatus } from '@/utils/enums';
+
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
   ssr: false,
 });
-
-interface ChartThreeState {
-  series: number[];
-}
 
 const options: ApexOptions = {
   chart: {
@@ -36,21 +29,24 @@ const options: ApexOptions = {
   },
   dataLabels: {
     enabled: true,
+    style: {
+      fontSize: '1rem'
+    }
   },
   responsive: [
-    {
-      breakpoint: 1024,
-      options: {
-        chart: {
-          width: 220,
-        },
-      },
-    },
+    // {
+    //   breakpoint: 1024,
+    //   options: {
+    //     chart: {
+    //       width: 220,
+    //     },
+    //   },
+    // },
     {
       breakpoint: 640,
       options: {
         chart: {
-          width: 240,
+          width: 300,
         },
       },
     },
@@ -63,8 +59,6 @@ interface IProps {
 }
 
 const ChartOne = ({ series }: IProps) => {
-  const { profile } = useAuthState();
-
   return (
     <div className="col-span-12 rounded-xl border border-stroke bg-white p-4 2xl:p-8 pb-2 2xl:pb-5 shadow-default xl:col-span-4">
       <div className="mb-3 justify-between gap-4 sm:flex">
@@ -80,8 +74,11 @@ const ChartOne = ({ series }: IProps) => {
       </div>
 
       <div className="mb-2">
-        <div id="chartThree" className="mx-auto flex justify-center">
-          {typeof window !== 'undefined' && <ReactApexChart options={options} series={series} type="pie" />}
+        <div id="chartThree" className="mx-auto justify-center hidden 2xl:flex">
+          {typeof window !== 'undefined' && <ReactApexChart width={340} options={options} series={series} type="pie" />}
+        </div>
+        <div id="chartThree" className="mx-auto justify-center flex 2xl:hidden">
+          {typeof window !== 'undefined' && <ReactApexChart width={320} options={options} series={series} type="pie" />}
         </div>
       </div>
     </div>

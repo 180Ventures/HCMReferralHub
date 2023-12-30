@@ -8,7 +8,7 @@ import {
 } from '@/components';
 import useTableHook from './hook';
 import { LeadStatus, PriceByStatusLead } from '@/utils/enums';
-import { FIRST_INDEX, USDollar } from '@/constants';
+import { FIRST_INDEX, ITEMS_PER_PAGE, USDollar } from '@/constants';
 import CreateNote from '../CreateNote';
 import clsx from 'clsx';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
@@ -17,7 +17,7 @@ interface IProps {
   data: ILead[];
   itemsPerPage?: number;
   countPage?: number;
-  currentPage?: number;
+  currentPage: number;
   onPageClick?: (e: any) => void;
 }
 
@@ -124,7 +124,7 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
                       </div>
                     </div>
                   )}
-                  <p className="text-blackLight text-xs font-normal font-Inter text-left">{index + 1}.</p>
+                  <p className="text-blackLight text-xs font-normal font-Inter text-left">{(ITEMS_PER_PAGE * (currentPage + 1 )) -  (ITEMS_PER_PAGE - index) + 1}.</p>
                 </div>
                 <div className="flex items-center gap-3 p-2.5 col-span-2 2xl:p-5">
                   {!isAdmin && (

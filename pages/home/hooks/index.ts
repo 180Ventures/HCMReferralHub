@@ -208,7 +208,7 @@ const useDashBoardHook = () => {
   }, [isAdmin]);
 
   useEffect(() => {
-    Promise.allSettled([getLeadsData, countLeadsOfWeek, countClientThisMonth, ...getChartData]).then((data) => {
+    Promise.allSettled([getLeadsData, countLeadsOfWeek, countClientThisMonth, ...getPieChartData]).then((data) => {
       const [leadsData ,leadsOfWeek, clientThisMonth, pendingData, wonData, lostData] = data;
 
       if(pendingData.status === PromiseStatus.fulfilled && wonData.status == PromiseStatus.fulfilled && lostData.status === PromiseStatus.fulfilled) {
