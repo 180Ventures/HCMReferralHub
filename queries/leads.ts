@@ -22,7 +22,7 @@ export const addLead = async (leadData: ILead) => {
     referralId: leadData.referralId,
     referralName: leadData.referralName || '',
     status: leadData.status,
-    price: leadData || 0,
+    price: leadData.price || 0,
     payout: leadData.payout || '',
     note: leadData.note || '',
     createdAt: Timestamp.now(),
