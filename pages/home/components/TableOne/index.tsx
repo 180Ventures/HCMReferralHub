@@ -108,6 +108,11 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
           </div>
         </div>
         <div className={`h-auto overflow-auto`}>
+          {data?.length == 0 && (
+            <p className='text-sm text-blackLight font-normal text-center pt-10 pb-4 capitalize'>
+              no records found.
+            </p>
+          )}
           {data?.map((item, index) => {
             return (
               <div
