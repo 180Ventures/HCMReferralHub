@@ -17,20 +17,23 @@ import { ILead } from '@/utils/types';
 
 export const addLead = async (leadData: ILead) => {
   const leadDocument = await addDoc(collection(db, Tables.leads), {
-    name: leadData.name,
+    name: leadData.name || '',
     phone: leadData.phone,
     referralId: leadData.referralId,
-    referralName: leadData.referralName,
+    referralName: leadData.referralName || '',
     status: leadData.status,
-    price: leadData.price,
-    payout: leadData.payout,
-    note: leadData.note,
+    price: leadData || 0,
+    payout: leadData.payout || '',
+    note: leadData.note || '',
     createdAt: Timestamp.now(),
   });
   return leadDocument;
 };
 
-export const getLeads = async (referralId: string, _limit?: number): Promise<ILead[]> => {
+export const getLeadsByReferralId = async (
+  referralId: string,
+  _limit?: number
+): Promise<ILead[]> => {
   const q = query(
     collection(db, Tables.leads),
     where('referralId', '==', referralId),

@@ -9,10 +9,8 @@ import CardItem from './components/CardItem';
 import TableOne from './components/TableOne';
 import MaketingComponent from './components/Maketing';
 import { LoadingPage } from '@/components';
+import { ITEMS_PER_PAGE } from '@/constants';
 const ChartOne = dynamic(() => import('./components/Charts/ChartOne'), {
-  ssr: false,
-});
-const ChartTwo = dynamic(() => import('./components/Charts/ChartTwo'), {
   ssr: false,
 });
 const ChartThree = dynamic(() => import('./components/Charts/ChartThree'), {
@@ -31,6 +29,9 @@ const HomePage: NextPage = () => {
     areaChart,
     marketingData,
     loading,
+    currentPage,
+    pageCount,
+    handlePageClick,
     handleNewLead,
     onToggleSideBar,
     handleSearchLeads,
@@ -39,11 +40,13 @@ const HomePage: NextPage = () => {
   } = useDashBoardHook();
 
   return (
-    <div className="dark:bg-boxdark-2 dark:text-bodydark">
+    <div className='dark:bg-boxdark-2 dark:text-bodydark'>
       {loading && <LoadingPage />}
-      <div className="flex h-screen overflow-hidden">
-        {sidebarOpen && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />}
-        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+      <div className='flex h-screen overflow-hidden'>
+        {sidebarOpen && (
+          <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />
+        )}
+        <div className='relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden'>
           <Header
             onSearchLeads={handleSearchLeads}
             onChangeTextSearch={onChangeTextSearch}
@@ -90,7 +93,6 @@ const HomePage: NextPage = () => {
               </div>
               <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
                 {typeof window !== 'undefined' && <ChartOne series={pieChart} />}
-                {/* {typeof window !== 'undefined' && <ChartTwo />} */}
                 {typeof window !== 'undefined' && <ChartThree series={areaChart.series} total={areaChart.total} />}
                 <div className="col-span-12 rounded-xl shadow-default xl:col-span-4">
                   <MaketingComponent data={marketingData} />
@@ -98,9 +100,16 @@ const HomePage: NextPage = () => {
               </div>
               <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5 mt-4">
                 <div className="col-span-12 overflow-auto">
-                  <TableOne data={tableData} />
-                </div>
+                <TableOne
+                    data={tableData}
+                    countPage={pageCount}
+                    itemsPerPage={ITEMS_PER_PAGE}
+                    onPageClick={(e) => handlePageClick(e)}
+                    currentPage={currentPage}
+                  />
               </div>
+              </div>
+              
             </div>
           </main>
         </div>

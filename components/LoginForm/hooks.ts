@@ -41,6 +41,7 @@ export const useLoginFormHooks = () => {
     } catch (error) {
       //@ts-ignore
       toastError(error.message);
+    } finally {
       setLoadingStatus(false);
     }
   }, []);

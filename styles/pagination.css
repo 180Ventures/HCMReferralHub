@@ -1,0 +1,27 @@
+.pagination {
+  display: flex;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 4px 14px;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.pagination .selected {
+  background-color: #ee8062;
+  color: white;
+  border-radius: 5px;
+}
+
+.pagination .selected a {
+  color: white;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
+  border-radius: 5px;
+}
