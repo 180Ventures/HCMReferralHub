@@ -7,14 +7,32 @@ import withAuth from '@/components/AuthHOC';
 import Sidebar from '../home/components/SideBar';
 import TableOne from '../home/components/TableOne';
 import useAdminHook from './hook';
+import { ITEMS_PER_PAGE } from '@/constants';
+import React from 'react';
 
 const AdminPage: NextPage = () => {
-  const { link, sidebarOpen, profile, isCopied, handleNewLead, onToggleSideBar, handleCopy } = useDashBoardHook();
+  const {
+    link,
+    sidebarOpen,
+    profile,
+    isCopied,
+    onToggleSideBar,
+    handleCopy,
+  } = useDashBoardHook();
 
-  const { leadsData, loading, tableData, handleSearchLeads, onChangeTextSearch } = useAdminHook();
+  const {
+    pageCount,
+    loading,
+    tableData,
+    itemOffset,
+    currentPage,
+    handlePageClick,
+    handleSearchLeads,
+    onChangeTextSearch,
+  } = useAdminHook();
 
   return (
-    <div className="dark:bg-boxdark-2 dark:text-bodydark">
+    <React.Fragment>
       {loading && <LoadingPage />}
       <div className="flex h-screen overflow-hidden">
         {sidebarOpen && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />}
@@ -56,16 +74,22 @@ const AdminPage: NextPage = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5 mt-12">
-                <div className="col-span-12 overflow-auto">
-                  <TableOne data={tableData} />
+              <div className='grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5 mt-12'>
+                <div className='col-span-12 overflow-auto'>
+                  <TableOne
+                    data={tableData}
+                    countPage={pageCount}
+                    itemsPerPage={ITEMS_PER_PAGE}
+                    onPageClick={(e) => handlePageClick(e)}
+                    currentPage={currentPage}
+                  />
                 </div>
               </div>
             </div>
           </main>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

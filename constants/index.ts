@@ -47,3 +47,6 @@ export const USDollar = new Intl.NumberFormat('en-US', {
 });
 
 export const PORT = 'REFERRAL_HUB';
+
+export const ITEMS_PER_PAGE = 20;
+export const FIRST_INDEX = 0;
