@@ -52,10 +52,12 @@ const auth = new google.auth.GoogleAuth({
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse<DataResponse>) {
   try {
-    const reqBody = req.body;
+    const reqBody = JSON.parse(req.body);
+    console.log('reqBody: ', reqBody);
     const googleSheetUrl = reqBody.googleSheetUrl as string;
     const referralName = reqBody.referralName as string;
     const referralId = reqBody.referralId as string;
+    console.log('googleSheetUrl: ', googleSheetUrl);
 
     const spreadsheetIds = googleSheetUrl.match(/\/d\/(.+)\//);
     if (spreadsheetIds) {
