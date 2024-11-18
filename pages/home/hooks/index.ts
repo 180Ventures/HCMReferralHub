@@ -12,10 +12,14 @@ import { LeadPaymentStatus, PriceByStatusLead, PromiseStatus } from '@/utils/enu
 import { ChartThreeState } from '../components/Charts/ChartThree';
 import { getStartAndEndDate12Month } from '@/utils/date';
 import { copyContent } from '@/utils';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { setRefreshLeadData } from '@/redux/slides/leadsAdminSlice';
 
 const DATA_12MONTHS = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 const useDashBoardHook = () => {
+  const dispatch = useAppDispatch();
+  const { refreshLeadData } = useAppSelector(store => store.leadsAdminReducer);
   const [textSearch, setTextSearch] = useState<string>('');
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
   const [isCopied, setIsCopied] = useState<boolean>(false);
@@ -139,7 +143,7 @@ const useDashBoardHook = () => {
   const getLeadsData = useMemo(() => {
     if (!profile?.uid) return null;
     return getLeadsByReferralId(profile?.uid);
-  }, [profile]);
+  }, [profile, refreshLeadData]);
 
   const countLeadsOfWeek = useMemo(() => {
     if (!profile) return null;
@@ -150,7 +154,7 @@ const useDashBoardHook = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [profile]);
+  }, [profile, refreshLeadData]);
 
   const countClientThisMonth = useMemo(() => {
     if (!profile) return null;
@@ -161,7 +165,7 @@ const useDashBoardHook = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [profile]);
+  }, [profile, refreshLeadData]);
 
   const getPieChartData = useMemo(() => {
     if (!profile) return [];
@@ -172,7 +176,7 @@ const useDashBoardHook = () => {
       countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadPaymentStatus.won),
       countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadPaymentStatus.loss),
     ];
-  }, [profile]);
+  }, [profile, refreshLeadData]);
 
   const getAreaChartData = useCallback(async () => {
     if (!profile) return [];
@@ -202,7 +206,7 @@ const useDashBoardHook = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [profile]);
+  }, [profile, refreshLeadData]);
 
   useEffect(() => {
     if (isAdmin && window.location.pathname.includes(ROUTERS.home)) router.replace(ROUTERS.admin);
@@ -237,7 +241,8 @@ const useDashBoardHook = () => {
       setMarketingData(DASHBOARD_MARKETING_DATA_TEMPLATE);
     });
     getAreaChartData();
-  }, []);
+    dispatch(setRefreshLeadData(false));
+  }, [refreshLeadData]);
 
   const handlePageClick = (event: any) => {
     setCurrentPage(event.selected);

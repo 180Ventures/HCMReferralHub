@@ -84,3 +84,18 @@ export const updateLead = async (leadId: string, leadData: any) => {
   const leadRef = doc(db, Tables.portalLeads, leadId);
   return await updateDoc(leadRef, leadData);
 };
+
+
+export const importLeadFromSheet = async (googleSheetUrl: string, referralName: string, referralId: string) => {
+  const data = await fetch(`/api/upload-lead-from-sheet`, {
+    method: "POST",
+    body: JSON.stringify({
+      googleSheetUrl: googleSheetUrl,
+      referralName: referralName,
+      referralId: referralId,
+
+    }),
+  });
+  const dataJson = await data.json();
+  return dataJson;
+};

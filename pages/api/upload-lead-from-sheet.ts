@@ -53,9 +53,10 @@ export default async function handler (
   res: NextApiResponse<DataResponse>
 ) {
   try {
-    const googleSheetUrl = req.body.googleSheetUrl as string;
-    const referralName = req.body.referralName as string;
-    const referralId = req.body.referralId as string;
+    const reqBody = JSON.parse(req.body);
+    const googleSheetUrl = reqBody.googleSheetUrl as string;
+    const referralName = reqBody.referralName as string;
+    const referralId = reqBody.referralId as string;
 
     const spreadsheetIds = googleSheetUrl.match(/\/d\/(.+)\//);
     if (spreadsheetIds) {

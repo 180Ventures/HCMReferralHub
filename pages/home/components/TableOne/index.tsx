@@ -34,20 +34,27 @@ const STATUS_DATA = [
 
 const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: IProps) => {
   const {
+    isImportingLeads,
+    sheetUrl,
+    isShowAddSheetUrlModal,
     isAdmin,
     loading,
     notes,
     showModelCreateNotes,
+    onChangeSheetUrl,
     setNotes,
     handleSaveNotes,
     setShowModelCreateNotes,
     handleChangeStatus,
     handleClickNotes,
+    setShowAddSheetUrlModal,
+    onShowAddSheetUrlModal,
+    onImportLead,
   } = useTableHook();
 
   return (
     <div className="rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white px-12 py-8 2xl:pt-6 pb-2.5 xl:pb-1">
-      {loading && <LoadingPage />}
+      {(loading || isImportingLeads) && <LoadingPage />}
       <ModalBase
         setOpen={setShowModelCreateNotes}
         open={showModelCreateNotes}
@@ -61,10 +68,45 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
           />
         }
       />
-      <div className="mb-3 justify-between gap-4 flex">
-        <div>
-          <h2 className="text-2xl font-Inter font-semibold text-blackLight">All Leads Referred</h2>
-        </div>
+      <ModalBase
+        setOpen={setShowAddSheetUrlModal}
+        open={isShowAddSheetUrlModal}
+        bodyNode={
+          <div className="flex flex-col p-6 gap-y-3">
+            <label htmlFor="notes" className="block  text-left text-lg font-medium text-gray-900 font-Inter">
+              Sheet URL
+            </label>
+            <input
+              value={sheetUrl}
+              onChange={onChangeSheetUrl}
+              placeholder="Add sheet url"
+              className={clsx(
+                'focus:ring-2 focus:ring-indigo-600',
+                'block w-full rounded-md border-0 p-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 sm:text-lg sm:leading-6'
+              )}
+            />
+            <button
+              disabled={!sheetUrl}
+              className="bg-primary text-white font-semibold text-base lg:text-lg 2xl:text-xl rounded-lg px-4 py-2 disabled:bg-gray-200 mt-2"
+              type="button"
+              onClick={onImportLead}
+            >
+              Import
+            </button>
+          </div>
+        }
+      />
+      <div className="mb-3 justify-between gap-4 flex  items-center flex-row ">
+        <h2 className="text-2xl font-Inter font-semibold text-blackLight">All Leads Referred</h2>
+        {!isAdmin &&
+          <button
+            onClick={onShowAddSheetUrlModal}
+            type="button"
+            className="bg-primary text-white font-semibold text-base lg:text-lg 2xl:text-xl rounded-lg px-4 py-2"
+          >
+            Import leads
+          </button>
+        }
       </div>
       <div className="flex flex-col overflow-auto mt-8">
         <div className="grid rounded-sm bg-gray-2 grid-cols-12 overflow-auto">
