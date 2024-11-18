@@ -36,21 +36,23 @@ interface DataResponse {
   data?: GoogleSheetRow[];
   error?: string;
 }
-const credentialJson =
-  process.env.NEXT_PUBLIC_FIREBASE_ADMIN_MODE === 'development'
-    ? path.join(process.cwd(), 'configs', 'google-services-dev.json')
-    : path.join(process.cwd(), 'configs', 'google-services-prod.json');
 
-const credentials = JSON.parse(readFileSync(credentialJson, 'utf8'));
+const credential = JSON.parse(
+  Buffer.from(process.env.NEXT_PUBLIC_GOOGLE_SERVICE_KEY!, "base64").toString()
+);
+
 
 const auth = new google.auth.GoogleAuth({
-  credentials,
+  credentials: {
+    client_email: credential.client_email,
+    private_key: credential.private_key,
+  },
   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse<DataResponse>) {
   try {
-    const reqBody = JSON.parse(req.body);
+    const reqBody = req.body;
     const googleSheetUrl = reqBody.googleSheetUrl as string;
     const referralName = reqBody.referralName as string;
     const referralId = reqBody.referralId as string;
