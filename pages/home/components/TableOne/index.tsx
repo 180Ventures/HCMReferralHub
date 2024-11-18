@@ -53,7 +53,12 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
   } = useTableHook();
 
   return (
-    <div className="rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white px-12 py-8 2xl:pt-6 pb-2.5 xl:pb-1">
+    <div
+      className={clsx(
+        'rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white px-12 py-8 2xl:pt-6 pb-2.5 xl:pb-1',
+        (isImportingLeads || loading) ? 'pointer-events-none' : 'pointer-events-auto'
+      )}
+    >
       {(loading || isImportingLeads) && <LoadingPage />}
       <ModalBase
         setOpen={setShowModelCreateNotes}
@@ -98,7 +103,7 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
       />
       <div className="mb-3 justify-between gap-4 flex  items-center flex-row ">
         <h2 className="text-2xl font-Inter font-semibold text-blackLight">All Leads Referred</h2>
-        {!isAdmin &&
+        {!isAdmin && (
           <button
             onClick={onShowAddSheetUrlModal}
             type="button"
@@ -106,7 +111,7 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
           >
             Import leads
           </button>
-        }
+        )}
       </div>
       <div className="flex flex-col overflow-auto mt-8">
         <div className="grid rounded-sm bg-gray-2 grid-cols-12 overflow-auto">

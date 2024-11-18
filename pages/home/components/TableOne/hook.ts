@@ -93,6 +93,7 @@ const useTableHook = () => {
       toastSuccess(MESSAGE.importLeadSuccess);
       dispatch(setRefreshLeadData(true));
       setShowAddSheetUrlModal(false);
+      setSheetUrl('');
     } catch (error) {
       console.log('Error when import leads: ', error);
       toastSuccess(MESSAGE.importLeadFail);
