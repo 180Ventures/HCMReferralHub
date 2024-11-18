@@ -4,12 +4,14 @@ import Input from '@/components/Input';
 import { AddNewLeadIcon, ArrowRight } from '@/icons';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
-import useNewLeadHook, { inititalValues, leadSchema } from './hook';
-import 'react-phone-number-input/style.css';
-import PhoneInput from 'react-phone-number-input';
+import useNewLeadHook, { leadSchema } from './hook';
+import { formatPhoneNumberToList } from '@/utils';
+import { ChangeEvent } from 'react';
+// import 'react-phone-number-input/style.css';
+// import PhoneInput from 'react-phone-number-input';
 
 const NewLead: NextPage = () => {
-  const { loading, onSubmitForm } = useNewLeadHook();
+  const { initialValues, loading, onSubmitForm } = useNewLeadHook();
 
   return (
     <Container headTitle="Add new lead">
@@ -30,7 +32,7 @@ const NewLead: NextPage = () => {
           </div>
           <Formik
             validationSchema={leadSchema}
-            initialValues={inititalValues}
+            initialValues={initialValues}
             validateOnMount={false}
             onSubmit={onSubmitForm}
           >
@@ -39,36 +41,57 @@ const NewLead: NextPage = () => {
                 <form className="w-[90%] md:w-[430px]" onSubmit={props.handleSubmit}>
                   <div className="flex mt-4 2xl:mt-8 flex-row justify-center items-center relative">
                     <Input
-                      name="name"
+                      name="firstName"
                       type="text"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
-                      value={props.values.name}
-                      placeholder="What is your name?"
+                      value={props.values.firstName}
+                      placeholder="What is your first name?"
                     />
                   </div>
-
                   <div className="flex mt-4 2xl:mt-8 flex-row justify-center items-center relative">
-                    {/* <Input
-                      name="phone"
+                    <Input
+                      name="lastName"
                       type="text"
                       onChange={props.handleChange}
                       onBlur={props.handleBlur}
-                      value={props.values.phone}
-                      placeholder="What is a good phone number to reach you?"
-                    /> */}
-                    <div className='flex flex-col w-full'>
-                      <PhoneInput
+                      value={props.values.lastName}
+                      placeholder="What is your last name?"
+                    />
+                  </div>
+                  <div className="flex mt-4 2xl:mt-8 flex-row justify-center items-center relative">
+                    <div className="flex flex-col w-full">
+                      <Input
+                        name="phoneNumber"
+                        type="text"
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                          const value = event.target.value;
+                          const formatValue = formatPhoneNumberToList(value);
+                          props.setFieldValue('phoneNumber', formatValue);
+                        }}
+                        onBlur={props.handleBlur}
+                        value={props.values.phoneNumber}
                         placeholder="What is a good phone number to reach you?"
-                        value={props.values.phone}
+                      />
+                      {/* <PhoneInput
+                        placeholder="What is a good phone number to reach you?"
+                        value={props.values.phoneNumber}
                         className="w-full h-11 2xl:h-12 bg-white rounded-lg border border-slate-200 text-[#898989] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal"
                         defaultCountry="US"
-                        onChange={(value) => props.setFieldValue('phone', value)}
-                      />
-                      <ErrorMessageForm name="phone" />
+                        onChange={(value) => props.setFieldValue('phoneNumber', value)}
+                      /> */}
                     </div>
                   </div>
-
+                  <div className="flex mt-4 2xl:mt-8 flex-row justify-center items-center relative">
+                    <Input
+                      name="email"
+                      type="text"
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      value={props.values.email}
+                      placeholder="What is your email?"
+                    />
+                  </div>
                   <button type="submit" className="mt-6 hover:opacity-75 w-full bg-[#396589] rounded-lg h-10 2xl:h-12">
                     <p className="text-base font-normal text-white flex justify-center items-center gap-1">
                       Submit <ArrowRight />

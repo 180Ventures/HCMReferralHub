@@ -1,9 +1,9 @@
 import { FIRST_INDEX, ITEMS_PER_PAGE, ROUTERS } from '@/constants';
 import { useAuthState } from '@/contexts/auth';
-import { getAllLeads } from '@/queries/leads';
+import { getAllLeads } from '@/queries/portalLeads';
 import { updateLeadsAdmin } from '@/redux/slides/leadsAdminSlice';
 import { RootState } from '@/redux/store';
-import { ILead } from '@/utils/types';
+import { IPortalLead } from '@/utils/types';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 const useAdminHook = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
-  const [tableData, setTableData] = useState<ILead[]>([]);
+  const [tableData, setTableData] = useState<IPortalLead[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const router = useRouter();
   const leadsData = useSelector((state: RootState) => state.leadsAdminReducer.data);
@@ -26,7 +26,7 @@ const useAdminHook = () => {
   }, [totalItems]);
 
   const onChangeTextSearch = useCallback((value: string) => {
-    if(!value) {
+    if (!value) {
       setLoading(true);
       setTimeout(() => {
         const dataSlice = [...leadsData].slice(FIRST_INDEX, FIRST_INDEX + ITEMS_PER_PAGE);
@@ -44,7 +44,9 @@ const useAdminHook = () => {
     setLoading(true);
     const lowerCasedSearch = searchText.toLowerCase().trim();
     const searchedValues = leadsData.filter(item =>
-      item.name.trim().toLowerCase().includes(lowerCasedSearch)
+      item.firstName.trim().toLowerCase().includes(lowerCasedSearch) ||
+      item.lastName.trim().toLowerCase().includes(lowerCasedSearch)
+
     );
     setTotalItems(searchedValues.length);
     setItemOffset(FIRST_INDEX);
@@ -57,7 +59,7 @@ const useAdminHook = () => {
     }, 500);
   }, [searchText, leadsData]);
 
-  const handlePageClick = (event: {selected: number}) => {
+  const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected);
     const newOffset = (event.selected * ITEMS_PER_PAGE) % totalItems;
     const data = [...leadsData].slice(newOffset, newOffset + ITEMS_PER_PAGE);
@@ -90,7 +92,8 @@ const useAdminHook = () => {
     const dataSlice = [...leadsData].slice(itemOffset, itemOffset + ITEMS_PER_PAGE);
     const lowerCasedSearch = searchText.toLowerCase().trim();
     const filteredData = dataSlice.filter(item =>
-      item.name.trim().toLowerCase().includes(lowerCasedSearch)
+      item.firstName.trim().toLowerCase().includes(lowerCasedSearch) ||
+      item.lastName.trim().toLowerCase().includes(lowerCasedSearch)
     );
     setTableData(filteredData);
   }, [leadsData]);

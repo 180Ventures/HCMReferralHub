@@ -11,6 +11,7 @@ const Container: React.FC<IProps> = ({ children, headTitle, className }) => {
     <main className={`flex flex-col w-full min-h-screen overflow-hidden font-Inter bg-white ${className}`}>
       <Head>
         <title>{headTitle}</title>
+        <link rel="icon" href="/icons/favicon.ico" />
       </Head>
       {children}
     </main>

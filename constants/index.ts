@@ -35,6 +35,9 @@ export const ERROR_SOMTHING_WENT_WRONG = 'Something went wrong please try again!
 export const MESSAGE = {
   addedNewLead: 'Added new lead successfully!',
   updatedLead: 'Updated lead successfully!',
+  importLeadFail: 'Import leads fail!',
+  importLeadSuccess: 'Imported leads successfully!',
+
   copied: 'Referral Link copied to clipboard!',
   loginFailed: 'Email or password is incorrect!',
 };
