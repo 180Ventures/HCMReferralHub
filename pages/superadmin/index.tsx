@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { LoadingPage } from '@/components';
+import { Container, LoadingPage } from '@/components';
 import useDashBoardHook from '../home/hooks';
 import Header from '../home/components/Header';
 import Button from '@/components/Button';
@@ -32,7 +32,7 @@ const AdminPage: NextPage = () => {
   } = useAdminHook();
 
   return (
-    <React.Fragment>
+    <Container headTitle='Dashboard' >
       {loading && <LoadingPage />}
       <div className="flex h-screen overflow-hidden">
         {sidebarOpen && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={onToggleSideBar} />}
@@ -69,7 +69,7 @@ const AdminPage: NextPage = () => {
                   <Button
                     text="+ Add Referral Partner"
                     customStyle="max-w-[160px] mt-4 sm:mt-0"
-                    //onClick={handleNewLead}
+                  //onClick={handleNewLead}
                   />
                 </div>
               </div>
@@ -89,7 +89,7 @@ const AdminPage: NextPage = () => {
           </main>
         </div>
       </div>
-    </React.Fragment>
+    </Container>
   );
 };
 

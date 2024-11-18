@@ -28,7 +28,7 @@ const Settings: NextPage = () => {
   const { sidebarOpen, onToggleSideBar, handleSearchLeads, onChangeTextSearch } = useDashBoardHook();
 
   return (
-    <Container headTitle="Settings Page">
+    <Container headTitle="Settings">
       {loading && <LoadingPage />}
       <div className="dark:bg-boxdark-2 dark:text-bodydark no-input">
         <div className="flex h-screen overflow-hidden">
