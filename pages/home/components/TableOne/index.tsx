@@ -6,8 +6,7 @@ import { LeadPaymentStatus, PriceByStatusLead } from '@/utils/enums';
 import { FIRST_INDEX, ITEMS_PER_PAGE, USDollar } from '@/constants';
 import CreateNote from '../CreateNote';
 import clsx from 'clsx';
-import { formatPhoneNumberIntl } from 'react-phone-number-input';
-import { getFirstCharacterName, getFullNameUser } from '@/utils';
+import { getFirstCharacterName, getFullNameUser, getListPhoneNumbers } from '@/utils';
 import moment from 'moment';
 
 interface IProps {
@@ -170,20 +169,28 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
 
                 <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
                   <p className="text-blackLight text-xs font-normal font-Inter">
-                    {moment(item.wonDateSubmitted?.toDate()).format('DD/MM/YYYY') || '...'}
+                    {item.wonDateSubmitted ? moment(item.wonDateSubmitted.toDate()).format('DD/MM/YYYY') : '-'}
                   </p>
                 </div>
                 {isAdmin ? (
-                  <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
-                    <p className="text-blackLight text-xs font-normal font-Inter">
-                      {formatPhoneNumberIntl(item.phoneNumber) || '...'}
-                    </p>
+                  <div className="flex flex-col items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
+                    {item.phoneNumber
+                      ? getListPhoneNumbers(item.phoneNumber).map((phoneNumber) => (
+                        <p key={phoneNumber} className="text-blackLight text-xs font-normal font-Inter truncate">
+                          {phoneNumber}
+                        </p>
+                      ))
+                      : '-'}
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-3">
-                    <p className="text-blackLight text-xs font-normal font-Inter truncate">
-                      {formatPhoneNumberIntl(item.phoneNumber) || '...'}
-                    </p>
+                  <div className="flex flex-col items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-3">
+                    {item.phoneNumber
+                      ? getListPhoneNumbers(item.phoneNumber).map((phoneNumber) => (
+                        <p key={phoneNumber} className="text-blackLight text-xs font-normal font-Inter truncate">
+                          {phoneNumber}
+                        </p>
+                      ))
+                      : '-'}
                   </div>
                 )}
                 {isAdmin && (

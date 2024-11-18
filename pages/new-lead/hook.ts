@@ -11,11 +11,7 @@ import * as Yup from 'yup';
 export const leadSchema = Yup.object().shape({
   firstName: Yup.string().required(FIELD_REQUIRED),
   lastName: Yup.string().required(FIELD_REQUIRED),
-  phoneNumber: Yup.string()
-    //.matches(/^[0-9]+$/, 'Phone number can only contain digits')
-    // .min(10, 'Phone number must have at least 10 digits')
-    .max(15, 'Phone number cannot have more than 15 digits')
-    .required('Phone number is required'),
+  phoneNumber: Yup.string().required('Phone number is required'),
 });
 
 const useNewLeadHook = () => {

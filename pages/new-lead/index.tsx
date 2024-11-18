@@ -5,8 +5,10 @@ import { AddNewLeadIcon, ArrowRight } from '@/icons';
 import { Formik } from 'formik';
 import { NextPage } from 'next';
 import useNewLeadHook, { leadSchema } from './hook';
-import 'react-phone-number-input/style.css';
-import PhoneInput from 'react-phone-number-input';
+import { formatPhoneNumberToList } from '@/utils';
+import { ChangeEvent } from 'react';
+// import 'react-phone-number-input/style.css';
+// import PhoneInput from 'react-phone-number-input';
 
 const NewLead: NextPage = () => {
   const { initialValues, loading, onSubmitForm } = useNewLeadHook();
@@ -58,23 +60,26 @@ const NewLead: NextPage = () => {
                     />
                   </div>
                   <div className="flex mt-4 2xl:mt-8 flex-row justify-center items-center relative">
-                    {/* <Input
-                      name="phone"
-                      type="text"
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.phone}
-                      placeholder="What is a good phone number to reach you?"
-                    /> */}
                     <div className="flex flex-col w-full">
-                      <PhoneInput
+                      <Input
+                        name="phoneNumber"
+                        type="text"
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                          const value = event.target.value;
+                          const formatValue = formatPhoneNumberToList(value);
+                          props.setFieldValue('phoneNumber', formatValue);
+                        }}
+                        onBlur={props.handleBlur}
+                        value={props.values.phoneNumber}
+                        placeholder="What is a good phone number to reach you?"
+                      />
+                      {/* <PhoneInput
                         placeholder="What is a good phone number to reach you?"
                         value={props.values.phoneNumber}
                         className="w-full h-11 2xl:h-12 bg-white rounded-lg border border-slate-200 text-[#898989] placeholder:text-slate-500 lg:placeholder:text-accent text-sm font-normal"
                         defaultCountry="US"
                         onChange={(value) => props.setFieldValue('phoneNumber', value)}
-                      />
-                      <ErrorMessageForm name="phoneNumber" />
+                      /> */}
                     </div>
                   </div>
                   <div className="flex mt-4 2xl:mt-8 flex-row justify-center items-center relative">

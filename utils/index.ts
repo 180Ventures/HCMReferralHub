@@ -58,8 +58,18 @@ export const showErrorMessageFirebase = (error: FirebaseError) => {
   toastError(errorMessage || 'Something went wrong please try again later!');
 };
 
+export const formatPhoneNumberToList = (phoneNumberInput: string) => {
+  return phoneNumberInput
+    .split(',')
+    .map((phoneNumber) => formatPhoneNumber(phoneNumber))
+    .join(', ');
+};
+
 export const formatPhoneNumber = (phoneNumber: string) => {
-  return phoneNumber.replace(/\D+/g, '').replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '+$1 ($2) $3-$4');
+  return phoneNumber
+    .trim()
+    .replace(/\D+/g, '')
+    .replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '+$1 ($2) $3-$4');
 };
 
 export const copyContent = async (text: string) => {
@@ -70,12 +80,16 @@ export const copyContent = async (text: string) => {
   }
 };
 
-
 export const getFirstCharacterName = (firstName: string) => {
   return (firstName && firstName.charAt(0)) ?? 'A';
-}
+};
 
 export const getFullNameUser = (firstName: string, lastName: string) => {
   const fullName = (firstName ?? '') + ' ' + (lastName ?? '');
   return fullName.toLowerCase();
-}
+};
+
+export const getListPhoneNumbers = (phoneNumber: string) => {
+  const listPhoneNumberSplits = phoneNumber.split(',');
+  return listPhoneNumberSplits.map(phoneNumber => formatPhoneNumber(phoneNumber));
+};
