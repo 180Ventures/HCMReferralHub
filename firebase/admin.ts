@@ -4,7 +4,7 @@ import path from 'path';
 const serviceAccount =
   process.env.NEXT_PUBLIC_FIREBASE_ADMIN_MODE === 'development'
     ? path.join(process.cwd(), 'configs', 'firebaseSecrets-dev.json')
-    : require('./firebaseSecrets-prod.json');
+    : path.join(process.cwd(), 'configs', 'firebaseSecrets-prod.json')
 
 try {
   if (!admin.apps.length) {

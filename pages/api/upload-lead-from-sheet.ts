@@ -3,8 +3,8 @@ import { google } from 'googleapis';
 import { readFileSync } from 'fs';
 import { JWT } from 'google-auth-library';
 import path from 'path';
-import admin from "@/firebase/admin";
-import { Timestamp } from "firebase-admin/firestore";
+import admin from '@/firebase/admin';
+import { Timestamp } from 'firebase-admin/firestore';
 import { LeadCreateBy, LeadPaymentStatus, Tables } from '@/utils/enums';
 const db = admin.firestore();
 interface GoogleSheetRow {
@@ -36,22 +36,19 @@ interface DataResponse {
   data?: GoogleSheetRow[];
   error?: string;
 }
-const credentialJson = path.join(process.cwd(), 'configs', 'google-services-dev.json');
+const credentialJson =
+  process.env.NEXT_PUBLIC_FIREBASE_ADMIN_MODE === 'development'
+    ? path.join(process.cwd(), 'configs', 'google-services-dev.json')
+    : path.join(process.cwd(), 'configs', 'google-services-prod.json');
 
-const credentials = JSON.parse(
-  readFileSync(credentialJson, 'utf8')
-);
-
+const credentials = JSON.parse(readFileSync(credentialJson, 'utf8'));
 
 const auth = new google.auth.GoogleAuth({
   credentials,
   scopes: ['https://www.googleapis.com/auth/spreadsheets.readonly'],
 });
 
-export default async function handler (
-  req: NextApiRequest,
-  res: NextApiResponse<DataResponse>
-) {
+export default async function handler (req: NextApiRequest, res: NextApiResponse<DataResponse>) {
   try {
     const reqBody = JSON.parse(req.body);
     const googleSheetUrl = reqBody.googleSheetUrl as string;
@@ -77,27 +74,29 @@ export default async function handler (
           phoneNumber: row[2] || '',
         }));
 
-        await Promise.all(data.map(async (item) => {
-          const timeNow = Timestamp.now();
-          const addValues: IAddLeadReq = {
-            firstName: item.firstName ?? "",
-            lastName: item.lastName ?? "",
-            phoneNumber: item.phoneNumber ?? "",
-            referralName: referralName,
-            referralId: referralId,
-            email: "",
-            createdAt: timeNow,
-            createdBy: LeadCreateBy.referralHub,
-            subAdsCampaign: LeadCreateBy.referralHub,
-            paymentStatus: LeadPaymentStatus.pending,
-            gender: "",
-            dateOfBirth: "",
-            country: "",
-            state: "",
-            note: ""
-          };
-          await db.collection(Tables.portalLeads).add(addValues);
-        }))
+        await Promise.all(
+          data.map(async (item) => {
+            const timeNow = Timestamp.now();
+            const addValues: IAddLeadReq = {
+              firstName: item.firstName ?? '',
+              lastName: item.lastName ?? '',
+              phoneNumber: item.phoneNumber ?? '',
+              referralName: referralName,
+              referralId: referralId,
+              email: '',
+              createdAt: timeNow,
+              createdBy: LeadCreateBy.referralHub,
+              subAdsCampaign: LeadCreateBy.referralHub,
+              paymentStatus: LeadPaymentStatus.pending,
+              gender: '',
+              dateOfBirth: '',
+              country: '',
+              state: '',
+              note: '',
+            };
+            await db.collection(Tables.portalLeads).add(addValues);
+          })
+        );
         res.status(200).json({ message: 'Data uploaded successfully' });
       } else {
         res.status(200).json({ message: 'No data found', data: [] });
@@ -105,7 +104,6 @@ export default async function handler (
     } else {
       res.status(200).json({ message: 'No sheet found', data: [] });
     }
-
   } catch (error) {
     console.error('Error fetching data from Google Sheets:', error);
     res.status(500).json({ message: 'Error fetching data', error: (error as Error).message });
