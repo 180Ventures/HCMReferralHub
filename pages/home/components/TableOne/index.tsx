@@ -1,20 +1,17 @@
-import { ILead } from '@/utils/types';
+import { IPortalLead } from '@/utils/types';
 import { DropdownIcon } from '@/icons';
-import {
-  LoadingPage,
-  ModalBase,
-  PaginatedItems,
-  PopoverBase,
-} from '@/components';
+import { LoadingPage, ModalBase, PaginatedItems, PopoverBase } from '@/components';
 import useTableHook from './hook';
-import { LeadStatus, PriceByStatusLead } from '@/utils/enums';
+import { LeadPaymentStatus, PriceByStatusLead } from '@/utils/enums';
 import { FIRST_INDEX, ITEMS_PER_PAGE, USDollar } from '@/constants';
 import CreateNote from '../CreateNote';
 import clsx from 'clsx';
 import { formatPhoneNumberIntl } from 'react-phone-number-input';
+import { getFirstCharacterName, getFullNameUser } from '@/utils';
+import moment from 'moment';
 
 interface IProps {
-  data: ILead[];
+  data: IPortalLead[];
   itemsPerPage?: number;
   countPage?: number;
   currentPage: number;
@@ -23,15 +20,15 @@ interface IProps {
 
 const STATUS_DATA = [
   {
-    id: 'Won',
+    id: LeadPaymentStatus.won,
     name: 'Won',
   },
   {
-    id: 'Lost',
-    name: 'Lost',
+    id: LeadPaymentStatus.loss,
+    name: 'Loss',
   },
   {
-    id: 'Pending',
+    id: LeadPaymentStatus.pending,
     name: 'Pending',
   },
 ];
@@ -50,7 +47,7 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
   } = useTableHook();
 
   return (
-    <div className='rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white px-12 py-8 2xl:pt-6 pb-2.5 xl:pb-1'>
+    <div className="rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white px-12 py-8 2xl:pt-6 pb-2.5 xl:pb-1">
       {loading && <LoadingPage />}
       <ModalBase
         setOpen={setShowModelCreateNotes}
@@ -67,17 +64,13 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
       />
       <div className="mb-3 justify-between gap-4 flex">
         <div>
-          <h2 className='text-2xl font-Inter font-semibold text-blackLight'>
-            All Leads Referred
-          </h2>
+          <h2 className="text-2xl font-Inter font-semibold text-blackLight">All Leads Referred</h2>
         </div>
       </div>
-      <div className='flex flex-col overflow-auto mt-8'>
-        <div className='grid rounded-sm bg-gray-2 grid-cols-12 overflow-auto'>
-          <div className='p-2.5 2xl:p-5 col-span-1'>
-            <h5 className='text-sm font-medium text-[#898989] capitalize'>
-              No
-            </h5>
+      <div className="flex flex-col overflow-auto mt-8">
+        <div className="grid rounded-sm bg-gray-2 grid-cols-12 overflow-auto">
+          <div className="p-2.5 2xl:p-5 col-span-1">
+            <h5 className="text-sm font-medium text-[#898989] capitalize">No</h5>
           </div>
           <div className="p-2.5 text-center 2xl:p-5 col-span-2">
             <h5 className="text-sm font-medium capitalize text-left text-[#898989]">Client Name</h5>
@@ -109,49 +102,48 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
         </div>
         <div className={`h-auto overflow-auto`}>
           {data?.length == 0 && (
-            <p className='text-sm text-blackLight font-normal text-center pt-10 pb-4 capitalize'>
-              no records found.
-            </p>
+            <p className="text-sm text-blackLight font-normal text-center pt-10 pb-4 capitalize">no records found.</p>
           )}
           {data?.map((item, index) => {
             return (
               <div
                 key={item.id}
-                className={`grid cursor-pointer border-b border-stroke dark:border-strokedark grid-cols-12 ${
-                  index === data.length - 1 ? 'border-none' : ''
-                }`}
+                className={`grid cursor-pointer border-b border-stroke dark:border-strokedark grid-cols-12 ${index === data.length - 1 ? 'border-none' : ''
+                  }`}
               >
                 <div className="flex items-center justify-start col-span-1 p-2.5 2xl:p-5">
                   {isAdmin && (
                     <div className="hidden lg:flex w-10 h-10 relative mr-2">
                       <div className="uppercase w-full h-full bg-orangeLight rounded-full flex justify-center items-center">
-                        <span className="text-white uppercase">{item.name?.length > 0 ? item.name[0] : 'A'}</span>
+                        <span className="text-white uppercase">{getFirstCharacterName(item.firstName)}</span>
                       </div>
                     </div>
                   )}
-                  <p className="text-blackLight text-xs font-normal font-Inter text-left">{(ITEMS_PER_PAGE * (currentPage + 1 )) -  (ITEMS_PER_PAGE - index) + 1}.</p>
+                  <p className="text-blackLight text-xs font-normal font-Inter text-left">
+                    {ITEMS_PER_PAGE * (currentPage + 1) - (ITEMS_PER_PAGE - index) + 1}.
+                  </p>
                 </div>
                 <div className="flex items-center gap-3 p-2.5 col-span-2 2xl:p-5">
                   {!isAdmin && (
                     <div className="hidden lg:flex w-10 h-10 relative">
                       <div className="uppercase w-full h-full bg-orangeLight rounded-full flex justify-center items-center">
-                        <span className="text-white uppercase">{item.name?.length > 0 ? item.name[0] : 'A'}</span>
+                        <span className="text-white uppercase">{getFirstCharacterName(item.firstName)}</span>
                       </div>
                     </div>
                   )}
                   <div className={clsx('flex flex-col items-start', isAdmin ? 'w-full' : 'w-2/3')}>
                     <p className=" text-sm font-medium font-Inter text-blackLight sm:block capitalize truncate w-full">
-                      {item?.name.toLowerCase()}
+                      {getFullNameUser(item.firstName, item.lastName)}
                     </p>
-                    {item.status === LeadStatus.pending ? (
-                      <p className=" text-sm font-normal font-Inter text-grayLight sm:block">{LeadStatus.pending}</p>
-                    ) : item.price === PriceByStatusLead.lost ? (
-                      <p className=" text-sm font-medium font-Inter text-grayLight sm:block">
-                        $0
+                    {item.paymentStatus === LeadPaymentStatus.pending ? (
+                      <p className=" text-sm font-normal font-Inter text-grayLight sm:block capitalize">
+                        {LeadPaymentStatus.pending}
                       </p>
+                    ) : item.paymentStatus === LeadPaymentStatus.loss ? (
+                      <p className=" text-sm font-medium font-Inter text-grayLight sm:block">$0</p>
                     ) : (
                       <p className=" text-sm font-medium font-Inter text-[#35B0A4] sm:block">
-                        {item.price && USDollar.format(item.price)}
+                        {USDollar.format(PriceByStatusLead.won)}
                       </p>
                     )}
                   </div>
@@ -161,27 +153,37 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
                   {isAdmin ? (
                     <PopoverBase data={STATUS_DATA} onClickItem={(statusId) => handleChangeStatus(statusId, item.id)}>
                       <div className="flex items-center">
-                        <p className="text-blackLight text-xs font-bold font-Inter text-center pr-1">{item.status}</p>
+                        <p className="text-blackLight text-xs font-bold font-Inter text-center pr-1 capitalize">
+                          {item.paymentStatus}
+                        </p>
                         <DropdownIcon />
                       </div>
                     </PopoverBase>
                   ) : (
                     <div className="flex items-center">
-                      <p className="text-blackLight text-xs font-bold font-Inter text-center pr-1">{item.status}</p>
+                      <p className="text-blackLight text-xs font-bold font-Inter text-center pr-1 capitalize">
+                        {item.paymentStatus}
+                      </p>
                     </div>
                   )}
                 </div>
 
                 <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
-                  <p className="text-blackLight text-xs font-normal font-Inter">{(item.payout as string) || '...'}</p>
+                  <p className="text-blackLight text-xs font-normal font-Inter">
+                    {moment(item.wonDateSubmitted?.toDate()).format('DD/MM/YYYY') || '...'}
+                  </p>
                 </div>
                 {isAdmin ? (
                   <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
-                    <p className="text-blackLight text-xs font-normal font-Inter">{formatPhoneNumberIntl(item.phone) || '...'}</p>
+                    <p className="text-blackLight text-xs font-normal font-Inter">
+                      {formatPhoneNumberIntl(item.phoneNumber) || '...'}
+                    </p>
                   </div>
                 ) : (
                   <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-3">
-                    <p className="text-blackLight text-xs font-normal font-Inter truncate">{formatPhoneNumberIntl(item.phone) || '...'}</p>
+                    <p className="text-blackLight text-xs font-normal font-Inter truncate">
+                      {formatPhoneNumberIntl(item.phoneNumber) || '...'}
+                    </p>
                   </div>
                 )}
                 {isAdmin && (
@@ -205,17 +207,16 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
           })}
         </div>
       </div>
-      {
-        (countPage && countPage > 1) ? 
-        <div className='my-4 w-full flex justify-center'>
+      {countPage && countPage > 1 ? (
+        <div className="my-4 w-full flex justify-center">
           <PaginatedItems
             handlePageClick={onPageClick}
             itemsPerPage={itemsPerPage || FIRST_INDEX}
             pageCount={countPage || FIRST_INDEX}
             currentPage={currentPage || FIRST_INDEX}
           />
-        </div> : null
-      }
+        </div>
+      ) : null}
     </div>
   );
 };

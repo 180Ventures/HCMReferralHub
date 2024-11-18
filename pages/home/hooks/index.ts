@@ -3,12 +3,12 @@ import { DASHBOARD_MARKETING_DATA_TEMPLATE } from '@/utils/data';
 import { IMarketingData } from '@/utils/types/dashboard';
 import { useAuthState } from '@/contexts/auth';
 import { useRouter } from 'next/router';
-import { countLeads, getLeadsByReferralId } from '@/queries/leads';
+import { countLeads, getLeadsByReferralId } from '@/queries/portalLeads';
 import { FIRST_INDEX, FORMAT_DATE, ITEMS_PER_PAGE, ROUTERS, USDollar } from '@/constants';
-import { ILead } from '@/utils/types';
+import { IPortalLead } from '@/utils/types';
 import { generateLink } from '@/utils/generateLink';
 import moment from 'moment';
-import { LeadStatus, PriceByStatusLead, PromiseStatus } from '@/utils/enums';
+import { LeadPaymentStatus, PriceByStatusLead, PromiseStatus } from '@/utils/enums';
 import { ChartThreeState } from '../components/Charts/ChartThree';
 import { getStartAndEndDate12Month } from '@/utils/date';
 import { copyContent } from '@/utils';
@@ -23,10 +23,10 @@ const useDashBoardHook = () => {
   const [link, setLink] = useState<string>(
     `${process.env.NEXT_PUBLIC_REFERRAL_URL}${generateLink(profile?.uid as string)}`
   );
-  
+
   //Table
-  const [tableData, setTableData] = useState<ILead[]>([]);
-  const [tableDataTemplate, setTableDataTemplate] = useState<ILead[]>([]);
+  const [tableData, setTableData] = useState<IPortalLead[]>([]);
+  const [tableDataTemplate, setTableDataTemplate] = useState<IPortalLead[]>([]);
   const [marketingData, setMarketingData] = useState<IMarketingData[]>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -40,7 +40,7 @@ const useDashBoardHook = () => {
   const pageCount = useMemo(() => {
     return Math.ceil(totalItems / ITEMS_PER_PAGE);
   }, [totalItems]);
-  
+
   //Dashboard & Charts
   const [totalLeads, setTotalLeads] = useState<number>(0);
   const [totalClients, setTotalClients] = useState<number>(0);
@@ -53,7 +53,7 @@ const useDashBoardHook = () => {
       },
     ],
   });
-  const [pieChart, setPieCart] = useState<number[]>([0,0,0]);
+  const [pieChart, setPieCart] = useState<number[]>([0, 0, 0]);
   const initialCards = [
     {
       id: 'card_01',
@@ -87,7 +87,7 @@ const useDashBoardHook = () => {
   );
 
   const onChangeTextSearch = useCallback((value: string) => {
-    if(!value) {
+    if (!value) {
       setLoading(true);
       setTimeout(() => {
         const dataSlice = [...tableDataTemplate].slice(FIRST_INDEX, FIRST_INDEX + ITEMS_PER_PAGE);
@@ -105,7 +105,8 @@ const useDashBoardHook = () => {
     setLoading(true);
     const lowerCasedSearch = textSearch.toLowerCase().trim();
     const searchedValues = tableDataTemplate.filter(item =>
-      item.name.trim().toLowerCase().includes(lowerCasedSearch)
+      item.firstName.trim().toLowerCase().includes(lowerCasedSearch) ||
+      item.lastName.trim().toLowerCase().includes(lowerCasedSearch)
     );
     setTotalItems(searchedValues.length);
     setItemOffset(FIRST_INDEX);
@@ -136,7 +137,7 @@ const useDashBoardHook = () => {
   }, []);
 
   const getLeadsData = useMemo(() => {
-    if(!profile?.uid) return null;
+    if (!profile?.uid) return null;
     return getLeadsByReferralId(profile?.uid);
   }, [profile]);
 
@@ -156,7 +157,7 @@ const useDashBoardHook = () => {
     try {
       const startOfThisMonth = moment().startOf('month').format(FORMAT_DATE.monthDayYear);
       const endOfThisMonth = moment().endOf('month').format(FORMAT_DATE.monthDayYear);
-      return countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadStatus.won);
+      return countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadPaymentStatus.won);
     } catch (error) {
       console.log(error);
     }
@@ -167,9 +168,9 @@ const useDashBoardHook = () => {
     const startOfThisMonth = moment().startOf('month').format(FORMAT_DATE.monthDayYear);
     const endOfThisMonth = moment().endOf('month').format(FORMAT_DATE.monthDayYear);
     return [
-      countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadStatus.pending),
-      countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadStatus.won),
-      countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadStatus.lost),
+      countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadPaymentStatus.pending),
+      countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadPaymentStatus.won),
+      countLeads(profile?.uid, startOfThisMonth, endOfThisMonth, LeadPaymentStatus.loss),
     ];
   }, [profile]);
 
@@ -177,7 +178,7 @@ const useDashBoardHook = () => {
     if (!profile) return [];
     const months = getStartAndEndDate12Month();
     const monthsPromise = months.map((month) => {
-      return countLeads(profile.uid, month.start, month.end, LeadStatus.won);
+      return countLeads(profile.uid, month.start, month.end, LeadPaymentStatus.won);
     });
     try {
       const responsive = await Promise.allSettled(monthsPromise);
@@ -209,9 +210,9 @@ const useDashBoardHook = () => {
 
   useEffect(() => {
     Promise.allSettled([getLeadsData, countLeadsOfWeek, countClientThisMonth, ...getPieChartData]).then((data) => {
-      const [leadsData ,leadsOfWeek, clientThisMonth, pendingData, wonData, lostData] = data;
+      const [leadsData, leadsOfWeek, clientThisMonth, pendingData, wonData, lostData] = data;
 
-      if(pendingData.status === PromiseStatus.fulfilled && wonData.status == PromiseStatus.fulfilled && lostData.status === PromiseStatus.fulfilled) {
+      if (pendingData.status === PromiseStatus.fulfilled && wonData.status == PromiseStatus.fulfilled && lostData.status === PromiseStatus.fulfilled) {
         setPieCart([pendingData.value, wonData.value, lostData.value]);
       }
 
@@ -229,8 +230,8 @@ const useDashBoardHook = () => {
         if (value) {
           setTotalItems(value?.length)
           const dataSlice = [...value].slice(itemOffset, itemOffset + ITEMS_PER_PAGE);
-          setTableData(dataSlice as ILead[]);
-          setTableDataTemplate(value as ILead[]);
+          setTableData(dataSlice as IPortalLead[]);
+          setTableDataTemplate(value as IPortalLead[]);
         }
       }
       setMarketingData(DASHBOARD_MARKETING_DATA_TEMPLATE);

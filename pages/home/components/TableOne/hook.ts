@@ -2,12 +2,13 @@ import { ERROR_SOMTHING_WENT_WRONG, FORMAT_DATE, MESSAGE } from '@/constants';
 import { useAuthState } from '@/contexts/auth';
 import { toastError, toastInfo, toastSuccess } from '@/utils';
 import { useCallback, useState } from 'react';
-import { updateLead } from '@/queries/leads';
+import { updateLead } from '@/queries/portalLeads';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { updateLeadsAdmin } from '@/redux/slides/leadsAdminSlice';
-import { LeadStatus, PriceByStatusLead } from '@/utils/enums';
+import { LeadPaymentStatus, PriceByStatusLead } from '@/utils/enums';
 import moment from 'moment';
+import { Timestamp } from 'firebase/firestore';
 
 const useTableHook = () => {
   const { isAdmin } = useAuthState();
@@ -20,14 +21,13 @@ const useTableHook = () => {
   const [currentLeadId, setCurrentLeadId] = useState<string>('');
 
   const handleChangeStatus = useCallback(
-    async (stsId: string, leadId?: string) => {
+    async (status: string, leadId?: string) => {
       if (!leadId) return;
       try {
         setLoading(true);
         const dataParams = {
-          status: stsId,
-          payout: stsId === LeadStatus.won ? moment().format(FORMAT_DATE.monthDayYearSlash) : '',
-          price: stsId === LeadStatus.won ? PriceByStatusLead.won : PriceByStatusLead.lost,
+          paymentStatus: status,
+          wonDateSubmitted: status === LeadPaymentStatus.won ? Timestamp.now() : null,
         };
         await updateLead(leadId, dataParams);
         const leadsUpdated = leadsData.map((item) => {

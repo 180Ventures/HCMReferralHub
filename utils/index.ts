@@ -69,3 +69,13 @@ export const copyContent = async (text: string) => {
     console.error('Failed to copy: ', err);
   }
 };
+
+
+export const getFirstCharacterName = (firstName: string) => {
+  return (firstName && firstName.charAt(0)) ?? 'A';
+}
+
+export const getFullNameUser = (firstName: string, lastName: string) => {
+  const fullName = (firstName ?? '') + ' ' + (lastName ?? '');
+  return fullName.toLowerCase();
+}

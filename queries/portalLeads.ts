@@ -9,33 +9,23 @@ import {
   getDocs,
   limit,
   doc,
-  updateDoc
+  updateDoc,
 } from 'firebase/firestore';
 
-import { Tables } from '@/utils/enums';
-import { ILead } from '@/utils/types';
+import { LeadCreateBy, Tables } from '@/utils/enums';
+import { IAddLeadFormValues, IPortalLead } from '@/utils/types';
 
-export const addLead = async (leadData: ILead) => {
-  const leadDocument = await addDoc(collection(db, Tables.leads), {
-    name: leadData.name || '',
-    phone: leadData.phone,
-    referralId: leadData.referralId,
-    referralName: leadData.referralName || '',
-    status: leadData.status,
-    price: leadData.price || 0,
-    payout: leadData.payout || '',
-    note: leadData.note || '',
+export const addLead = async (leadData: IAddLeadFormValues) => {
+  const leadDocument = await addDoc(collection(db, Tables.portalLeads), {
+    ...leadData,
     createdAt: Timestamp.now(),
   });
   return leadDocument;
 };
 
-export const getLeadsByReferralId = async (
-  referralId: string,
-  _limit?: number
-): Promise<ILead[]> => {
+export const getLeadsByReferralId = async (referralId: string, _limit?: number): Promise<IPortalLead[]> => {
   const q = query(
-    collection(db, Tables.leads),
+    collection(db, Tables.portalLeads),
     where('referralId', '==', referralId),
     orderBy('createdAt', 'desc'),
     limit(_limit || 999)
@@ -45,27 +35,27 @@ export const getLeadsByReferralId = async (
     id: it.id,
     ...it.data(),
     createdAt: it.data().createdAt.toString(),
-  })) as ILead[];
+  })) as IPortalLead[];
 };
 
 export const countLeads = async (
   referralId: string,
   startDate: string,
   endDate: string,
-  status?: string
+  paymentStatus?: string
 ): Promise<number> => {
   let q;
-  if (status) {
+  if (paymentStatus) {
     q = query(
-      collection(db, Tables.leads),
+      collection(db, Tables.portalLeads),
       where('referralId', '==', referralId),
-      where('status', '==', status),
+      where('paymentStatus', '==', paymentStatus),
       where('createdAt', '>=', Timestamp.fromDate(new Date(startDate))),
       where('createdAt', '<=', Timestamp.fromDate(new Date(endDate)))
     );
   } else {
     q = query(
-      collection(db, Tables.leads),
+      collection(db, Tables.portalLeads),
       where('referralId', '==', referralId),
       where('createdAt', '>=', Timestamp.fromDate(new Date(startDate))),
       where('createdAt', '<=', Timestamp.fromDate(new Date(endDate)))
@@ -75,17 +65,22 @@ export const countLeads = async (
   return querySnapshot.docs.length;
 };
 
-export const getAllLeads = async (_limit?: number): Promise<ILead[]> => {
-  const q = query(collection(db, Tables.leads), orderBy('createdAt', 'desc'), limit(_limit || 999));
+export const getAllLeads = async (_limit?: number): Promise<IPortalLead[]> => {
+  const q = query(
+    collection(db, Tables.portalLeads),
+    where('createdBy', '==', LeadCreateBy.referralHub),
+    orderBy('createdAt', 'desc'),
+    limit(_limit || 999)
+  );
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((it) => ({
     id: it.id,
     ...it.data(),
     createdAt: it.data().createdAt.toString(),
-  })) as ILead[];
+  })) as IPortalLead[];
 };
 
 export const updateLead = async (leadId: string, leadData: any) => {
-  const leadRef = doc(db, Tables.leads, leadId);
+  const leadRef = doc(db, Tables.portalLeads, leadId);
   return await updateDoc(leadRef, leadData);
 };

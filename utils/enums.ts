@@ -1,17 +1,12 @@
 export enum Tables {
   users = 'users',
   contacts = 'contacts',
-  leads = 'leads',
+  portalLeads = 'portalLeads',
   //delete
+  // leads = 'leads',
   comments = 'comments',
   replies = 'replies',
   chapters = 'chapters',
-}
-
-export enum LeadStatus {
-  pending = 'Pending',
-  won = 'Won',
-  lost = 'Lost',
 }
 
 export enum PriceByStatusLead {
@@ -27,4 +22,15 @@ export enum Roles {
 export enum PromiseStatus {
   fulfilled = 'fulfilled',
   rejected = 'rejected',
+}
+
+
+export enum LeadPaymentStatus {
+  won = 'won',
+  pending = 'pending',
+  loss = 'loss',
+};
+
+export enum LeadCreateBy {
+  referralHub = 'referralHub'
 }
