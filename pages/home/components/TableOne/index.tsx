@@ -103,7 +103,7 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
       />
       <div className="mb-3 justify-between gap-4 flex  items-center flex-row ">
         <h2 className="text-2xl font-Inter font-semibold text-blackLight">All Leads Referred</h2>
-        {!isAdmin && (
+        {/* {!isAdmin && (
           <button
             onClick={onShowAddSheetUrlModal}
             type="button"
@@ -111,7 +111,7 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
           >
             Import leads
           </button>
-        )}
+        )} */}
       </div>
       <div className="flex flex-col overflow-auto mt-8">
         <div className="grid rounded-sm bg-gray-2 grid-cols-12 overflow-auto">

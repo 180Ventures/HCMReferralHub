@@ -3,7 +3,7 @@ export enum Tables {
   contacts = 'contacts',
   portalLeads = 'portalLeads',
   //delete
-  // leads = 'leads',
+  leads = 'leads',
   comments = 'comments',
   replies = 'replies',
   chapters = 'chapters',
