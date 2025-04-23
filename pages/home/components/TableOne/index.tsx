@@ -56,7 +56,7 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
     <div
       className={clsx(
         'rounded-xl min-w-[560px] overflow-auto border border-stroke bg-white px-12 py-8 2xl:pt-6 pb-2.5 xl:pb-1',
-        (isImportingLeads || loading) ? 'pointer-events-none' : 'pointer-events-auto'
+        isImportingLeads || loading ? 'pointer-events-none' : 'pointer-events-auto'
       )}
     >
       {(loading || isImportingLeads) && <LoadingPage />}
@@ -154,8 +154,9 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
             return (
               <div
                 key={item.id}
-                className={`grid cursor-pointer border-b border-stroke dark:border-strokedark grid-cols-12 ${index === data.length - 1 ? 'border-none' : ''
-                  }`}
+                className={`grid cursor-pointer border-b border-stroke dark:border-strokedark grid-cols-12 ${
+                  index === data.length - 1 ? 'border-none' : ''
+                }`}
               >
                 <div className="flex items-center justify-start col-span-1 p-2.5 2xl:p-5">
                   {isAdmin && (
@@ -216,27 +217,27 @@ const TableOne = ({ data, currentPage, itemsPerPage, countPage, onPageClick }: I
 
                 <div className="flex items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
                   <p className="text-blackLight text-xs font-normal font-Inter">
-                    {item.wonDateSubmitted ? moment(item.wonDateSubmitted.toDate()).format('DD/MM/YYYY') : '-'}
+                    {item.wonDateSubmitted ? moment(item.wonDateSubmitted.seconds * 1000).format('DD/MM/YYYY') : '-'}
                   </p>
                 </div>
                 {isAdmin ? (
                   <div className="flex flex-col items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-2">
                     {item.phoneNumber
                       ? getListPhoneNumbers(item.phoneNumber).map((phoneNumber) => (
-                        <p key={phoneNumber} className="text-blackLight text-xs font-normal font-Inter truncate">
-                          {phoneNumber}
-                        </p>
-                      ))
+                          <p key={phoneNumber} className="text-blackLight text-xs font-normal font-Inter truncate">
+                            {phoneNumber}
+                          </p>
+                        ))
                       : '-'}
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center p-2.5 sm:flex 2xl:p-5 col-span-3">
                     {item.phoneNumber
                       ? getListPhoneNumbers(item.phoneNumber).map((phoneNumber) => (
-                        <p key={phoneNumber} className="text-blackLight text-xs font-normal font-Inter truncate">
-                          {phoneNumber}
-                        </p>
-                      ))
+                          <p key={phoneNumber} className="text-blackLight text-xs font-normal font-Inter truncate">
+                            {phoneNumber}
+                          </p>
+                        ))
                       : '-'}
                   </div>
                 )}
